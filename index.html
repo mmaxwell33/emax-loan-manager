@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0d1117" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="E-Max Loans" />
+  <title>E-Max Loan Manager</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="css/app.css" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     SCREEN 1: AUTH (Login)
+══════════════════════════════════════════ -->
+<div id="screen-auth" class="screen active">
+  <div class="auth-logo">💰</div>
+  <div class="auth-title">E-Max Loans</div>
+  <div class="auth-sub">Loan Manager — E-Max Enterprise</div>
+  <div class="auth-box">
+    <div id="auth-error" class="auth-error"></div>
+    <div class="form-group">
+      <label>Email Address</label>
+      <input id="auth-email" type="email" class="form-input" placeholder="your@email.com" autocomplete="email" />
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input id="auth-password" type="password" class="form-input" placeholder="••••••••" autocomplete="current-password" />
+    </div>
+    <button id="btn-login" class="btn btn-primary btn-full" onclick="Auth.login()">
+      Sign In
+    </button>
+    <div class="mt12 text-center">
+      <span class="text-muted">No account? </span>
+      <a href="#" onclick="Auth.showSignup()" style="color:var(--accent2)">Create one</a>
+    </div>
+    <div id="signup-section" style="display:none" class="mt16">
+      <div class="form-group">
+        <label>Your Full Name</label>
+        <input id="auth-name" type="text" class="form-input" placeholder="E.g. Abena Mensah" />
+      </div>
+      <button id="btn-signup" class="btn btn-success btn-full" onclick="Auth.signup()">
+        Create Account
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN 2: DASHBOARD
+══════════════════════════════════════════ -->
+<div id="screen-dashboard" class="screen">
+  <div class="screen-header">
+    <div style="flex:1">
+      <div style="font-size:12px;color:var(--text2)" id="dash-greeting">Good morning</div>
+      <h2 id="dash-biz-name" style="font-size:18px">E-Max Enterprise</h2>
+    </div>
+    <button class="back-btn" onclick="App.navigate('settings')" title="Settings">⚙️</button>
+  </div>
+
+  <div class="pad">
+    <!-- Stats -->
+    <div class="stat-grid">
+      <div class="stat-tile accent">
+        <div class="ico">💼</div>
+        <div class="val" id="stat-active">—</div>
+        <div class="lbl">Active Loans</div>
+      </div>
+      <div class="stat-tile gold">
+        <div class="ico">💰</div>
+        <div class="val" id="stat-outstanding">—</div>
+        <div class="lbl">Outstanding (GHS)</div>
+      </div>
+      <div class="stat-tile green">
+        <div class="ico">✅</div>
+        <div class="val" id="stat-collected">—</div>
+        <div class="lbl">Collected This Month</div>
+      </div>
+      <div class="stat-tile red">
+        <div class="ico">⚠️</div>
+        <div class="val" id="stat-overdue">—</div>
+        <div class="lbl">Overdue Loans</div>
+      </div>
+    </div>
+
+    <!-- Due Today -->
+    <div class="card" id="due-today-card">
+      <div class="card-title">📅 Due This Week</div>
+      <div id="due-today-list"><div class="text-muted text-center" style="padding:16px 0">Loading…</div></div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="mt16">
+      <div class="card-title pad-x">Quick Actions</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 0 0 0">
+        <button class="btn btn-primary" onclick="Loans.openNewLoan()" style="border-radius:14px;height:52px">
+          ➕ New Loan
+        </button>
+        <button class="btn btn-ghost" onclick="App.navigate('reports')" style="border-radius:14px;height:52px">
+          📊 Reports
+        </button>
+      </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="card mt16">
+      <div class="card-title">🕐 Recent Activity</div>
+      <div id="activity-list"><div class="text-muted" style="padding:8px 0">Loading…</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN 3: LOANS LIST
+══════════════════════════════════════════ -->
+<div id="screen-loans" class="screen">
+  <div class="screen-header">
+    <h2>Loans</h2>
+    <button class="btn btn-primary btn-sm" onclick="Loans.openNewLoan()">+ New</button>
+  </div>
+
+  <div class="search-bar">
+    <div class="search-input-wrap">
+      <span class="search-icon">🔍</span>
+      <input id="loans-search" class="search-input" type="search" placeholder="Search by name…" oninput="Loans.filterList(this.value)" />
+    </div>
+  </div>
+
+  <div class="tab-row">
+    <button class="tab-btn active" onclick="Loans.setFilter('All', this)">All</button>
+    <button class="tab-btn" onclick="Loans.setFilter('Active', this)">Active</button>
+    <button class="tab-btn" onclick="Loans.setFilter('Overdue', this)">Overdue ⚠️</button>
+    <button class="tab-btn" onclick="Loans.setFilter('Completed', this)">Completed</button>
+  </div>
+
+  <div id="loans-list">
+    <div class="empty-state">
+      <div class="empty-icon">💳</div>
+      <h3>No loans yet</h3>
+      <p>Tap the + New button to create your first loan</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN 4: NEW LOAN WIZARD
+══════════════════════════════════════════ -->
+<div id="screen-new-loan" class="screen">
+  <div class="screen-header">
+    <button class="back-btn" onclick="App.back()">←</button>
+    <h2>New Loan</h2>
+  </div>
+
+  <!-- Step indicator -->
+  <div class="wizard-steps" id="wizard-steps">
+    <div class="wizard-step active" id="ws-1"><div class="w-num">1</div> Borrower</div>
+    <div class="w-sep"></div>
+    <div class="wizard-step" id="ws-2"><div class="w-num">2</div> Guarantor</div>
+    <div class="w-sep"></div>
+    <div class="wizard-step" id="ws-3"><div class="w-num">3</div> Witness</div>
+    <div class="w-sep"></div>
+    <div class="wizard-step" id="ws-4"><div class="w-num">4</div> Loan</div>
+    <div class="w-sep"></div>
+    <div class="wizard-step" id="ws-5"><div class="w-num">5</div> Review</div>
+  </div>
+
+  <!-- Step 1: Borrower -->
+  <div id="step-1" class="pad">
+    <div class="card-title">Borrower Details</div>
+    <div class="form-group">
+      <label>Full Name *</label>
+      <input id="b-name" type="text" class="form-input" placeholder="Borrower's full name" />
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Phone Number *</label>
+        <input id="b-phone" type="tel" class="form-input" placeholder="024 XXX XXXX" />
+      </div>
+      <div class="form-group">
+        <label>Date of Birth</label>
+        <input id="b-dob" type="date" class="form-input" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Home Address *</label>
+      <textarea id="b-address" class="form-textarea" placeholder="House number, area, city…"></textarea>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Occupation</label>
+        <input id="b-occupation" type="text" class="form-input" placeholder="E.g. Trader" />
+      </div>
+      <div class="form-group">
+        <label>Ghana Card Number</label>
+        <input id="b-ghana-card" type="text" class="form-input" placeholder="GHA-XXXXXXXXX-X" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Borrower Photo (optional)</label>
+      <div class="photo-upload-box" onclick="document.getElementById('b-photo-input').click()">
+        <div class="pu-icon">📷</div>
+        <p>Tap to take or upload photo</p>
+      </div>
+      <input id="b-photo-input" type="file" accept="image/*" capture="user" style="display:none" onchange="Loans.previewPhoto(this,'b-photo-preview')" />
+      <img id="b-photo-preview" class="photo-preview mt8" style="display:none" />
+    </div>
+    <div class="form-group">
+      <label>Ghana Card Photo (optional)</label>
+      <div class="photo-upload-box" onclick="document.getElementById('b-id-input').click()">
+        <div class="pu-icon">🪪</div>
+        <p>Tap to photograph Ghana Card</p>
+      </div>
+      <input id="b-id-input" type="file" accept="image/*" capture="environment" style="display:none" onchange="Loans.previewPhoto(this,'b-id-preview')" />
+      <img id="b-id-preview" class="photo-preview mt8" style="display:none" />
+    </div>
+    <button class="btn btn-primary btn-full mt16" onclick="Loans.wizardNext(1)">Next: Guarantor →</button>
+  </div>
+
+  <!-- Step 2: Guarantor -->
+  <div id="step-2" class="pad" style="display:none">
+    <div class="card-title">Guarantor Details</div>
+    <p class="text-muted mt8" style="margin-bottom:14px">The guarantor agrees to pay if the borrower defaults.</p>
+    <div class="form-group">
+      <label>Guarantor Full Name *</label>
+      <input id="g-name" type="text" class="form-input" placeholder="Guarantor's full name" />
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Phone Number *</label>
+        <input id="g-phone" type="tel" class="form-input" placeholder="024 XXX XXXX" />
+      </div>
+      <div class="form-group">
+        <label>Relationship</label>
+        <select id="g-relationship" class="form-select">
+          <option>Spouse</option><option>Parent</option><option>Sibling</option>
+          <option>Friend</option><option>Colleague</option><option>Other</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Address</label>
+      <textarea id="g-address" class="form-textarea" placeholder="Guarantor's address…"></textarea>
+    </div>
+    <div class="form-group">
+      <label>Ghana Card Number</label>
+      <input id="g-ghana-card" type="text" class="form-input" placeholder="GHA-XXXXXXXXX-X" />
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px">
+      <button class="btn btn-ghost" onclick="Loans.wizardBack(2)" style="flex:0 0 auto">← Back</button>
+      <button class="btn btn-primary btn-full" onclick="Loans.wizardNext(2)">Next: Witness →</button>
+    </div>
+  </div>
+
+  <!-- Step 3: Witness -->
+  <div id="step-3" class="pad" style="display:none">
+    <div class="card-title">Witness Details</div>
+    <p class="text-muted mt8" style="margin-bottom:14px">A witness who can confirm the loan agreement.</p>
+    <div class="form-group">
+      <label>Witness Full Name *</label>
+      <input id="w-name" type="text" class="form-input" placeholder="Witness's full name" />
+    </div>
+    <div class="form-group">
+      <label>Phone Number *</label>
+      <input id="w-phone" type="tel" class="form-input" placeholder="024 XXX XXXX" />
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px">
+      <button class="btn btn-ghost" onclick="Loans.wizardBack(3)" style="flex:0 0 auto">← Back</button>
+      <button class="btn btn-primary btn-full" onclick="Loans.wizardNext(3)">Next: Loan Amount →</button>
+    </div>
+  </div>
+
+  <!-- Step 4: Loan Details -->
+  <div id="step-4" class="pad" style="display:none">
+    <div class="card-title">Loan Details</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Loan Amount (GHS) *</label>
+        <input id="l-amount" type="number" class="form-input" placeholder="E.g. 1000" min="1" oninput="Loans.updateCalcPreview()" />
+      </div>
+      <div class="form-group">
+        <label>Duration (Months) *</label>
+        <select id="l-months" class="form-select" onchange="Loans.updateCalcPreview()">
+          <option value="">Select</option>
+          <option value="1">1 Month</option><option value="2">2 Months</option>
+          <option value="3">3 Months</option><option value="4">4 Months</option>
+          <option value="5">5 Months</option><option value="6">6 Months</option>
+          <option value="7">7 Months</option><option value="8">8 Months</option>
+          <option value="9">9 Months</option><option value="10">10 Months</option>
+          <option value="11">11 Months</option><option value="12">12 Months</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Start Date</label>
+      <input id="l-start" type="date" class="form-input" />
+    </div>
+    <div class="form-group">
+      <label>Processing Fee</label>
+      <div style="display:flex;gap:10px;align-items:center">
+        <label style="display:flex;gap:6px;align-items:center;font-size:14px;font-weight:500;cursor:pointer">
+          <input id="l-fee-paid" type="checkbox" checked style="width:16px;height:16px;accent-color:var(--accent)" />
+          <span>Borrower paid processing fee upfront</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Live Calculator Preview -->
+    <div id="calc-preview-box" class="calc-preview" style="display:none">
+      <div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent2);margin-bottom:10px">📐 Loan Breakdown</div>
+      <div class="calc-row"><span class="cl">Principal</span><span class="cv" id="cp-principal">—</span></div>
+      <div class="calc-row"><span class="cl">Processing Fee (4%)</span><span class="cv red" id="cp-fee">—</span></div>
+      <div class="calc-row"><span class="cl">Interest per Month (10%)</span><span class="cv gold" id="cp-monthly-int">—</span></div>
+      <div class="calc-row"><span class="cl">Total Interest</span><span class="cv gold" id="cp-total-int">—</span></div>
+      <div class="calc-row"><span class="cl">Total Repayable</span><span class="cv" id="cp-total">—</span></div>
+      <div class="calc-row"><span class="cl">Monthly Payment</span><span class="cv big" id="cp-monthly">—</span></div>
+      <div class="calc-row"><span class="cl">Late Penalty (if missed)</span><span class="cv red" id="cp-penalty">—</span></div>
+    </div>
+
+    <div class="form-group mt12">
+      <label>Notes (optional)</label>
+      <textarea id="l-notes" class="form-textarea" placeholder="Any special notes about this loan…"></textarea>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px">
+      <button class="btn btn-ghost" onclick="Loans.wizardBack(4)" style="flex:0 0 auto">← Back</button>
+      <button class="btn btn-primary btn-full" onclick="Loans.wizardNext(4)">Review Loan →</button>
+    </div>
+  </div>
+
+  <!-- Step 5: Review + Submit -->
+  <div id="step-5" class="pad" style="display:none">
+    <div class="card-title">Review & Confirm</div>
+    <div id="review-content"></div>
+    <div style="display:flex;gap:10px;margin-top:20px">
+      <button class="btn btn-ghost" onclick="Loans.wizardBack(5)" style="flex:0 0 auto">← Back</button>
+      <button id="btn-submit-loan" class="btn btn-success btn-full" onclick="Loans.submitLoan()">
+        ✅ Issue Loan
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN 5: LOAN DETAIL
+══════════════════════════════════════════ -->
+<div id="screen-loan-detail" class="screen">
+  <div class="screen-header">
+    <button class="back-btn" onclick="App.back()">←</button>
+    <h2 id="loan-detail-title">Loan Details</h2>
+    <span id="loan-detail-badge"></span>
+  </div>
+  <div class="pad" id="loan-detail-content">
+    <div class="text-muted text-center" style="padding:40px 0">Loading…</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN 6: BORROWERS LIST
+══════════════════════════════════════════ -->
+<div id="screen-borrowers" class="screen">
+  <div class="screen-header">
+    <h2>Borrowers</h2>
+  </div>
+  <div class="search-bar">
+    <div class="search-input-wrap">
+      <span class="search-icon">🔍</span>
+      <input id="borrowers-search" class="search-input" type="search" placeholder="Search borrowers…" oninput="Borrowers.filter(this.value)" />
+    </div>
+  </div>
+  <div id="borrowers-list">
+    <div class="empty-state">
+      <div class="empty-icon">👥</div>
+      <h3>No borrowers yet</h3>
+      <p>Create a loan to add your first borrower</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN 7: BORROWER DETAIL
+══════════════════════════════════════════ -->
+<div id="screen-borrower-detail" class="screen">
+  <div class="screen-header">
+    <button class="back-btn" onclick="App.back()">←</button>
+    <h2 id="borrower-detail-name">Borrower</h2>
+  </div>
+  <div class="pad" id="borrower-detail-content">
+    <div class="text-muted text-center" style="padding:40px 0">Loading…</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN 8: REPORTS
+══════════════════════════════════════════ -->
+<div id="screen-reports" class="screen">
+  <div class="screen-header">
+    <h2>Reports</h2>
+  </div>
+  <div class="pad">
+    <!-- Summary tiles -->
+    <div class="stat-grid" id="reports-summary">
+      <div class="stat-tile green"><div class="ico">💰</div><div class="val" id="rep-total-interest">—</div><div class="lbl">Total Interest Earned</div></div>
+      <div class="stat-tile accent"><div class="ico">📊</div><div class="val" id="rep-total-loans">—</div><div class="lbl">Total Loans Issued</div></div>
+      <div class="stat-tile gold"><div class="ico">🏆</div><div class="val" id="rep-repayment-rate">—</div><div class="lbl">Repayment Rate</div></div>
+      <div class="stat-tile"><div class="ico">👥</div><div class="val" id="rep-total-borrowers">—</div><div class="lbl">Total Borrowers</div></div>
+    </div>
+    <div class="card-title mt16">Monthly Breakdown</div>
+    <div id="monthly-reports-list">
+      <div class="text-muted text-center" style="padding:40px 0">Loading reports…</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN 9: SETTINGS
+══════════════════════════════════════════ -->
+<div id="screen-settings" class="screen">
+  <div class="screen-header">
+    <button class="back-btn" onclick="App.back()">←</button>
+    <h2>Settings</h2>
+  </div>
+  <div class="pad">
+    <!-- Business Info -->
+    <div class="card-title">Business</div>
+    <div class="card">
+      <div class="form-group">
+        <label>Business Name</label>
+        <input id="set-biz-name" type="text" class="form-input" placeholder="E-Max Enterprise" />
+      </div>
+      <div class="form-group">
+        <label>Your Full Name</label>
+        <input id="set-full-name" type="text" class="form-input" placeholder="Your name" />
+      </div>
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input id="set-phone" type="tel" class="form-input" placeholder="024 XXX XXXX" />
+      </div>
+      <button class="btn btn-primary btn-full" onclick="Settings.save()">Save Changes</button>
+    </div>
+
+    <!-- Notifications -->
+    <div class="card-title mt16">Notifications</div>
+    <div class="card">
+      <div class="settings-row">
+        <div class="settings-icon">🔔</div>
+        <div class="settings-info">
+          <div class="s-title">Payment Reminders</div>
+          <div class="s-sub">Get notified when payments are due</div>
+        </div>
+        <button id="notif-toggle" class="toggle" onclick="Settings.toggleNotifications(this)"></button>
+      </div>
+    </div>
+
+    <!-- Diagnostics -->
+    <div class="card-title mt16">Diagnostics</div>
+    <div class="card">
+      <div id="diag-results">
+        <div class="text-muted">Tap Run to check all systems</div>
+      </div>
+      <button class="btn btn-ghost btn-full mt12" onclick="Settings.runDiagnostics()">🔬 Run Diagnostics</button>
+    </div>
+
+    <!-- Sign Out -->
+    <div class="mt24">
+      <button class="btn btn-danger btn-full" onclick="Auth.logout()">Sign Out</button>
+    </div>
+    <div class="mt12 text-center text-muted" style="font-size:11px">
+      E-Max Loan Manager v1.0 · Built by Maxwell
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     BOTTOM NAVIGATION
+══════════════════════════════════════════ -->
+<nav id="bottom-nav">
+  <button class="nav-item active" id="nav-dashboard" onclick="App.navigate('dashboard')">
+    <span class="nav-icon">🏠</span>Home
+  </button>
+  <button class="nav-item" id="nav-loans" onclick="App.navigate('loans')">
+    <span class="nav-icon">💳</span>Loans
+  </button>
+  <button class="nav-item" id="nav-borrowers" onclick="App.navigate('borrowers')">
+    <span class="nav-icon">👥</span>People
+  </button>
+  <button class="nav-item" id="nav-reports" onclick="App.navigate('reports')">
+    <span class="nav-icon">📊</span>Reports
+  </button>
+</nav>
+
+<!-- TOAST NOTIFICATIONS -->
+<div id="toast-container"></div>
+
+<!-- ══════════════════════════════════════════
+     SCRIPTS — order matters
+══════════════════════════════════════════ -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/calculator.js"></script>
+<script src="js/app.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/loans.js"></script>
+<script src="js/borrowers.js"></script>
+<script src="js/payments.js"></script>
+<script src="js/dashboard.js"></script>
+<script src="js/reports.js"></script>
+<script src="js/settings.js"></script>
+</body>
+</html>
