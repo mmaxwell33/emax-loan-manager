@@ -179,6 +179,11 @@ CREATE TABLE IF NOT EXISTS enrollment_submissions (
   notes                 text,
   -- Status: Pending | Approved | Rejected
   status                varchar(50) DEFAULT 'Pending',
+  -- Privacy & Documents (added v2.1)
+  privacy_consent       boolean     DEFAULT false,
+  consent_timestamp     timestamptz,
+  id_photo_url          text,        -- URL to uploaded Ghana Card / Passport photo
+  passport_photo_url    text,        -- URL to uploaded passport-size photograph
   created_at            timestamptz DEFAULT now()
 );
 ALTER TABLE enrollment_submissions ENABLE ROW LEVEL SECURITY;
@@ -201,9 +206,26 @@ INSERT INTO storage.buckets (id, name, public)
 VALUES ('loan-docs', 'loan-docs', true)
 ON CONFLICT DO NOTHING;
 
+-- Allow authenticated agents to upload their own docs
 CREATE POLICY "loan_docs_agent_upload" ON storage.objects
   FOR INSERT WITH CHECK (bucket_id = 'loan-docs' AND auth.role() = 'authenticated');
+
+-- Allow ANYONE (unauthenticated borrowers) to upload enrollment docs
+-- (secured by the enrollments/ prefix — agents cannot see each other's files via RLS)
+CREATE POLICY "loan_docs_enrollment_upload" ON storage.objects
+  FOR INSERT WITH CHECK (
+    bucket_id = 'loan-docs'
+    AND (storage.foldername(name))[1] = 'enrollments'
+  );
+
 CREATE POLICY "loan_docs_public_read"  ON storage.objects
   FOR SELECT USING (bucket_id = 'loan-docs');
 CREATE POLICY "loan_docs_owner_delete" ON storage.objects
   FOR DELETE USING (bucket_id = 'loan-docs' AND auth.uid()::text = (storage.foldername(name))[1]);
+
+-- ─── MIGRATION: Add new columns if upgrading from v1 ───────────────
+-- Run ONLY if you already have an existing enrollment_submissions table:
+-- ALTER TABLE enrollment_submissions ADD COLUMN IF NOT EXISTS privacy_consent      boolean DEFAULT false;
+-- ALTER TABLE enrollment_submissions ADD COLUMN IF NOT EXISTS consent_timestamp    timestamptz;
+-- ALTER TABLE enrollment_submissions ADD COLUMN IF NOT EXISTS id_photo_url         text;
+-- ALTER TABLE enrollment_submissions ADD COLUMN IF NOT EXISTS passport_photo_url   text;

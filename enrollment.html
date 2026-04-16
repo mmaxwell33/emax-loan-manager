@@ -13,6 +13,7 @@
       --card:   #161b22;
       --border: rgba(255,255,255,0.08);
       --accent: #5b5bd6;
+      --acc2:   #7c7cff;
       --text1:  #e6edf3;
       --text2:  #8b949e;
       --green:  #22c55e;
@@ -25,188 +26,283 @@
       color: var(--text1);
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       min-height: 100vh;
-      padding-bottom: 40px;
+      padding-bottom: 60px;
     }
 
+    /* ── Header ── */
     .header {
       background: var(--card);
       border-bottom: 1px solid var(--border);
-      padding: 20px 24px;
+      padding: 16px 20px;
       display: flex;
       align-items: center;
       gap: 14px;
+      position: sticky; top: 0; z-index: 10;
     }
     .header-icon {
-      width: 44px; height: 44px;
-      background: var(--accent);
+      width: 42px; height: 42px;
+      background: linear-gradient(135deg, var(--accent), var(--acc2));
       border-radius: 12px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 22px;
+      font-size: 20px; flex-shrink: 0;
     }
-    .header-title { font-size: 18px; font-weight: 700; }
-    .header-sub   { font-size: 13px; color: var(--text2); margin-top: 2px; }
+    .header-title { font-size: 17px; font-weight: 700; }
+    .header-sub   { font-size: 12px; color: var(--text2); margin-top: 2px; }
 
     .container { max-width: 680px; margin: 0 auto; padding: 24px 16px; }
 
-    .step-bar {
-      display: flex;
-      align-items: center;
-      margin-bottom: 28px;
-      gap: 0;
-    }
+    /* ── Step bar ── */
+    .steps-outer { margin-bottom: 28px; }
+    .steps-row   { display: flex; align-items: center; }
     .step-dot {
-      width: 30px; height: 30px;
-      border-radius: 50%;
-      background: var(--card);
-      border: 2px solid var(--border);
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--card); border: 2px solid var(--border);
       display: flex; align-items: center; justify-content: center;
       font-size: 12px; font-weight: 700; color: var(--text2);
       transition: all 0.3s; flex-shrink: 0;
     }
-    .step-dot.active  { background: var(--accent); border-color: var(--accent); color: #fff; }
-    .step-dot.done    { background: var(--green);  border-color: var(--green);  color: #fff; }
-    .step-line { flex: 1; height: 2px; background: var(--border); }
-    .step-line.done { background: var(--green); }
-    .step-label { font-size: 10px; color: var(--text2); text-align: center; margin-top: 4px; }
+    .step-dot.active { background: var(--accent); border-color: var(--accent); color:#fff; }
+    .step-dot.done   { background: var(--green);  border-color: var(--green);  color:#fff; }
+    .step-line { flex:1; height:2px; background: var(--border); transition: background 0.3s; }
+    .step-line.done  { background: var(--green); }
+    .step-label { font-size:10px; color:var(--text2); text-align:center; margin-top:5px; }
 
+    /* ── Panels ── */
     .panel {
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 16px;
-      padding: 24px;
+      padding: 22px;
       margin-bottom: 16px;
     }
     .panel-title {
-      font-size: 16px; font-weight: 700; margin-bottom: 20px;
-      padding-bottom: 12px; border-bottom: 1px solid var(--border);
+      font-size:16px; font-weight:700; margin-bottom:18px;
+      padding-bottom:12px; border-bottom:1px solid var(--border);
     }
-    .form-group { margin-bottom: 16px; }
-    label { display: block; font-size: 13px; color: var(--text2); margin-bottom: 6px; font-weight: 500; }
-    .req { color: var(--red); }
+    .section-label {
+      font-size:10px; font-weight:700; color:var(--accent);
+      letter-spacing:.09em; text-transform:uppercase;
+      margin: 20px 0 10px;
+    }
+    .section-label:first-child { margin-top:0; }
 
-    input[type=text], input[type=tel], input[type=number], input[type=email], input[type=date], select, textarea {
-      width: 100%;
+    /* ── Forms ── */
+    .form-group { margin-bottom: 14px; }
+    label { display:block; font-size:13px; color:var(--text2); margin-bottom:6px; font-weight:500; }
+    .req { color:var(--red); }
+    input, select, textarea {
+      width:100%;
       background: rgba(255,255,255,0.04);
       border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 14px 16px;
+      border-radius:10px;
+      padding: 13px 14px;
       color: var(--text1);
-      font-size: 16px;
+      font-size:16px;
       outline: none;
       transition: border-color 0.2s;
       -webkit-appearance: none;
+      font-family: inherit;
     }
     input:focus, select:focus, textarea:focus { border-color: var(--accent); }
-    textarea { min-height: 80px; resize: vertical; }
+    textarea { min-height:72px; resize:vertical; }
     select option { background: #161b22; }
-
     .form-row {
-      display: grid;
+      display:grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
     }
-    @media (max-width: 480px) { .form-row { grid-template-columns: 1fr; } }
+    @media (max-width:480px) { .form-row { grid-template-columns:1fr; } }
 
-    .amount-chips {
-      display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;
-    }
-    .amount-chip {
-      padding: 8px 16px;
-      background: rgba(91,91,214,0.12);
-      border: 1px solid rgba(91,91,214,0.3);
-      border-radius: 20px;
-      color: var(--accent);
-      font-size: 14px; font-weight: 600; cursor: pointer;
-      transition: all 0.15s;
-    }
-    .amount-chip:hover, .amount-chip.selected {
-      background: var(--accent); color: #fff;
-      border-color: var(--accent);
-    }
-
-    .calc-box {
-      background: rgba(91,91,214,0.08);
-      border: 1px solid rgba(91,91,214,0.2);
-      border-radius: 12px;
-      padding: 16px;
-      margin-top: 16px;
-      display: none;
-    }
-    .calc-title { font-size: 13px; font-weight: 700; margin-bottom: 12px; color: var(--accent); }
-    .calc-grid  { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .cg-item    { display: flex; flex-direction: column; gap: 2px; }
-    .cg-label   { font-size: 11px; color: var(--text2); }
-    .cg-val     { font-size: 15px; font-weight: 700; }
-    .cg-big     { font-size: 20px; color: var(--accent); }
-    .text-red   { color: var(--red); }
-    .text-gold  { color: var(--gold); }
-
-    .btn {
-      padding: 14px 24px;
-      border-radius: 10px;
-      border: none;
-      font-size: 16px; font-weight: 700;
-      cursor: pointer;
-      width: 100%; margin-top: 8px;
-      transition: all 0.15s;
-    }
-    .btn-primary { background: var(--accent); color: #fff; }
-    .btn-primary:hover { background: #6e6ef0; }
-    .btn-ghost {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text1);
-      width: auto; margin-top: 0; padding: 12px 20px;
-    }
-    .btn-success { background: var(--green); color: #fff; }
-    .btn-success:disabled { opacity: 0.5; cursor: not-allowed; }
-
-    .btn-row { display: flex; gap: 12px; margin-top: 16px; }
-
-    .hint { font-size: 12px; color: var(--text2); margin-top: 6px; }
+    /* ── Hint / info boxes ── */
+    .hint     { font-size:12px; color:var(--text2); margin-top:5px; }
     .hint-box {
-      background: rgba(234,179,8,0.08);
-      border: 1px solid rgba(234,179,8,0.2);
-      border-radius: 10px;
-      padding: 12px 16px;
-      font-size: 13px;
-      color: var(--gold);
-      margin-bottom: 20px;
+      border-radius:10px; padding:12px 14px;
+      font-size:13px; line-height:1.55; margin-bottom:18px;
+    }
+    .hint-blue { background:rgba(91,91,214,0.09); border:1px solid rgba(91,91,214,0.25); color:var(--text2); }
+    .hint-gold { background:rgba(234,179,8,0.08);  border:1px solid rgba(234,179,8,0.22); color:var(--gold); }
+
+    /* ── Buttons ── */
+    .btn {
+      padding:14px 24px; border-radius:10px; border:none;
+      font-size:16px; font-weight:700; cursor:pointer;
+      transition:all 0.15s; font-family:inherit;
+    }
+    .btn-full  { width:100%; display:block; margin-top:10px; }
+    .btn-primary { background:var(--accent); color:#fff; }
+    .btn-primary:hover { background:var(--acc2); }
+    .btn-success { background:var(--green); color:#fff; }
+    .btn-success:disabled { opacity:.45; cursor:not-allowed; }
+    .btn-ghost {
+      background:transparent; border:1px solid var(--border);
+      color:var(--text1); padding:12px 20px;
+    }
+    .nav-btns { display:flex; gap:12px; margin-top:16px; }
+    .nav-btns .btn { flex:1; }
+
+    /* ── Amount chips ── */
+    .amt-chips { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px; }
+    .amt-chip {
+      padding:8px 16px;
+      background:rgba(91,91,214,0.10);
+      border:1px solid rgba(91,91,214,0.28);
+      border-radius:20px; color:var(--accent);
+      font-size:14px; font-weight:600; cursor:pointer;
+      transition:all 0.15s; font-family:inherit;
+    }
+    .amt-chip.sel { background:var(--accent); color:#fff; border-color:var(--accent); }
+
+    /* ── Calc box ── */
+    .calc-box {
+      background:rgba(91,91,214,0.07); border:1px solid rgba(91,91,214,0.18);
+      border-radius:12px; padding:16px; margin-top:14px; display:none;
+    }
+    .calc-title { font-size:12px; font-weight:700; margin-bottom:12px; color:var(--accent); }
+    .calc-grid  { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .cg-label   { font-size:11px; color:var(--text2); }
+    .cg-val     { font-size:15px; font-weight:700; margin-top:2px; }
+    .cg-big     { font-size:21px; color:var(--accent); }
+    .c-red      { color:var(--red); }
+    .c-gold     { color:var(--gold); }
+
+    /* ── Upload zones ── */
+    .upload-zone {
+      border:2px dashed var(--border);
+      border-radius:12px;
+      padding:20px 16px;
+      text-align:center;
+      cursor:pointer;
+      transition:all 0.2s;
+      position:relative;
+    }
+    .upload-zone:hover, .upload-zone.has-file {
+      border-color: var(--accent);
+      background: rgba(91,91,214,0.06);
+    }
+    .upload-zone input[type=file] {
+      position:absolute; inset:0; opacity:0; cursor:pointer;
+      width:100%; height:100%; border:none; padding:0;
+    }
+    .upload-icon  { font-size:28px; margin-bottom:6px; }
+    .upload-label { font-size:14px; font-weight:600; color:var(--text1); }
+    .upload-hint  { font-size:12px; color:var(--text2); margin-top:4px; }
+    .upload-preview {
+      width:100%; max-height:160px; object-fit:cover;
+      border-radius:8px; margin-top:10px; display:none;
+    }
+    .upload-name {
+      font-size:12px; color:var(--green); margin-top:6px; display:none;
     }
 
-    .success-screen {
-      text-align: center;
-      padding: 40px 20px;
-      display: none;
+    /* ── ID scan button ── */
+    .scan-id-btn {
+      width:100%; padding:12px; border-radius:10px;
+      border:1px dashed rgba(91,91,214,0.4);
+      background:rgba(91,91,214,0.07);
+      color:var(--accent); font-size:14px; font-weight:600;
+      cursor:pointer; display:flex; align-items:center;
+      justify-content:center; gap:8px; margin-bottom:14px;
+      transition:all 0.2s; font-family:inherit;
     }
-    .success-icon { font-size: 64px; margin-bottom: 16px; }
-    .success-title { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
-    .success-sub { color: var(--text2); font-size: 15px; line-height: 1.6; }
-
-    .nav-btns { display: flex; gap: 12px; }
-    .nav-btns .btn { flex: 1; }
-
-    .spinner {
-      display: inline-block; width: 18px; height: 18px;
-      border: 2px solid rgba(255,255,255,0.3);
-      border-top-color: #fff;
-      border-radius: 50%;
-      animation: spin 0.6s linear infinite;
-      vertical-align: middle; margin-right: 8px;
+    .scan-id-btn:hover { background:rgba(91,91,214,0.14); border-color:var(--accent); }
+    .scan-status {
+      font-size:12px; color:var(--text2); text-align:center;
+      padding:6px; margin-top:-6px; margin-bottom:10px;
     }
-    @keyframes spin { to { transform: rotate(360deg); } }
 
+    /* ── Privacy consent ── */
+    #consent-screen {
+      max-width:520px; margin:0 auto; padding:24px 16px;
+    }
+    .consent-logo {
+      text-align:center; margin-bottom:24px;
+    }
+    .consent-logo .icon {
+      width:64px; height:64px;
+      background:linear-gradient(135deg,var(--accent),var(--acc2));
+      border-radius:18px; display:inline-flex; align-items:center;
+      justify-content:center; font-size:30px; margin-bottom:12px;
+    }
+    .consent-logo .co-title { font-size:20px; font-weight:800; }
+    .consent-logo .co-sub   { font-size:13px; color:var(--text2); margin-top:4px; }
+    .consent-body {
+      background:var(--card); border:1px solid var(--border);
+      border-radius:16px; padding:22px; margin-bottom:18px;
+    }
+    .consent-body h2 {
+      font-size:15px; font-weight:700; margin-bottom:14px;
+    }
+    .consent-body p {
+      font-size:13px; color:var(--text2); line-height:1.65;
+      margin-bottom:12px;
+    }
+    .consent-body ul {
+      font-size:13px; color:var(--text2); line-height:1.7;
+      padding-left:18px; margin-bottom:12px;
+    }
+    .consent-check {
+      display:flex; align-items:flex-start; gap:12px;
+      background:rgba(91,91,214,0.08); border:1px solid rgba(91,91,214,0.25);
+      border-radius:12px; padding:16px; margin-bottom:18px; cursor:pointer;
+    }
+    .consent-check input[type=checkbox] {
+      width:20px; height:20px; flex-shrink:0; margin-top:2px;
+      cursor:pointer; accent-color:var(--accent);
+      border:none; padding:0;
+    }
+    .consent-check-text { font-size:13px; line-height:1.55; color:var(--text1); }
+    .secure-badge {
+      display:flex; align-items:center; justify-content:center;
+      gap:6px; font-size:11px; color:var(--text2); margin-bottom:16px;
+    }
+
+    /* ── ID scan modal ── */
+    #id-scan-modal {
+      display:none; position:fixed; inset:0; z-index:100;
+      background:rgba(0,0,0,0.85); padding:20px;
+      align-items:center; justify-content:center;
+    }
+    #id-scan-modal.open { display:flex; }
+    .id-scan-inner {
+      background:var(--card); border:1px solid var(--border);
+      border-radius:16px; padding:22px; width:100%; max-width:480px;
+      max-height:90vh; overflow-y:auto;
+    }
+    .id-scan-inner .panel-title { margin-bottom:14px; }
+    #id-scan-preview {
+      width:100%; border-radius:10px; margin:10px 0; display:none;
+    }
+    #id-scan-status { font-size:13px; color:var(--text2); text-align:center; padding:8px 0; }
+
+    /* ── Error / spinner ── */
     .error-msg {
-      background: rgba(239,68,68,0.1);
-      border: 1px solid rgba(239,68,68,0.3);
-      border-radius: 8px;
-      padding: 10px 14px;
-      font-size: 13px; color: var(--red);
-      margin-bottom: 12px; display: none;
+      background:rgba(239,68,68,0.10); border:1px solid rgba(239,68,68,0.28);
+      border-radius:8px; padding:10px 14px;
+      font-size:13px; color:var(--red);
+      margin-bottom:12px; display:none;
     }
+    .spinner {
+      display:inline-block; width:18px; height:18px;
+      border:2px solid rgba(255,255,255,0.25);
+      border-top-color:#fff; border-radius:50%;
+      animation:spin 0.6s linear infinite;
+      vertical-align:middle; margin-right:8px;
+    }
+    @keyframes spin { to { transform:rotate(360deg); } }
 
-    .steps-outer { margin-bottom: 24px; }
-    .steps-row { display: flex; align-items: center; gap: 0; }
+    /* ── Success ── */
+    .success-screen {
+      text-align:center; padding:48px 20px; display:none;
+    }
+    .success-icon  { font-size:64px; margin-bottom:16px; }
+    .success-title { font-size:24px; font-weight:800; margin-bottom:10px; }
+    .success-sub   { color:var(--text2); font-size:15px; line-height:1.65; }
+    .success-ref {
+      display:inline-block; background:rgba(34,197,94,0.10);
+      border:1px solid rgba(34,197,94,0.3); border-radius:8px;
+      padding:8px 20px; color:var(--green); font-weight:700;
+      font-size:16px; margin-top:16px; letter-spacing:.04em;
+    }
   </style>
 </head>
 <body>
@@ -215,10 +311,78 @@
   <div class="header-icon">💰</div>
   <div>
     <div class="header-title">E-EMAX Enterprise</div>
-    <div class="header-sub">Loan Application Form</div>
+    <div class="header-sub">Secure Loan Application</div>
+  </div>
+  <div style="margin-left:auto;font-size:11px;color:var(--green);display:flex;align-items:center;gap:4px">
+    🔒 Secure
   </div>
 </div>
 
+<!-- ═══════════════════════════════════════
+     CONSENT GATE — shown first, always
+════════════════════════════════════════ -->
+<div id="consent-screen">
+  <div class="consent-logo" style="margin-top:28px">
+    <div class="icon">💰</div>
+    <div class="co-title">Loan Application</div>
+    <div class="co-sub">E-EMAX Enterprise · Ghana</div>
+  </div>
+
+  <div class="consent-body">
+    <h2>🔒 Privacy Notice & Data Consent</h2>
+    <p>Before you fill this form, please read how E-EMAX Enterprise uses your personal information.</p>
+
+    <p><strong>What information we collect:</strong></p>
+    <ul>
+      <li>Your full name, phone number, date of birth and home address</li>
+      <li>Your Ghana Card number or Passport number (for identity verification)</li>
+      <li>A photo of your ID document (Ghana Card / Passport)</li>
+      <li>Your passport-size photograph</li>
+      <li>Details of your guarantor and witness</li>
+      <li>Your loan request amount and repayment period</li>
+    </ul>
+
+    <p><strong>How we use your information:</strong></p>
+    <ul>
+      <li>To verify your identity before approving any loan</li>
+      <li>To process and manage your loan account</li>
+      <li>To contact you about repayments and your account</li>
+      <li>To contact your guarantor if necessary</li>
+    </ul>
+
+    <p><strong>Your rights:</strong> Your information is stored securely and is only accessible to E-EMAX Enterprise staff. We do not share your data with third parties. You may request to see or delete your data at any time by contacting E-EMAX Enterprise directly.</p>
+
+    <p style="color:var(--gold)">⚠️ This application is only valid when submitted through an official E-EMAX Enterprise enrollment link.</p>
+  </div>
+
+  <div class="secure-badge">
+    🔐 256-bit encrypted · Stored securely · Ghana Data Protection Act compliant
+  </div>
+
+  <div class="consent-check" onclick="toggleConsent()">
+    <input type="checkbox" id="consent-checkbox" onclick="event.stopPropagation(); toggleConsent()" />
+    <div class="consent-check-text">
+      <strong>I agree and give consent</strong> for E-EMAX Enterprise to collect, store and use my
+      personal information — including my ID document and photograph — for the purpose of processing
+      my loan application. I confirm that all information I provide is true and accurate.
+    </div>
+  </div>
+
+  <button id="consent-btn" class="btn btn-primary btn-full" onclick="startForm()" disabled
+    style="font-size:17px;padding:16px">
+    I Agree — Start Application →
+  </button>
+
+  <p style="font-size:11px;color:var(--text2);text-align:center;margin-top:16px;line-height:1.5">
+    You cannot submit this application without giving consent.<br>
+    If you have questions, contact E-EMAX Enterprise before proceeding.
+  </p>
+</div>
+
+<!-- ═══════════════════════════════════════
+     MAIN FORM — hidden until consent given
+════════════════════════════════════════ -->
+<div id="main-form" style="display:none">
 <div class="container">
 
   <!-- Step bar -->
@@ -232,7 +396,7 @@
       <div class="step-line" id="sl-3"></div>
       <div class="step-dot" id="sd-4">4</div>
     </div>
-    <div style="display:flex;justify-content:space-between;margin-top:6px">
+    <div style="display:flex;justify-content:space-between;margin-top:5px">
       <span class="step-label">You</span>
       <span class="step-label">Guarantor</span>
       <span class="step-label">Witness</span>
@@ -242,14 +406,27 @@
 
   <div id="error-global" class="error-msg"></div>
 
-  <!-- STEP 1: Borrower -->
+  <!-- ══ STEP 1: Borrower ══ -->
   <div id="step-1">
-    <div class="hint-box">
-      📝 Please fill this form carefully. All information must be accurate and true.
-      E-EMAX Enterprise will review your application before approval.
+    <div class="hint-box hint-gold">
+      📝 Fill in your details carefully. Make sure your name matches exactly what is on your Ghana Card or Passport.
     </div>
+
+    <!-- ID Scan Option -->
+    <div class="panel" style="margin-bottom:14px">
+      <div class="panel-title">📷 Quick Fill from ID Card (Optional)</div>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:14px;line-height:1.5">
+        Take a photo of your Ghana Card or Passport and the app will automatically fill in your details. You can still edit everything after.
+      </p>
+      <button class="scan-id-btn" onclick="openIdScan()">
+        📷 Scan Ghana Card / Passport
+      </button>
+      <div id="scan-id-status" class="scan-status" style="display:none"></div>
+    </div>
+
     <div class="panel">
       <div class="panel-title">👤 Your Personal Details</div>
+
       <div class="form-group">
         <label>Full Name <span class="req">*</span></label>
         <input id="e-name" type="text" placeholder="E.g. Akua Mensah" autocomplete="name" />
@@ -274,27 +451,54 @@
           <select id="e-occupation">
             <option value="">— Select —</option>
             <option>Trader</option><option>Farmer</option><option>Teacher</option>
-            <option>Nurse/Doctor</option><option>Civil Servant</option>
-            <option>Driver</option><option>Seamstress/Tailor</option>
+            <option>Nurse / Doctor</option><option>Civil Servant</option>
+            <option>Driver</option><option>Seamstress / Tailor</option>
             <option>Hairdresser</option><option>Student</option>
             <option>Self-Employed</option><option>Other</option>
           </select>
         </div>
         <div class="form-group">
-          <label>Ghana Card Number</label>
+          <label>Ghana Card / Passport No.</label>
           <input id="e-ghana-card" type="text" placeholder="GHA-XXXXXXXXX-X" />
         </div>
       </div>
-      <button class="btn btn-primary" onclick="nextStep(1)">Next: Guarantor Details →</button>
+
+      <!-- ID Document Upload -->
+      <div class="section-label">📄 Upload Your ID Document</div>
+      <p class="hint" style="margin-bottom:10px">Upload a clear photo of your Ghana Card, Passport or National ID. Both sides if possible.</p>
+      <div class="upload-zone" id="id-doc-zone" onclick="document.getElementById('id-doc-input').click()">
+        <input type="file" id="id-doc-input" accept="image/*,application/pdf" onchange="handleUpload('id-doc')" style="display:none" />
+        <div class="upload-icon">🪪</div>
+        <div class="upload-label">Tap to upload ID document</div>
+        <div class="upload-hint">Ghana Card, Passport, or Voter ID — photo or PDF</div>
+        <img id="id-doc-preview" class="upload-preview" />
+        <div id="id-doc-name" class="upload-name"></div>
+      </div>
+
+      <!-- Passport Photo Upload -->
+      <div class="section-label" style="margin-top:18px">🤳 Upload Your Passport Photo</div>
+      <p class="hint" style="margin-bottom:10px">A clear photo of your face — taken from the front, well-lit background.</p>
+      <div class="upload-zone" id="passport-zone" onclick="document.getElementById('passport-input').click()">
+        <input type="file" id="passport-input" accept="image/*" capture="user" onchange="handleUpload('passport')" style="display:none" />
+        <div class="upload-icon">📸</div>
+        <div class="upload-label">Tap to upload passport photo</div>
+        <div class="upload-hint">Take a new selfie or choose from gallery</div>
+        <img id="passport-preview" class="upload-preview" />
+        <div id="passport-name" class="upload-name"></div>
+      </div>
+
+      <button class="btn btn-primary btn-full" style="margin-top:20px" onclick="nextStep(1)">
+        Next: Guarantor Details →
+      </button>
     </div>
   </div>
 
-  <!-- STEP 2: Guarantor -->
+  <!-- ══ STEP 2: Guarantor ══ -->
   <div id="step-2" style="display:none">
     <div class="panel">
       <div class="panel-title">🤝 Guarantor Details</div>
-      <div class="hint-box" style="background:rgba(91,91,214,0.08);border-color:rgba(91,91,214,0.2);color:var(--text2)">
-        Your guarantor must agree to repay the loan if you default. They must sign the loan form in person.
+      <div class="hint-box hint-blue">
+        Your guarantor must agree to repay the loan if you are unable to. They must be present in person when signing the loan agreement.
       </div>
       <div class="form-group">
         <label>Guarantor Full Name <span class="req">*</span></label>
@@ -314,7 +518,7 @@
         </div>
       </div>
       <div class="form-group">
-        <label>Address</label>
+        <label>Home Address</label>
         <textarea id="e-g-address" placeholder="Guarantor's home address…"></textarea>
       </div>
       <div class="form-group">
@@ -328,12 +532,12 @@
     </div>
   </div>
 
-  <!-- STEP 3: Witness -->
+  <!-- ══ STEP 3: Witness ══ -->
   <div id="step-3" style="display:none">
     <div class="panel">
       <div class="panel-title">👁️ Witness Details</div>
-      <div class="hint-box" style="background:rgba(91,91,214,0.08);border-color:rgba(91,91,214,0.2);color:var(--text2)">
-        A witness confirms the loan agreement. They must also be present when signing.
+      <div class="hint-box hint-blue">
+        A witness confirms the loan agreement was signed voluntarily. They must also be present when signing.
       </div>
       <div class="form-group">
         <label>Witness Full Name <span class="req">*</span></label>
@@ -350,39 +554,33 @@
     </div>
   </div>
 
-  <!-- STEP 4: Loan -->
+  <!-- ══ STEP 4: Loan ══ -->
   <div id="step-4" style="display:none">
     <div class="panel">
-      <div class="panel-title">💵 Loan Request</div>
+      <div class="panel-title">💵 Your Loan Request</div>
 
       <div class="form-group">
-        <label>How much do you want to borrow? (GH₵) <span class="req">*</span></label>
-        <div class="amount-chips" id="amt-chips">
-          <button class="amount-chip" onclick="setAmt(500)">GH₵ 500</button>
-          <button class="amount-chip" onclick="setAmt(1000)">GH₵ 1,000</button>
-          <button class="amount-chip" onclick="setAmt(2000)">GH₵ 2,000</button>
-          <button class="amount-chip" onclick="setAmt(3000)">GH₵ 3,000</button>
-          <button class="amount-chip" onclick="setAmt(5000)">GH₵ 5,000</button>
+        <label>How much do you need? (GH₵) <span class="req">*</span></label>
+        <div class="amt-chips" id="amt-chips">
+          <button class="amt-chip" onclick="setAmt(500, this)">GH₵ 500</button>
+          <button class="amt-chip" onclick="setAmt(1000, this)">GH₵ 1,000</button>
+          <button class="amt-chip" onclick="setAmt(2000, this)">GH₵ 2,000</button>
+          <button class="amt-chip" onclick="setAmt(3000, this)">GH₵ 3,000</button>
+          <button class="amt-chip" onclick="setAmt(5000, this)">GH₵ 5,000</button>
         </div>
-        <input id="e-amount" type="number" placeholder="Or type amount here" min="100" oninput="calcPreview()" />
+        <input id="e-amount" type="number" placeholder="Or type your amount here" min="100" oninput="calcPreview()" />
       </div>
 
       <div class="form-group">
         <label>For how many months? <span class="req">*</span></label>
         <select id="e-months" onchange="calcPreview()">
           <option value="">— Select duration —</option>
-          <option value="1">1 Month</option>
-          <option value="2">2 Months</option>
-          <option value="3">3 Months</option>
-          <option value="4">4 Months</option>
-          <option value="5">5 Months</option>
-          <option value="6">6 Months</option>
-          <option value="7">7 Months</option>
-          <option value="8">8 Months</option>
-          <option value="9">9 Months</option>
-          <option value="10">10 Months</option>
-          <option value="11">11 Months</option>
-          <option value="12">12 Months</option>
+          <option value="1">1 Month</option><option value="2">2 Months</option>
+          <option value="3">3 Months</option><option value="4">4 Months</option>
+          <option value="5">5 Months</option><option value="6">6 Months</option>
+          <option value="7">7 Months</option><option value="8">8 Months</option>
+          <option value="9">9 Months</option><option value="10">10 Months</option>
+          <option value="11">11 Months</option><option value="12">12 Months</option>
         </select>
         <div class="hint">Minimum 1 month · Maximum 12 months</div>
       </div>
@@ -391,55 +589,60 @@
         <label>Purpose of Loan</label>
         <select id="e-purpose">
           <option value="">— Select reason —</option>
-          <option>Business / Trading</option>
-          <option>School fees</option>
-          <option>Medical expenses</option>
-          <option>Home improvements</option>
-          <option>Agriculture / Farming</option>
-          <option>Personal / Emergency</option>
+          <option>Business / Trading</option><option>School fees</option>
+          <option>Medical expenses</option><option>Home improvements</option>
+          <option>Agriculture / Farming</option><option>Personal / Emergency</option>
           <option>Other</option>
         </select>
       </div>
 
-      <!-- Live calculator preview -->
+      <!-- Live calculator -->
       <div id="calc-preview" class="calc-box">
-        <div class="calc-title">📐 What you will pay — E-EMAX Enterprise</div>
+        <div class="calc-title">📐 Your repayment breakdown — E-EMAX Enterprise</div>
         <div class="calc-grid">
-          <div class="cg-item">
-            <span class="cg-label">Amount you receive</span>
-            <span class="cg-val" id="cp-get">—</span>
+          <div>
+            <div class="cg-label">Amount you receive</div>
+            <div class="cg-val" id="cp-get">—</div>
           </div>
-          <div class="cg-item">
-            <span class="cg-label">Processing fee (4%)</span>
-            <span class="cg-val text-red" id="cp-fee">—</span>
+          <div>
+            <div class="cg-label">Processing fee (4%)</div>
+            <div class="cg-val c-red" id="cp-fee">—</div>
           </div>
-          <div class="cg-item">
-            <span class="cg-label">Interest per month (10%)</span>
-            <span class="cg-val text-gold" id="cp-int">—</span>
+          <div>
+            <div class="cg-label">Interest per month (10%)</div>
+            <div class="cg-val c-gold" id="cp-int">—</div>
           </div>
-          <div class="cg-item">
-            <span class="cg-label">Total to repay</span>
-            <span class="cg-val" id="cp-total">—</span>
+          <div>
+            <div class="cg-label">Total to repay</div>
+            <div class="cg-val" id="cp-total">—</div>
           </div>
-          <div class="cg-item" style="grid-column:span 2">
-            <span class="cg-label">Your monthly payment</span>
-            <span class="cg-val cg-big" id="cp-monthly">—</span>
+          <div style="grid-column:span 2">
+            <div class="cg-label">Your monthly payment</div>
+            <div class="cg-val cg-big" id="cp-monthly">—</div>
           </div>
-          <div class="cg-item">
-            <span class="cg-label">Late payment penalty</span>
-            <span class="cg-val text-red" id="cp-penalty">—</span>
+          <div>
+            <div class="cg-label">Late payment penalty</div>
+            <div class="cg-val c-red" id="cp-penalty">—</div>
           </div>
         </div>
-        <div style="font-size:11px;color:var(--text2);margin-top:12px;line-height:1.5">
+        <div style="font-size:11px;color:var(--text2);margin-top:12px;line-height:1.55">
           * Processing fee is paid BEFORE you receive the loan.<br>
-          * Interest is 10% of the principal per month, for the full duration.<br>
-          * A 10% penalty is added to your monthly payment if paid late.
+          * Interest is 10% of principal per month for the full duration.<br>
+          * A 10% penalty applies to your monthly payment if you pay late.
         </div>
       </div>
 
       <div class="form-group" style="margin-top:16px">
         <label>Additional Notes (optional)</label>
-        <textarea id="e-notes" placeholder="Anything else you'd like E-EMAX Enterprise to know…"></textarea>
+        <textarea id="e-notes" placeholder="Anything else you'd like E-EMAX Enterprise to know about your application…"></textarea>
+      </div>
+
+      <!-- Final consent reminder -->
+      <div style="background:rgba(34,197,94,0.07);border:1px solid rgba(34,197,94,0.2);
+        border-radius:10px;padding:12px 14px;font-size:12px;color:var(--text2);
+        margin-top:14px;line-height:1.5">
+        🔒 By submitting, you confirm that all information is true and you agree to E-EMAX Enterprise's
+        loan terms, processing fee of 4%, monthly interest of 10%, and late penalty of 10%.
       </div>
 
       <div class="nav-btns">
@@ -451,39 +654,102 @@
     </div>
   </div>
 
-  <!-- SUCCESS -->
+  <!-- ══ SUCCESS ══ -->
   <div class="success-screen" id="success-screen">
     <div class="success-icon">🎉</div>
     <div class="success-title">Application Submitted!</div>
     <div class="success-sub">
-      Thank you! Your loan application has been received.<br><br>
-      <strong>E-EMAX Enterprise will contact you soon</strong> to confirm approval and arrange a time to sign the loan agreement in person.<br><br>
-      Please keep your phone on — they will call you on <strong id="confirm-phone"></strong>.
+      Thank you! Your loan application has been received by E-EMAX Enterprise.<br><br>
+      <strong>We will contact you soon</strong> to confirm approval and arrange a time to sign the loan agreement in person.<br><br>
+      Please keep your phone on — we will call you on <strong id="confirm-phone"></strong>.
     </div>
+    <div class="success-ref" id="confirm-ref"></div>
+    <p style="font-size:12px;color:var(--text2);margin-top:20px;line-height:1.5">
+      Save this page or take a screenshot as proof of your submission.
+    </p>
   </div>
 
 </div><!-- /container -->
+</div><!-- /main-form -->
+
+<!-- ═══════════════════════════════════════
+     ID SCAN MODAL
+════════════════════════════════════════ -->
+<div id="id-scan-modal">
+  <div class="id-scan-inner">
+    <div class="panel-title">📷 Scan Your ID Card</div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:14px;line-height:1.5">
+      Take a clear, well-lit photo of your Ghana Card or Passport. Hold it flat and make sure all text is readable.
+    </p>
+
+    <div style="display:flex;gap:10px;margin-bottom:14px">
+      <button class="btn btn-primary" style="flex:1;font-size:14px;padding:12px"
+        onclick="document.getElementById('id-scan-camera').click()">
+        📷 Take Photo
+      </button>
+      <button class="btn btn-ghost" style="flex:1;font-size:14px;padding:12px"
+        onclick="document.getElementById('id-scan-gallery').click()">
+        🖼️ Choose from Gallery
+      </button>
+    </div>
+    <input type="file" id="id-scan-camera"  accept="image/*" capture="environment" onchange="processIdScan(this)" style="display:none" />
+    <input type="file" id="id-scan-gallery" accept="image/*" onchange="processIdScan(this)" style="display:none" />
+
+    <img id="id-scan-preview" />
+    <div id="id-scan-status">Waiting for photo…</div>
+
+    <div style="display:flex;gap:10px;margin-top:14px">
+      <button class="btn btn-ghost" style="flex:1;font-size:14px;padding:12px"
+        onclick="closeIdScan()">Cancel</button>
+      <button id="id-scan-use-btn" class="btn btn-success" style="flex:1;font-size:14px;padding:12px;display:none"
+        onclick="applyIdScanResults()">
+        ✅ Use These Details
+      </button>
+    </div>
+  </div>
+</div>
 
 <script>
-  // ── Config ────────────────────────────────────
-  const PROCESSING_FEE_RATE    = 0.04;
-  const MONTHLY_INTEREST_RATE  = 0.10;
-  const LATE_PENALTY_RATE      = 0.10;
+  // ── Constants ──────────────────────────────
+  const PROC_FEE_RATE   = 0.04;
+  const MONTHLY_INT     = 0.10;
+  const LATE_PENALTY    = 0.10;
 
-  // ── Supabase client ───────────────────────────
+  // ── Supabase ───────────────────────────────
   const sbEnroll = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
-
-  // ── Get agent ID from URL ─────────────────────
   const urlParams = new URLSearchParams(window.location.search);
   const agentId   = urlParams.get('agent');
 
-  // ── Step helpers ──────────────────────────────
+  // ── File state ─────────────────────────────
+  let idDocFile      = null;
+  let passportFile   = null;
+  let idScanResults  = {};
+
+  // ── Consent gate ───────────────────────────
+  function toggleConsent() {
+    const cb  = document.getElementById('consent-checkbox');
+    const btn = document.getElementById('consent-btn');
+    btn.disabled = !cb.checked;
+  }
+
+  function startForm() {
+    if (!agentId) {
+      alert('This enrollment link is invalid. Please ask E-EMAX Enterprise for a new link.');
+      return;
+    }
+    document.getElementById('consent-screen').style.display = 'none';
+    document.getElementById('main-form').style.display      = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ── Step navigation ────────────────────────
   let currentStep = 1;
 
   function updateStepBar(step) {
     for (let i = 1; i <= 4; i++) {
       const dot  = document.getElementById(`sd-${i}`);
       const line = document.getElementById(`sl-${i}`);
+      if (!dot) continue;
       if (i < step)  { dot.className = 'step-dot done';   dot.textContent = '✓'; }
       if (i === step){ dot.className = 'step-dot active';  dot.textContent = i; }
       if (i > step)  { dot.className = 'step-dot';         dot.textContent = i; }
@@ -496,7 +762,7 @@
     if (err) { showError(err); return; }
     hideError();
     document.getElementById(`step-${from}`).style.display = 'none';
-    document.getElementById(`step-${from+1}`).style.display = 'block';
+    document.getElementById(`step-${from + 1}`).style.display = 'block';
     currentStep = from + 1;
     updateStepBar(currentStep);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -504,7 +770,7 @@
 
   function prevStep(from) {
     document.getElementById(`step-${from}`).style.display = 'none';
-    document.getElementById(`step-${from-1}`).style.display = 'block';
+    document.getElementById(`step-${from - 1}`).style.display = 'block';
     currentStep = from - 1;
     updateStepBar(currentStep);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -512,14 +778,10 @@
 
   function showError(msg) {
     const el = document.getElementById('error-global');
-    el.textContent = msg;
-    el.style.display = 'block';
+    el.textContent = msg; el.style.display = 'block';
     el.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
-  function hideError() {
-    const el = document.getElementById('error-global');
-    el.style.display = 'none';
-  }
+  function hideError() { document.getElementById('error-global').style.display = 'none'; }
 
   function validate(step) {
     if (step === 1) {
@@ -528,86 +790,290 @@
       if (!document.getElementById('e-address').value.trim()) return 'Please enter your home address.';
     }
     if (step === 2) {
-      if (!document.getElementById('e-g-name').value.trim())  return 'Please enter guarantor\'s full name.';
-      if (!document.getElementById('e-g-phone').value.trim()) return 'Please enter guarantor\'s phone number.';
+      if (!document.getElementById('e-g-name').value.trim())  return "Please enter your guarantor's full name.";
+      if (!document.getElementById('e-g-phone').value.trim()) return "Please enter your guarantor's phone number.";
     }
     if (step === 3) {
-      if (!document.getElementById('e-w-name').value.trim())  return 'Please enter witness\'s full name.';
-      if (!document.getElementById('e-w-phone').value.trim()) return 'Please enter witness\'s phone number.';
+      if (!document.getElementById('e-w-name').value.trim())  return "Please enter the witness's full name.";
+      if (!document.getElementById('e-w-phone').value.trim()) return "Please enter the witness's phone number.";
     }
     return null;
   }
 
-  // ── Calculator ────────────────────────────────
-  function setAmt(val) {
+  // ── File upload handling ───────────────────
+  function handleUpload(type) {
+    const inputId   = type === 'id-doc' ? 'id-doc-input' : 'passport-input';
+    const previewId = type === 'id-doc' ? 'id-doc-preview' : 'passport-preview';
+    const nameId    = type === 'id-doc' ? 'id-doc-name' : 'passport-name';
+    const zoneId    = type === 'id-doc' ? 'id-doc-zone' : 'passport-zone';
+
+    const file = document.getElementById(inputId).files[0];
+    if (!file) return;
+
+    if (type === 'id-doc')    idDocFile    = file;
+    if (type === 'passport')  passportFile = file;
+
+    // Show preview if image
+    if (file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        const img = document.getElementById(previewId);
+        img.src = e.target.result;
+        img.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    const nameEl = document.getElementById(nameId);
+    nameEl.textContent = '✅ ' + file.name;
+    nameEl.style.display = 'block';
+    document.getElementById(zoneId).classList.add('has-file');
+  }
+
+  // ── ID Card Scanner ────────────────────────
+  let tesseractLoaded = false;
+
+  function openIdScan() {
+    document.getElementById('id-scan-modal').classList.add('open');
+    document.getElementById('id-scan-preview').style.display = 'none';
+    document.getElementById('id-scan-use-btn').style.display = 'none';
+    document.getElementById('id-scan-status').textContent = 'Choose how to capture your ID below.';
+  }
+
+  function closeIdScan() {
+    document.getElementById('id-scan-modal').classList.remove('open');
+  }
+
+  async function processIdScan(input) {
+    const file = input.files[0];
+    if (!file) return;
+
+    const statusEl = document.getElementById('id-scan-status');
+    statusEl.innerHTML = '<span class="spinner" style="border-color:rgba(255,255,255,0.2);border-top-color:var(--accent)"></span> Reading your ID…';
+
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      const imgEl = document.getElementById('id-scan-preview');
+      imgEl.src = e.target.result;
+      imgEl.style.display = 'block';
+
+      try {
+        // Lazy-load Tesseract
+        if (!tesseractLoaded) {
+          await new Promise((res, rej) => {
+            const s = document.createElement('script');
+            s.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';
+            s.onload = res; s.onerror = rej;
+            document.head.appendChild(s);
+          });
+          tesseractLoaded = true;
+        }
+
+        const { createWorker } = Tesseract;
+        const worker = await createWorker('eng', 1, {
+          workerPath: 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/worker.min.js',
+          langPath:   'https://tessdata.projectnaptha.com/4.0.0',
+          corePath:   'https://cdn.jsdelivr.net/npm/tesseract.js-core@5/tesseract-core-simd-lstm.wasm.js',
+          logger: m => {
+            if (m.status === 'recognizing text') {
+              const pct = Math.round((m.progress || 0) * 100);
+              statusEl.innerHTML = `<span class="spinner" style="border-color:rgba(255,255,255,0.2);border-top-color:var(--accent)"></span> Reading… ${pct}%`;
+            }
+          }
+        });
+
+        const { data: { text } } = await worker.recognize(e.target.result);
+        await worker.terminate();
+
+        idScanResults = extractIdFields(text);
+
+        // Show what was found
+        const found = Object.entries(idScanResults).filter(([k,v]) => v).map(([k,v]) => {
+          const labels = { name:'Name', cardNumber:'Card No.', dob:'Date of Birth', nationality:'Nationality' };
+          return `<span style="color:var(--green)">✓ ${labels[k] || k}: <strong>${v}</strong></span>`;
+        });
+
+        if (found.length > 0) {
+          statusEl.innerHTML = `<div style="text-align:left;line-height:1.8">${found.join('<br>')}</div>`;
+          document.getElementById('id-scan-use-btn').style.display = 'block';
+        } else {
+          statusEl.innerHTML = `<span style="color:var(--gold)">⚠️ Could not read text clearly. Try better lighting or a flatter surface. You can still fill in the details manually.</span>`;
+        }
+
+      } catch(err) {
+        statusEl.innerHTML = `<span style="color:var(--text2)">Could not read ID automatically. Please fill in your details manually below.</span>`;
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function extractIdFields(rawText) {
+    const text  = rawText;
+    const clean = text.replace(/\n+/g,' ').replace(/\s+/g,' ');
+    const result = {};
+
+    // Ghana Card number: GHA-XXXXXXXXX-X
+    const cardMatch = clean.match(/\b(GHA[-\s]?\d{9}[-\s]?\d)\b/i)
+      || clean.match(/\b([A-Z]{3}[-\s]?\d{9}[-\s]?\d)\b/);
+    if (cardMatch) result.cardNumber = cardMatch[1].replace(/\s/g,'-').toUpperCase();
+
+    // Passport number: letter(s) + digits
+    const passMatch = clean.match(/\b([A-Z]{1,2}\d{7,8})\b/);
+    if (passMatch && !result.cardNumber) result.cardNumber = passMatch[1];
+
+    // Name — look for "SURNAME / GIVEN NAMES" section on card
+    const nameMatch = clean.match(/(?:surname|last\s*name|family\s*name)[:\s]+([A-Za-z\-]+)/i);
+    const givenMatch= clean.match(/(?:given\s*names?|first\s*name|forename)[:\s]+([A-Za-z ]+?)(?:\s+[A-Z]{2,}|\s*sex|\s*date|$)/i);
+    if (nameMatch && givenMatch) {
+      result.name = titleCase(`${givenMatch[1].trim()} ${nameMatch[1].trim()}`);
+    } else {
+      // Fallback: find two adjacent capitalized words
+      const fullName = clean.match(/\b([A-Z][A-Z\s]{3,30})\b/);
+      if (fullName) result.name = titleCase(fullName[1].trim());
+    }
+
+    // Date of birth
+    const dobMatch = clean.match(/(?:birth|born|d\.o\.b|dob)[:\s]*(\d{1,2}[\s\/\-]\d{1,2}[\s\/\-]\d{2,4})/i)
+      || clean.match(/(\d{2}[\s\/\-]\d{2}[\s\/\-]\d{4})/);
+    if (dobMatch) {
+      // Try to convert to date input format
+      const parts = dobMatch[1].trim().split(/[\s\/\-]/);
+      if (parts.length === 3) {
+        const y = parts[2].length === 2 ? '20'+parts[2] : parts[2];
+        result.dob = `${y}-${parts[1].padStart(2,'0')}-${parts[0].padStart(2,'0')}`;
+      }
+    }
+
+    // Nationality
+    const natMatch = clean.match(/(?:nationality|citizen)[:\s]+([A-Za-z]+)/i);
+    if (natMatch) result.nationality = titleCase(natMatch[1]);
+
+    return result;
+  }
+
+  function applyIdScanResults() {
+    if (idScanResults.name)       document.getElementById('e-name').value = idScanResults.name;
+    if (idScanResults.cardNumber) document.getElementById('e-ghana-card').value = idScanResults.cardNumber;
+    if (idScanResults.dob)        document.getElementById('e-dob').value = idScanResults.dob;
+
+    closeIdScan();
+
+    const statusEl = document.getElementById('scan-id-status');
+    statusEl.style.display = 'block';
+    statusEl.innerHTML = `<span style="color:var(--green)">✅ Details filled from your ID — review them below</span>`;
+  }
+
+  function titleCase(str) {
+    return str.trim().toLowerCase().split(' ')
+      .map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+  }
+
+  // ── Calculator ─────────────────────────────
+  function setAmt(val, btn) {
     document.getElementById('e-amount').value = val;
-    document.querySelectorAll('.amount-chip').forEach(c => c.classList.remove('selected'));
-    event.target.classList.add('selected');
+    document.querySelectorAll('.amt-chip').forEach(c => c.classList.remove('sel'));
+    if (btn) btn.classList.add('sel');
     calcPreview();
   }
 
   function fmt(n) {
     if (!n && n !== 0) return '—';
-    return 'GH₵ ' + Number(n).toLocaleString('en-GH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return 'GH₵ ' + Number(n).toLocaleString('en-GH', { minimumFractionDigits:2, maximumFractionDigits:2 });
   }
 
   function calcPreview() {
     const amt = parseFloat(document.getElementById('e-amount').value);
     const dur = parseInt(document.getElementById('e-months').value);
     const box = document.getElementById('calc-preview');
-
     if (!amt || !dur || amt <= 0) { box.style.display = 'none'; return; }
 
-    const fee        = amt * PROCESSING_FEE_RATE;
-    const monthlyInt = amt * MONTHLY_INTEREST_RATE;
-    const totalInt   = monthlyInt * dur;
-    const total      = amt + totalInt;
-    const monthly    = total / dur;
-    const penalty    = monthly * LATE_PENALTY_RATE;
+    const fee      = amt * PROC_FEE_RATE;
+    const mInt     = amt * MONTHLY_INT;
+    const total    = amt + (mInt * dur);
+    const monthly  = total / dur;
+    const penalty  = monthly * LATE_PENALTY;
 
     box.style.display = 'block';
     document.getElementById('cp-get').textContent     = fmt(amt - fee);
     document.getElementById('cp-fee').textContent     = fmt(fee);
-    document.getElementById('cp-int').textContent     = fmt(monthlyInt);
+    document.getElementById('cp-int').textContent     = fmt(mInt);
     document.getElementById('cp-total').textContent   = fmt(total);
     document.getElementById('cp-monthly').textContent = fmt(monthly);
     document.getElementById('cp-penalty').textContent = fmt(penalty);
   }
 
-  // ── Submit ────────────────────────────────────
+  // ── Submit ─────────────────────────────────
   async function submitApplication() {
     const amount = parseFloat(document.getElementById('e-amount').value);
     const months = parseInt(document.getElementById('e-months').value);
 
     if (!amount || amount <= 0) { showError('Please enter or select a loan amount.'); return; }
     if (!months)                { showError('Please select how many months.'); return; }
-    if (!agentId)               { showError('Invalid enrollment link — please ask E-EMAX Enterprise for a new link.'); return; }
+    if (!agentId)               { showError('Invalid enrollment link. Please contact E-EMAX Enterprise for a new link.'); return; }
 
     const btn = document.getElementById('btn-submit');
     btn.innerHTML = '<span class="spinner"></span>Submitting…';
     btn.disabled  = true;
     hideError();
 
+    // Upload ID doc and passport photo to Supabase Storage
+    let idDocUrl      = null;
+    let passportUrl   = null;
+    const submissionId = crypto.randomUUID();
+
+    try {
+      if (idDocFile) {
+        const ext  = idDocFile.name.split('.').pop();
+        const path = `enrollments/${agentId}/${submissionId}/id_doc.${ext}`;
+        const { error: upErr } = await sbEnroll.storage
+          .from('loan-docs')
+          .upload(path, idDocFile, { upsert: true, contentType: idDocFile.type });
+        if (!upErr) {
+          const { data: { publicUrl } } = sbEnroll.storage.from('loan-docs').getPublicUrl(path);
+          idDocUrl = publicUrl;
+        }
+      }
+
+      if (passportFile) {
+        const ext  = passportFile.name.split('.').pop();
+        const path = `enrollments/${agentId}/${submissionId}/passport.${ext}`;
+        const { error: upErr } = await sbEnroll.storage
+          .from('loan-docs')
+          .upload(path, passportFile, { upsert: true, contentType: passportFile.type });
+        if (!upErr) {
+          const { data: { publicUrl } } = sbEnroll.storage.from('loan-docs').getPublicUrl(path);
+          passportUrl = publicUrl;
+        }
+      }
+    } catch(storErr) {
+      // Storage upload failed — continue with form data only (non-blocking)
+      console.warn('Storage upload error:', storErr);
+    }
+
     const payload = {
-      agent_id          : agentId,
-      full_name         : document.getElementById('e-name').value.trim(),
-      phone             : document.getElementById('e-phone').value.trim(),
-      address           : document.getElementById('e-address').value.trim(),
-      date_of_birth     : document.getElementById('e-dob').value || null,
-      occupation        : document.getElementById('e-occupation').value,
-      ghana_card_number : document.getElementById('e-ghana-card').value.trim(),
-      guarantor_name    : document.getElementById('e-g-name').value.trim(),
-      guarantor_phone   : document.getElementById('e-g-phone').value.trim(),
-      guarantor_address : document.getElementById('e-g-address').value.trim(),
+      agent_id              : agentId,
+      full_name             : document.getElementById('e-name').value.trim(),
+      phone                 : document.getElementById('e-phone').value.trim(),
+      address               : document.getElementById('e-address').value.trim(),
+      date_of_birth         : document.getElementById('e-dob').value || null,
+      occupation            : document.getElementById('e-occupation').value,
+      ghana_card_number     : document.getElementById('e-ghana-card').value.trim(),
+      guarantor_name        : document.getElementById('e-g-name').value.trim(),
+      guarantor_phone       : document.getElementById('e-g-phone').value.trim(),
+      guarantor_address     : document.getElementById('e-g-address').value.trim(),
       guarantor_relationship: document.getElementById('e-g-rel').value,
-      guarantor_card    : document.getElementById('e-g-card').value.trim(),
-      witness_name      : document.getElementById('e-w-name').value.trim(),
-      witness_phone     : document.getElementById('e-w-phone').value.trim(),
-      amount_requested  : amount,
-      duration_months   : months,
-      purpose           : document.getElementById('e-purpose').value,
-      notes             : document.getElementById('e-notes').value.trim(),
-      status            : 'Pending',
+      guarantor_card        : document.getElementById('e-g-card').value.trim(),
+      witness_name          : document.getElementById('e-w-name').value.trim(),
+      witness_phone         : document.getElementById('e-w-phone').value.trim(),
+      amount_requested      : amount,
+      duration_months       : months,
+      purpose               : document.getElementById('e-purpose').value,
+      notes                 : document.getElementById('e-notes').value.trim(),
+      status                : 'Pending',
+      privacy_consent       : true,
+      consent_timestamp     : new Date().toISOString(),
+      id_photo_url          : idDocUrl,
+      passport_photo_url    : passportUrl,
     };
 
     const { error } = await sbEnroll.from('enrollment_submissions').insert(payload);
@@ -620,9 +1086,10 @@
     }
 
     // Show success
-    document.getElementById('step-4').style.display     = 'none';
+    document.getElementById('step-4').style.display       = 'none';
     document.getElementById('success-screen').style.display = 'block';
-    document.getElementById('confirm-phone').textContent = payload.phone;
+    document.getElementById('confirm-phone').textContent  = payload.phone;
+    document.getElementById('confirm-ref').textContent    = 'Ref: ' + submissionId.slice(0,8).toUpperCase();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 </script>
