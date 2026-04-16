@@ -151,6 +151,48 @@ CREATE TRIGGER trig_borrowers_updated_at BEFORE UPDATE ON borrowers
 CREATE TRIGGER trig_loans_updated_at     BEFORE UPDATE ON loans
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+-- ─── ENROLLMENT SUBMISSIONS ──────────────────────────────────
+-- Public applications from the enrollment.html page (no auth required)
+CREATE TABLE IF NOT EXISTS enrollment_submissions (
+  id                    uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  agent_id              uuid NOT NULL REFERENCES agents(id) ON DELETE CASCADE,
+  -- Borrower
+  full_name             varchar(255) NOT NULL,
+  phone                 varchar(50)  NOT NULL,
+  address               text,
+  date_of_birth         date,
+  occupation            varchar(255),
+  ghana_card_number     varchar(100),
+  -- Guarantor
+  guarantor_name        varchar(255),
+  guarantor_phone       varchar(50),
+  guarantor_address     text,
+  guarantor_relationship varchar(100),
+  guarantor_card        varchar(100),
+  -- Witness
+  witness_name          varchar(255),
+  witness_phone         varchar(50),
+  -- Loan request
+  amount_requested      numeric(12,2),
+  duration_months       integer,
+  purpose               varchar(255),
+  notes                 text,
+  -- Status: Pending | Approved | Rejected
+  status                varchar(50) DEFAULT 'Pending',
+  created_at            timestamptz DEFAULT now()
+);
+ALTER TABLE enrollment_submissions ENABLE ROW LEVEL SECURITY;
+
+-- Agents can read and update their own submissions
+CREATE POLICY "enroll_agent_read" ON enrollment_submissions
+  FOR SELECT USING (agent_id IN (SELECT id FROM agents WHERE user_id = auth.uid()));
+CREATE POLICY "enroll_agent_update" ON enrollment_submissions
+  FOR UPDATE USING (agent_id IN (SELECT id FROM agents WHERE user_id = auth.uid()));
+
+-- IMPORTANT: Allow public (unauthenticated) inserts for borrower enrollment form
+CREATE POLICY "enroll_public_insert" ON enrollment_submissions
+  FOR INSERT WITH CHECK (true);
+
 -- ─── STORAGE BUCKET (for photos) ───────────────────────────
 -- Run this SEPARATELY in Supabase Storage settings:
 -- Create bucket called "loan-docs" → set to Public

@@ -31,14 +31,22 @@ const App = {
     const navBtn = document.getElementById(`nav-${screenId}`);
     if (navBtn) navBtn.classList.add('active');
 
+    // Update sidebar highlight
+    document.querySelectorAll('.si').forEach(b => b.classList.remove('active'));
+    const siBtn = document.getElementById(`si-${screenId}`);
+    if (siBtn) siBtn.classList.add('active');
+
     // Lazy-load screen data
-    if (screenId === 'dashboard')  Dashboard.load();
-    if (screenId === 'loans')      Loans.loadList();
-    if (screenId === 'borrowers')  Borrowers.loadList();
-    if (screenId === 'reports')    Reports.load();
+    if (screenId === 'dashboard')    Dashboard.load();
+    if (screenId === 'loans')        Loans.loadList();
+    if (screenId === 'borrowers')    Borrowers.loadList();
+    if (screenId === 'reports')      Reports.load();
+    if (screenId === 'analytics')    Analytics.load();
+    if (screenId === 'applications') Scanner.loadApplications();
+    if (screenId === 'team')         Team.load();
     if (screenId === 'loan-detail' && data)       Loans.loadDetail(data);
     if (screenId === 'borrower-detail' && data)   Borrowers.loadDetail(data);
-    if (screenId === 'settings')   Settings.load();
+    if (screenId === 'settings')     Settings.load();
   },
 
   back() {
@@ -93,6 +101,20 @@ const App = {
     }
     this.agentId = agent?.id;
 
+    // Update sidebar avatar & name
+    const { data: agentProfile } = await sb.from('agents')
+      .select('full_name, business_name').eq('id', this.agentId).single();
+    if (agentProfile) {
+      const avatarEl = document.getElementById('sb-avatar');
+      const nameEl   = document.getElementById('sb-name');
+      const emailEl  = document.getElementById('sb-email');
+      if (avatarEl) avatarEl.textContent = (agentProfile.full_name || 'U').slice(0,2).toUpperCase();
+      if (nameEl)   nameEl.textContent   = agentProfile.full_name || 'User';
+      if (emailEl)  emailEl.textContent  = user.email || '';
+    }
+
+    document.getElementById('app-shell').style.display = '';
+    document.getElementById('screen-auth').classList.remove('active');
     document.getElementById('bottom-nav').classList.add('visible');
     this.navigate('dashboard');
   },

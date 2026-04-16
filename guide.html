@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E-Max Loan Manager — User Guide</title>
+  <style>
+    :root {
+      --bg:     #0d1117;
+      --card:   #161b22;
+      --card2:  #1c2330;
+      --border: rgba(255,255,255,0.08);
+      --accent: #5b5bd6;
+      --text1:  #e6edf3;
+      --text2:  #8b949e;
+      --green:  #22c55e;
+      --red:    #ef4444;
+      --gold:   #eab308;
+      --purple: #a855f7;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text1);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(135deg, #1a1a3e 0%, #0d1117 60%);
+      border-bottom: 1px solid var(--border);
+      padding: 60px 32px;
+      text-align: center;
+    }
+    .hero-icon { font-size: 64px; margin-bottom: 16px; }
+    .hero-title { font-size: 36px; font-weight: 800; margin-bottom: 8px; }
+    .hero-sub { font-size: 18px; color: var(--text2); max-width: 520px; margin: 0 auto; }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(91,91,214,0.15);
+      border: 1px solid rgba(91,91,214,0.3);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 13px;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+
+    /* ── Layout ── */
+    .page { max-width: 960px; margin: 0 auto; padding: 40px 24px 80px; }
+
+    /* ── Section headings ── */
+    .section { margin-bottom: 48px; }
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .section-title {
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 20px;
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+    .card-title { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+
+    /* ── Feature cards ── */
+    .feature {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .feature-icon { font-size: 28px; }
+    .feature-title { font-size: 15px; font-weight: 700; }
+    .feature-desc { font-size: 13px; color: var(--text2); line-height: 1.5; }
+
+    /* ── Step boxes ── */
+    .steps { display: flex; flex-direction: column; gap: 0; }
+    .step {
+      display: flex;
+      gap: 20px;
+      position: relative;
+    }
+    .step:not(:last-child)::before {
+      content: '';
+      position: absolute;
+      left: 19px;
+      top: 48px;
+      bottom: -8px;
+      width: 2px;
+      background: var(--border);
+    }
+    .step-num {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; font-weight: 800;
+      flex-shrink: 0;
+      color: #fff;
+      z-index: 1;
+      margin-bottom: 24px;
+    }
+    .step-body { flex: 1; padding-top: 8px; padding-bottom: 16px; }
+    .step-body h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+    .step-body p  { font-size: 14px; color: var(--text2); line-height: 1.6; }
+
+    /* ── Highlight boxes ── */
+    .hl-box {
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .hl-gold   { background: rgba(234,179,8,0.08);  border: 1px solid rgba(234,179,8,0.2);  color: var(--gold); }
+    .hl-green  { background: rgba(34,197,94,0.08);  border: 1px solid rgba(34,197,94,0.2);  color: var(--green); }
+    .hl-red    { background: rgba(239,68,68,0.08);  border: 1px solid rgba(239,68,68,0.2);  color: var(--red); }
+    .hl-accent { background: rgba(91,91,214,0.08);  border: 1px solid rgba(91,91,214,0.2);  color: var(--accent); }
+
+    /* ── Tables ── */
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+    th { font-size: 12px; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: 0.5px; }
+    tr:last-child td { border-bottom: none; }
+    .tag {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .tag-green  { background: rgba(34,197,94,0.15);  color: var(--green); }
+    .tag-gold   { background: rgba(234,179,8,0.15);  color: var(--gold); }
+    .tag-red    { background: rgba(239,68,68,0.15);  color: var(--red); }
+    .tag-accent { background: rgba(91,91,214,0.15);  color: var(--accent); }
+    .tag-gray   { background: rgba(107,114,128,0.2); color: #9ca3af; }
+
+    /* ── Two columns ── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 640px) { .two-col { grid-template-columns: 1fr; } }
+
+    /* ── Calc example ── */
+    .calc-box {
+      background: rgba(91,91,214,0.08);
+      border: 1px solid rgba(91,91,214,0.2);
+      border-radius: 16px;
+      padding: 24px;
+      margin-top: 8px;
+    }
+    .calc-title { font-size: 15px; font-weight: 700; margin-bottom: 16px; color: var(--accent); }
+    .calc-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 14px; }
+    .calc-row:last-child { border-bottom: none; font-weight: 800; font-size: 16px; }
+    .calc-row .lbl { color: var(--text2); }
+    .calc-row .val { font-weight: 700; }
+    .val-red  { color: var(--red); }
+    .val-gold { color: var(--gold); }
+    .val-big  { color: var(--accent); font-size: 20px; }
+
+    /* ── Separator ── */
+    .sep { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+
+    /* ── Nav TOC ── */
+    .toc {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 40px;
+    }
+    .toc-title { font-size: 15px; font-weight: 700; margin-bottom: 16px; }
+    .toc ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .toc a { color: var(--accent); text-decoration: none; font-size: 14px; }
+    .toc a:hover { text-decoration: underline; }
+
+    .pill {
+      display: inline-block;
+      background: rgba(91,91,214,0.15);
+      color: var(--accent);
+      border-radius: 6px;
+      padding: 2px 8px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .info-row { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+    .info-row:last-child { border-bottom: none; }
+    .info-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+    .info-title { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+    .info-desc  { font-size: 13px; color: var(--text2); }
+
+    @media (max-width: 640px) {
+      .hero-title { font-size: 26px; }
+      .card-grid  { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <div class="hero-icon">💰</div>
+  <div class="hero-badge">E-Max Enterprise — Loan Manager v2.0</div>
+  <div class="hero-title">Your Complete User Guide</div>
+  <div class="hero-sub">Everything you need to know to manage loans, record payments, and grow the business — from any phone or computer.</div>
+</div>
+
+<div class="page">
+
+  <!-- TOC -->
+  <div class="toc">
+    <div class="toc-title">📋 What's in this guide</div>
+    <ul>
+      <li><a href="#overview">1. What the app does</a></li>
+      <li><a href="#screens">2. The screens explained</a></li>
+      <li><a href="#new-loan">3. How to create a new loan (step by step)</a></li>
+      <li><a href="#payments">4. How to record a payment</a></li>
+      <li><a href="#scanner">5. How to scan old paper documents</a></li>
+      <li><a href="#enrollment">6. How new borrowers apply online</a></li>
+      <li><a href="#analytics">7. Analytics &amp; reports explained</a></li>
+      <li><a href="#team">8. Adding your sisters / team members</a></li>
+      <li><a href="#math">9. How the loan math works (with example)</a></li>
+      <li><a href="#free-vs-paid">10. Free vs Paid — Supabase &amp; Vercel</a></li>
+      <li><a href="#security">11. Security &amp; data safety</a></li>
+      <li><a href="#tips">12. Quick tips for daily use</a></li>
+    </ul>
+  </div>
+
+  <!-- ─── 1. OVERVIEW ─── -->
+  <div id="overview" class="section">
+    <div class="section-label">Section 1</div>
+    <div class="section-title">What the app does</div>
+    <p style="color:var(--text2);margin-bottom:20px">
+      E-Max Loan Manager replaces all the paper notebooks and manual calculations. It tracks every loan from the moment it is issued until it is fully repaid — and alerts you when payments are due or late.
+    </p>
+    <div class="card-grid">
+      <div class="feature">
+        <div class="feature-icon">💳</div>
+        <div class="feature-title">Track every loan</div>
+        <div class="feature-desc">Create loans with borrower details, guarantor, witness, amount, duration, and photos. All stored safely online.</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">📐</div>
+        <div class="feature-title">Auto calculation</div>
+        <div class="feature-desc">You enter the amount and months. The app instantly calculates processing fee, monthly interest, total repayable, and monthly payment — no pen and paper needed.</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">✅</div>
+        <div class="feature-title">Record payments</div>
+        <div class="feature-desc">Tap a button to record each monthly payment. The app tracks how much has been collected and what is still owed.</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">⚠️</div>
+        <div class="feature-title">Overdue alerts</div>
+        <div class="feature-desc">Loans that pass their due date automatically show as Overdue in red. You can see exactly how many days late and add the penalty.</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">📷</div>
+        <div class="feature-title">Scan old documents</div>
+        <div class="feature-desc">Take a photo of a paper loan document. The app tries to read it automatically. You review and correct, then save it digitally.</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">📊</div>
+        <div class="feature-title">Analytics &amp; reports</div>
+        <div class="feature-desc">See charts of monthly collections, interest earned, loan status breakdown, and your top borrowers — updated in real time.</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🔗</div>
+        <div class="feature-title">Online applications</div>
+        <div class="feature-desc">Send a link to new borrowers. They fill in their own details on their phone. You review and approve — no typing needed on your end.</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🌍</div>
+        <div class="feature-title">Works everywhere</div>
+        <div class="feature-desc">Use it on your phone, tablet, or computer. Works in Ghana and Canada. No App Store needed — installs directly from the browser.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="sep" />
+
+  <!-- ─── 2. SCREENS ─── -->
+  <div id="screens" class="section">
+    <div class="section-label">Section 2</div>
+    <div class="section-title">The screens explained</div>
+
+    <div class="card" style="margin-bottom:24px">
+      <table>
+        <thead>
+          <tr>
+            <th>Screen</th>
+            <th>What it shows</th>
+            <th>Use it to…</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>🏠 <strong>Dashboard</strong></td>
+            <td>Summary tiles, charts, upcoming payments</td>
+            <td>See the business at a glance every morning</td>
+          </tr>
+          <tr>
+            <td>💳 <strong>Loans</strong></td>
+            <td>All loans — filter by Active / Overdue / Completed</td>
+            <td>Find a specific loan, record a payment, see details</td>
+          </tr>
+          <tr>
+            <td>📷 <strong>Scan Doc</strong></td>
+            <td>Camera + OCR reader</td>
+            <td>Convert old paper loan documents into digital records</td>
+          </tr>
+          <tr>
+            <td>📋 <strong>Applications</strong></td>
+            <td>Pending online applications from borrowers</td>
+            <td>Review and approve new borrower applications</td>
+          </tr>
+          <tr>
+            <td>👥 <strong>Borrowers</strong></td>
+            <td>All borrowers with their loan history</td>
+            <td>Find a borrower, see their profile and all past loans</td>
+          </tr>
+          <tr>
+            <td>📊 <strong>Analytics</strong></td>
+            <td>Charts — interest earned, collections, volume, status</td>
+            <td>Understand trends in the business over time</td>
+          </tr>
+          <tr>
+            <td>📈 <strong>Reports</strong></td>
+            <td>Month-by-month financial summary</td>
+            <td>See total interest earned, repayment rate, total lent out</td>
+          </tr>
+          <tr>
+            <td>🤝 <strong>Team</strong></td>
+            <td>How to add team members (sisters, manager)</td>
+            <td>Send the invite message to anyone who needs access</td>
+          </tr>
+          <tr>
+            <td>⚙️ <strong>Settings</strong></td>
+            <td>Business name, your name, notifications, diagnostics</td>
+            <td>Update your profile, enable push notifications</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <hr class="sep" />
+
+  <!-- ─── 3. NEW LOAN ─── -->
+  <div id="new-loan" class="section">
+    <div class="section-label">Section 3</div>
+    <div class="section-title">How to create a new loan</div>
+    <div class="hl-accent" style="margin-bottom:24px">
+      💡 This is the most important thing in the app. When someone comes to take a loan, follow these steps.
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3>Tap "➕ New Loan" on the Dashboard or Loans screen</h3>
+          <p>This opens the 5-step loan wizard. You can go back at any step if you make a mistake.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3>Step 1 — Borrower Details</h3>
+          <p>Enter the borrower's full name, phone number, home address, and Ghana Card number. You can also take a photo of their face and their Ghana Card using the camera buttons. <em>Name, phone, and address are required.</em></p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3>Step 2 — Guarantor Details</h3>
+          <p>Enter the guarantor's name and phone number. The guarantor is the person who agrees to repay if the borrower defaults. Select their relationship (spouse, parent, friend, etc.).</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h3>Step 3 — Witness Details</h3>
+          <p>Enter the witness's name and phone number. The witness is someone who saw the agreement being made.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <h3>Step 4 — Loan Amount &amp; Duration</h3>
+          <p>Tap one of the quick-select buttons (500, 1,000, 2,000…) or type the exact amount. Then tap or select the number of months. <strong>The loan breakdown appears automatically</strong> — it shows the processing fee, monthly payment, and total repayable. You can also add notes here.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">6</div>
+        <div class="step-body">
+          <h3>Step 5 — Review &amp; Confirm</h3>
+          <p>Check all details carefully. If anything is wrong, tap "← Back". When everything is correct, tap <strong>"✅ Issue Loan"</strong>. The loan is saved and appears in the Loans list.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="sep" />
+
+  <!-- ─── 4. PAYMENTS ─── -->
+  <div id="payments" class="section">
+    <div class="section-label">Section 4</div>
+    <div class="section-title">How to record a payment</div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3>Go to Loans and tap the borrower's name</h3>
+          <p>This opens the loan detail screen showing the current balance, progress, and payment history.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3>Find "💳 Record Payment" section</h3>
+          <p>The monthly payment amount is pre-filled. Change it only if the borrower paid a different amount.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3>If payment is late — tick "Late payment"</h3>
+          <p>A 10% penalty is added automatically. You can see the penalty amount before confirming.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h3>Tap "✅ Record Payment"</h3>
+          <p>The payment is saved. The progress bar updates. If this was the final payment, the loan is automatically marked as <span class="tag tag-green">Completed</span> 🎉</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="sep" />
+
+  <!-- ─── 5. SCANNER ─── -->
+  <div id="scanner" class="section">
+    <div class="section-label">Section 5</div>
+    <div class="section-title">How to scan old paper documents</div>
+    <div class="hl-gold" style="margin-bottom:20px">
+      📚 Your mum has a stack of old paper loan records. This feature lets her take a photo and digitise them one by one.
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3>Tap "📷 Scan Doc" in the menu</h3>
+          <p>Two buttons appear: "Take Photo" (opens the camera) and "From Gallery" (choose an existing photo).</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3>Take a clear photo of the paper document</h3>
+          <p>Hold the phone steady. Make sure all the writing is visible and the paper is flat. Good lighting helps a lot.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3>Wait 10–15 seconds while the app reads the text</h3>
+          <p>The app uses OCR (optical character recognition) to try to read the name, phone number, amount, and duration from the document.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h3>Review and correct the extracted data</h3>
+          <p>The app fills in what it could read. <strong>Always check every field</strong> — OCR can make mistakes, especially with handwriting. Fix any errors by tapping on the field and typing the correct value.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <h3>Tap "✅ Create Loan from This Document"</h3>
+          <p>The loan is saved digitally. The photo is also stored so you have a record of the original paper.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="hl-accent" style="margin-top:16px">
+      💡 Tip: If the app can't read the handwriting, that's okay — just type the details manually. The important thing is to save the photo and the information together.
+    </div>
+  </div>
+
+  <hr class="sep" />
+
+  <!-- ─── 6. ENROLLMENT ─── -->
+  <div id="enrollment" class="section">
+    <div class="section-label">Section 6</div>
+    <div class="section-title">How new borrowers apply online</div>
+    <div class="hl-green" style="margin-bottom:20px">
+      🔗 This feature means new borrowers fill in their own details on their phone — no manual typing for mum!
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">For Mum (sending the link)</div>
+        <div class="steps">
+          <div class="info-row">
+            <div class="info-icon">1️⃣</div>
+            <div>
+              <div class="info-title">Go to "📋 Applications" screen</div>
+              <div class="info-desc">Tap Applications in the menu</div>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-icon">2️⃣</div>
+            <div>
+              <div class="info-title">Tap "Copy Link" button</div>
+              <div class="info-desc">The enrollment link is copied to clipboard</div>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-icon">3️⃣</div>
+            <div>
+              <div class="info-title">Send the link via WhatsApp or SMS</div>
+              <div class="info-desc">Paste it and send to the new borrower</div>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-icon">4️⃣</div>
+            <div>
+              <div class="info-title">Wait for the application to arrive</div>
+              <div class="info-desc">It appears in the Applications screen when submitted</div>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-icon">5️⃣</div>
+            <div>
+              <div class="info-title">Tap "✅ Approve" to create the loan</div>
+              <div class="info-desc">The loan wizard opens pre-filled — just review and submit</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">For the Borrower (filling the form)</div>
+        <div class="steps">
+          <div class="info-row">
+            <div class="info-icon">📱</div>
+            <div>
+              <div class="info-title">Open the link on their phone</div>
+              <div class="info-desc">Works on any phone, no app needed</div>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-icon">📝</div>
+            <div>
+              <div class="info-title">Fill in 4 steps</div>
+              <div class="info-desc">Personal details → Guarantor → Witness → Loan amount &amp; duration</div>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-icon">🧮</div>
+            <div>
+              <div class="info-title">See the loan calculator</div>
+              <div class="info-desc">As they type, the monthly payment is shown automatically so they know what they're agreeing to</div>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-icon">✅</div>
+            <div>
+              <div class="info-title">Submit — done!</div>
+              <div class="info-desc">They see a confirmation page. Mum is notified.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hl-accent" style="margin-top:16px">
+      🔐 The enrollment link is tied to your account. Only applications submitted through your link come to your dashboard. The link never expires, but you can generate a new one any time.
+    </div>
+  </div>
+
+  <hr class="sep" />
+
+  <!-- ─── 7. ANALYTICS ─── -->
+  <div id="analytics" class="section">
+    <div class="section-label">Section 7</div>
+    <div class="section-title">Analytics &amp; Reports explained</div>
+
+    <div class="card-grid">
+      <div class="feature">
+        <div class="feature-icon">📊</div>
+        <div class="feature-title">Monthly Collections chart</div>
+        <div class="feature-desc">Bar chart showing how much was collected each month. Growing bars = business is growing.</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">📈</div>
+        <div class="feature-title">Loans Issued per Month</div>
+        <div class="feature-desc">Line chart showing how many new loans were created each month. Useful for seeing busy seasons.</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🍩</div>
+        <div class="feature-title">Status Breakdown donut</div>
+        <div class="feature-desc">Shows the proportion of Active (blue), Overdue (red), Completed (green), and Defaulted (grey) loans.</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">⚖️</div>
+        <div class="feature-title">Outstanding vs Collected</div>
+        <div class="feature-desc">Compares how much has been collected versus how much is still owed across all loans.</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🏆</div>
+        <div class="feature-title">Top Borrowers table</div>
+        <div class="feature-desc">Lists your biggest borrowers by total amount taken. Useful for managing risk and relationships.</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">💰</div>
+        <div class="feature-title">Total Interest Earned</div>
+        <div class="feature-desc">The total profit generated from interest payments. This is the business's income.</div>
+      </div>
+    </div>
+
+    <div class="hl-gold" style="margin-top:20px">
+      📅 You can change the time period (3 months, 6 months, 12 months) using the dropdown at the top of the Analytics screen to see different time ranges.
+    </div>
+  </div>
+
+  <hr class="sep" />
+
+  <!-- ─── 8. TEAM ─── -->
+  <div id="team" class="section">
+    <div class="section-label">Section 8</div>
+    <div class="section-title">Adding your sisters and team members</div>
+
+    <div class="hl-accent" style="margin-bottom:20px">
+      👨‍👩‍👧‍👧 Your sisters in Canada can log in and help manage the system. Each person has their own account and sees only their own loans. Currently, accounts are separate — shared view coming in a future update.
+    </div>
+
+    <div class="card">
+      <div class="card-title">How to invite a team member</div>
+      <div class="steps">
+        <div class="info-row">
+          <div class="info-icon">🤝</div>
+          <div>
+            <div class="info-title">Go to "🤝 Team" screen in the sidebar</div>
+            <div class="info-desc">Scroll to the bottom of the sidebar menu</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-icon">📋</div>
+          <div>
+            <div class="info-title">Tap "Copy Invite Message"</div>
+            <div class="info-desc">A ready-made WhatsApp message is copied with the app link and step-by-step instructions</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-icon">💬</div>
+          <div>
+            <div class="info-title">Paste and send in WhatsApp</div>
+            <div class="info-desc">Send to your sister or manager. They follow the instructions to create their own account.</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-icon">📱</div>
+          <div>
+            <div class="info-title">They install on their phone</div>
+            <div class="info-desc">On iPhone: open in Safari → Share → Add to Home Screen. On Android: open in Chrome → menu → Add to Home Screen.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hl-gold" style="margin-top:16px">
+      🔐 Important: Each person's login is their own private account. Do not share passwords. If you need to give someone access to your exact data, contact Delali to set up shared access.
+    </div>
+  </div>
+
+  <hr class="sep" />
+
+  <!-- ─── 9. LOAN MATH ─── -->
+  <div id="math" class="section">
+    <div class="section-label">Section 9</div>
+    <div class="section-title">How the loan math works</div>
+    <p style="color:var(--text2);margin-bottom:20px">The app does all calculations automatically, but here is how it works so you can verify.</p>
+
+    <div class="two-col" style="margin-bottom:24px">
+      <div class="card">
+        <div class="card-title">The three charges</div>
+        <div class="info-row">
+          <div class="info-icon">💸</div>
+          <div>
+            <div class="info-title">Processing Fee — 4%</div>
+            <div class="info-desc">Paid BEFORE the borrower receives the money. GH₵ 40 for every GH₵ 1,000 borrowed.</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-icon">📅</div>
+          <div>
+            <div class="info-title">Interest — 10% per month</div>
+            <div class="info-desc">Applied to the full principal for every month of the loan. Not reducing balance.</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-icon">⚠️</div>
+          <div>
+            <div class="info-title">Late Penalty — 10% of monthly payment</div>
+            <div class="info-desc">Added if a payment is not made on the due date. Example: if monthly payment is GH₵ 350, the penalty is GH₵ 35.</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="calc-box">
+          <div class="calc-title">🧮 Example: GH₵ 1,000 for 4 months</div>
+          <div class="calc-row"><span class="lbl">Principal (amount taken)</span><span class="val">GH₵ 1,000</span></div>
+          <div class="calc-row"><span class="lbl">Processing fee (4% × 1,000)</span><span class="val val-red">−GH₵ 40</span></div>
+          <div class="calc-row"><span class="lbl">Amount received by borrower</span><span class="val">GH₵ 960</span></div>
+          <div class="calc-row" style="margin-top:8px"><span class="lbl">Interest / month (10% × 1,000)</span><span class="val val-gold">GH₵ 100</span></div>
+          <div class="calc-row"><span class="lbl">Total interest (100 × 4 months)</span><span class="val val-gold">GH₵ 400</span></div>
+          <div class="calc-row"><span class="lbl">Total to repay (1,000 + 400)</span><span class="val">GH₵ 1,400</span></div>
+          <div class="calc-row"><span class="lbl">Monthly payment (1,400 ÷ 4)</span><span class="val val-big">GH₵ 350</span></div>
+          <div class="calc-row"><span class="lbl">Late penalty if missed (10% × 350)</span><span class="val val-red">+GH₵ 35</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="sep" />
+
+  <!-- ─── 10. FREE VS PAID ─── -->
+  <div id="free-vs-paid" class="section">
+    <div class="section-label">Section 10</div>
+    <div class="section-title">Free vs Paid — Supabase &amp; Vercel</div>
+    <p style="color:var(--text2);margin-bottom:20px">The app uses two free services. Here is what the free tiers include and when you would need to upgrade.</p>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">🗄️ Supabase (database)</div>
+        <table>
+          <thead><tr><th>Feature</th><th>Free</th><th>Pro ($25/mo)</th></tr></thead>
+          <tbody>
+            <tr><td>Database storage</td><td>500 MB</td><td>8 GB</td></tr>
+            <tr><td>Rows of data</td><td>Unlimited</td><td>Unlimited</td></tr>
+            <tr><td>File storage (photos)</td><td>1 GB</td><td>100 GB</td></tr>
+            <tr><td>Project pausing</td><td>Pauses after 1 week inactive</td><td>Never pauses</td></tr>
+            <tr><td>Backups</td><td>Daily (7 days)</td><td>Daily (30 days)</td></tr>
+          </tbody>
+        </table>
+        <div class="hl-gold" style="margin-top:12px;font-size:13px">
+          ⚠️ <strong>Important:</strong> The free tier pauses if no one logs in for 7 days. When it resumes (takes ~30 seconds) all data is safe. Upgrade to Pro to avoid this.
+        </div>
+        <p style="color:var(--text2);font-size:13px;margin-top:10px">
+          For a loan business with 50–500 active loans and photo storage, 500 MB is more than enough for 1–2 years. Upgrade when you reach ~400 MB used.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🚀 Vercel (hosting)</div>
+        <table>
+          <thead><tr><th>Feature</th><th>Free (Hobby)</th><th>Pro ($20/mo)</th></tr></thead>
+          <tbody>
+            <tr><td>Deployments</td><td>Unlimited</td><td>Unlimited</td></tr>
+            <tr><td>Bandwidth</td><td>100 GB/month</td><td>1 TB/month</td></tr>
+            <tr><td>Custom domain</td><td>✅ Included</td><td>✅ Included</td></tr>
+            <tr><td>HTTPS</td><td>✅ Auto</td><td>✅ Auto</td></tr>
+            <tr><td>Team members</td><td>1 user</td><td>Multiple</td></tr>
+          </tbody>
+        </table>
+        <div class="hl-green" style="margin-top:12px;font-size:13px">
+          ✅ The free Vercel Hobby plan is more than enough for this app forever. You only need Pro if you have a business team managing deployments together.
+        </div>
+        <p style="color:var(--text2);font-size:13px;margin-top:10px">
+          With a small loan business in Ghana, you will never come close to the 100 GB/month bandwidth limit.
+        </p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:20px">
+      <div class="card-title">💡 My recommendation</div>
+      <p style="color:var(--text2);font-size:14px;line-height:1.7">
+        Start on the <strong>free tier of both</strong> — it costs nothing. If your mum is using it daily and data is growing, upgrade Supabase to Pro ($25/month ≈ GH₵ 280/month at current rates) to avoid the sleep issue. Vercel free is fine forever for this use case.
+        <br><br>
+        The easiest way to avoid the sleep issue for free: have someone log in at least once per week. Since your sister in Canada can log in from there, the project will stay awake.
+      </p>
+    </div>
+  </div>
+
+  <hr class="sep" />
+
+  <!-- ─── 11. SECURITY ─── -->
+  <div id="security" class="section">
+    <div class="section-label">Section 11</div>
+    <div class="section-title">Security &amp; Data Safety</div>
+
+    <div class="card-grid">
+      <div class="feature">
+        <div class="feature-icon">🔐</div>
+        <div class="feature-title">Password protection</div>
+        <div class="feature-desc">Only people with an account can see loan data. Supabase handles the login — passwords are never stored as plain text.</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🛡️</div>
+        <div class="feature-title">Row-Level Security</div>
+        <div class="feature-desc">Even if someone guessed your API key, they still cannot read your data. The database enforces that each user only sees their own records.</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🔒</div>
+        <div class="feature-title">HTTPS everywhere</div>
+        <div class="feature-desc">All data is encrypted in transit. Vercel provides HTTPS automatically — the padlock icon always shows in the browser.</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">☁️</div>
+        <div class="feature-title">Cloud backup</div>
+        <div class="feature-desc">Data is stored in Supabase's cloud (hosted in Ireland). Daily automatic backups. Even if the phone is lost, all data is safe.</div>
+      </div>
+    </div>
+
+    <div class="hl-red" style="margin-top:20px">
+      🚨 <strong>Never share your password with anyone.</strong> If you think your account has been accessed by someone else, go to Settings → Account → Sign Out on all devices, then reset your password via the login screen.
+    </div>
+  </div>
+
+  <hr class="sep" />
+
+  <!-- ─── 12. TIPS ─── -->
+  <div id="tips" class="section">
+    <div class="section-label">Section 12</div>
+    <div class="section-title">Quick tips for daily use</div>
+
+    <div class="card">
+      <div class="info-row">
+        <div class="info-icon">☀️</div>
+        <div>
+          <div class="info-title">Check the Dashboard every morning</div>
+          <div class="info-desc">The "Due This Week" panel shows who owes money in the next 7 days. Call them in advance so they are ready.</div>
+        </div>
+      </div>
+      <div class="info-row">
+        <div class="info-icon">📱</div>
+        <div>
+          <div class="info-title">Install the app on your iPhone home screen</div>
+          <div class="info-desc">Open emax-loan-manager.vercel.app in Safari → Tap Share → "Add to Home Screen". It opens like a real app, no browser bar.</div>
+        </div>
+      </div>
+      <div class="info-row">
+        <div class="info-icon">✅</div>
+        <div>
+          <div class="info-title">Record payments immediately</div>
+          <div class="info-desc">The moment you receive money, open the app and record it. Don't rely on memory — the system keeps the perfect record for you.</div>
+        </div>
+      </div>
+      <div class="info-row">
+        <div class="info-icon">📷</div>
+        <div>
+          <div class="info-title">Always take a photo of the Ghana Card</div>
+          <div class="info-desc">When creating a new loan, photograph the borrower's Ghana Card. If they default later, you have their ID on file.</div>
+        </div>
+      </div>
+      <div class="info-row">
+        <div class="info-icon">📋</div>
+        <div>
+          <div class="info-title">Use the enrollment link for new borrowers</div>
+          <div class="info-desc">Instead of writing details down yourself, send the link and let the borrower fill their own information. Less work for you, fewer typing errors.</div>
+        </div>
+      </div>
+      <div class="info-row">
+        <div class="info-icon">⚙️</div>
+        <div>
+          <div class="info-title">Run Diagnostics if something seems wrong</div>
+          <div class="info-desc">Go to Settings → Diagnostics → Run. It checks all systems and shows which ones are working. Send a screenshot to Delali if something is red.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div style="text-align:center;margin-top:60px;color:var(--text2);font-size:13px">
+    <div style="font-size:24px;margin-bottom:8px">💰</div>
+    <div>E-Max Loan Manager v2.0</div>
+    <div style="margin-top:4px">Built by Delali for E-Max Enterprise, Ghana</div>
+    <div style="margin-top:4px">Questions? Contact Delali on WhatsApp</div>
+  </div>
+
+</div><!-- /page -->
+</body>
+</html>

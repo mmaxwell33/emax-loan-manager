@@ -48,6 +48,10 @@ const Dashboard = {
 
     // Recent activity
     this._loadActivity();
+
+    // Charts
+    this._renderCollectionsChart(loans);
+    this._renderStatusDonut(loans);
   },
 
   _renderDueToday(upcoming) {
@@ -77,6 +81,98 @@ const Dashboard = {
           </div>
         </div>`;
     }).join('');
+  },
+
+  _charts: {},
+
+  _renderCollectionsChart(loans) {
+    const canvas = document.getElementById('chart-collections');
+    if (!canvas) return;
+    if (this._charts.collections) { this._charts.collections.destroy(); }
+
+    // Build last 6 months of payment data
+    const labels = [], values = [];
+    const now = new Date();
+    for (let i = 5; i >= 0; i--) {
+      const d   = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+      labels.push(d.toLocaleDateString('en-GH', { month: 'short' }));
+      let total = 0;
+      loans.forEach(l => (l.payments || []).forEach(p => {
+        if ((p.payment_date || '').startsWith(key)) total += parseFloat(p.amount_paid || 0);
+      }));
+      values.push(Math.round(total));
+    }
+
+    this._charts.collections = new Chart(canvas, {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Collected (GH₵)',
+          data: values,
+          backgroundColor: 'rgba(91,91,214,0.6)',
+          borderColor: '#5b5bd6',
+          borderWidth: 2,
+          borderRadius: 8,
+          borderSkipped: false,
+        }],
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: { label: ctx => ` GH₵ ${Calculator.fmt(ctx.parsed.y)}` } },
+        },
+        scales: {
+          x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#8b949e' } },
+          y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#8b949e' } },
+        },
+      },
+    });
+  },
+
+  _renderStatusDonut(loans) {
+    const canvas = document.getElementById('chart-status');
+    if (!canvas) return;
+    if (this._charts.status) { this._charts.status.destroy(); }
+
+    const today = App.today();
+    const counts = { Active: 0, Overdue: 0, Completed: 0, Defaulted: 0 };
+    loans.forEach(l => {
+      let s = l.status;
+      if (s === 'Active' && l.end_date < today) s = 'Overdue';
+      counts[s] = (counts[s] || 0) + 1;
+    });
+
+    const labels = Object.keys(counts).filter(k => counts[k] > 0);
+    const data   = labels.map(k => counts[k]);
+    const colors = { Active: '#5b5bd6', Overdue: '#ef4444', Completed: '#22c55e', Defaulted: '#6b7280' };
+
+    this._charts.status = new Chart(canvas, {
+      type: 'doughnut',
+      data: {
+        labels,
+        datasets: [{ data, backgroundColor: labels.map(l => colors[l]), borderWidth: 0 }],
+      },
+      options: {
+        cutout: '65%',
+        plugins: {
+          legend: {
+            display: true, position: 'right',
+            labels: { color: '#8b949e', font: { size: 12 }, boxWidth: 10 },
+          },
+        },
+      },
+    });
+
+    // Update legend
+    const legendEl = document.getElementById('status-legend');
+    if (legendEl) legendEl.innerHTML = labels.map((l, i) => `
+      <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+        <span style="width:10px;height:10px;border-radius:50%;background:${colors[l]};flex-shrink:0"></span>
+        <span style="font-size:13px">${l} (${data[i]})</span>
+      </div>`).join('');
   },
 
   async _loadActivity() {
