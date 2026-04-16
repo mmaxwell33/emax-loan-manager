@@ -606,49 +606,96 @@
             <div class="scan-form-panel">
               <div class="panel">
                 <div class="panel-title">✏️ Review & Edit Extracted Data</div>
-                <p class="text-muted mt8" style="margin-bottom:16px">Check all fields carefully before creating the loan.</p>
-                <div class="form-group">
-                  <label>Borrower Full Name *</label>
-                  <input id="scan-name" type="text" class="form-input form-lg" placeholder="Borrower name" />
-                </div>
-                <div class="form-row-2">
+                <p class="text-muted mt8" style="margin-bottom:16px">Fields highlighted in yellow were not found — enter them manually.</p>
+                <div id="scan-form">
+
+                  <!-- BORROWER INFO -->
+                  <div style="font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.08em;
+                    text-transform:uppercase;margin:0 0 10px">Borrower Details</div>
                   <div class="form-group">
-                    <label>Phone Number *</label>
-                    <input id="scan-phone" type="tel" class="form-input form-lg" placeholder="024 XXX XXXX" />
+                    <label>Borrower Full Name *</label>
+                    <input id="scan-name" type="text" class="form-input form-lg" placeholder="Full name" />
+                  </div>
+                  <div class="form-row-2">
+                    <div class="form-group">
+                      <label>Phone Number *</label>
+                      <input id="scan-phone" type="tel" class="form-input form-lg" placeholder="024 XXX XXXX" />
+                    </div>
+                    <div class="form-group">
+                      <label>Ghana Card Number</label>
+                      <input id="scan-ghana-card" type="text" class="form-input form-lg" placeholder="GHA-XXXXXXXXX-X" />
+                    </div>
+                  </div>
+                  <div class="form-row-2">
+                    <div class="form-group">
+                      <label>Occupation</label>
+                      <input id="scan-occupation" type="text" class="form-input" placeholder="e.g. Trader, Teacher" />
+                    </div>
+                    <div class="form-group">
+                      <label>Loan Date</label>
+                      <input id="scan-date" type="date" class="form-input" />
+                    </div>
                   </div>
                   <div class="form-group">
-                    <label>Amount (GH₵) *</label>
-                    <input id="scan-amount" type="number" class="form-input form-lg" placeholder="Loan amount" />
+                    <label>Address</label>
+                    <textarea id="scan-address" class="form-textarea" rows="2" placeholder="Home / business address"></textarea>
                   </div>
-                </div>
-                <div class="form-row-2">
+
+                  <!-- LOAN TERMS -->
+                  <div style="font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.08em;
+                    text-transform:uppercase;margin:16px 0 10px">Loan Terms</div>
+                  <div class="form-row-2">
+                    <div class="form-group">
+                      <label>Amount (GH₵) *</label>
+                      <input id="scan-amount" type="number" class="form-input form-lg" placeholder="Loan amount" />
+                    </div>
+                    <div class="form-group">
+                      <label>Duration</label>
+                      <select id="scan-months" class="form-select form-lg">
+                        <option value="1">1 Month</option><option value="2">2 Months</option>
+                        <option value="3" selected>3 Months</option><option value="4">4 Months</option>
+                        <option value="5">5 Months</option><option value="6">6 Months</option>
+                        <option value="7">7 Months</option><option value="8">8 Months</option>
+                        <option value="9">9 Months</option><option value="10">10 Months</option>
+                        <option value="11">11 Months</option><option value="12">12 Months</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <!-- GUARANTOR -->
+                  <div style="font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.08em;
+                    text-transform:uppercase;margin:16px 0 10px">Guarantor</div>
+                  <div class="form-row-2">
+                    <div class="form-group">
+                      <label>Guarantor Name</label>
+                      <input id="scan-guarantor-name" type="text" class="form-input" placeholder="Full name" />
+                    </div>
+                    <div class="form-group">
+                      <label>Guarantor Phone</label>
+                      <input id="scan-guarantor-phone" type="tel" class="form-input" placeholder="024 XXX XXXX" />
+                    </div>
+                  </div>
+
+                  <!-- WITNESS -->
+                  <div style="font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.08em;
+                    text-transform:uppercase;margin:16px 0 10px">Witness</div>
                   <div class="form-group">
-                    <label>Duration (Months)</label>
-                    <select id="scan-months" class="form-select form-lg">
-                      <option value="1">1 Month</option><option value="2">2 Months</option>
-                      <option value="3" selected>3 Months</option><option value="4">4 Months</option>
-                      <option value="5">5 Months</option><option value="6">6 Months</option>
-                      <option value="7">7 Months</option><option value="8">8 Months</option>
-                      <option value="9">9 Months</option><option value="10">10 Months</option>
-                      <option value="11">11 Months</option><option value="12">12 Months</option>
-                    </select>
+                    <label>Witness Name</label>
+                    <input id="scan-witness-name" type="text" class="form-input" placeholder="Full name" />
                   </div>
-                  <div class="form-group">
-                    <label>Loan Date</label>
-                    <input id="scan-date" type="date" class="form-input form-lg" />
+
+                  <!-- NOTES -->
+                  <div class="form-group" style="margin-top:16px">
+                    <label>Raw Extracted Text (for reference)</label>
+                    <textarea id="scan-notes" class="form-textarea" rows="3"
+                      placeholder="Text extracted from the document will appear here…"></textarea>
                   </div>
+
+                  <button id="scan-submit-btn" class="btn btn-success btn-full btn-lg mt12"
+                    onclick="Scanner.createLoanFromScan()">
+                    ✅ Save This Loan Record
+                  </button>
                 </div>
-                <div class="form-group">
-                  <label>Address</label>
-                  <textarea id="scan-address" class="form-textarea" placeholder="Borrower's address"></textarea>
-                </div>
-                <div class="form-group">
-                  <label>Notes</label>
-                  <textarea id="scan-notes" class="form-textarea" placeholder="Any notes from the document…"></textarea>
-                </div>
-                <button class="btn btn-success btn-full btn-lg" onclick="Scanner.createLoanFromScan()">
-                  ✅ Create Loan from This Document
-                </button>
               </div>
             </div>
           </div>
