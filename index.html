@@ -15,9 +15,10 @@
 <body>
 
 <!-- ══════════════════════════════════════════
-     SCREEN 1: AUTH (Login)
+     AUTH SCREEN (full page)
 ══════════════════════════════════════════ -->
-<div id="screen-auth" class="screen active">
+<div id="screen-auth" class="auth-screen active">
+  <div class="auth-bg-glow"></div>
   <div class="auth-logo">💰</div>
   <div class="auth-title">E-Max Loans</div>
   <div class="auth-sub">Loan Manager — E-Max Enterprise</div>
@@ -31,473 +32,869 @@
       <label>Password</label>
       <input id="auth-password" type="password" class="form-input" placeholder="••••••••" autocomplete="current-password" />
     </div>
-    <button id="btn-login" class="btn btn-primary btn-full" onclick="Auth.login()">
-      Sign In
-    </button>
+    <button id="btn-login" class="btn btn-primary btn-full" onclick="Auth.login()">Sign In</button>
     <div class="mt12 text-center">
       <span class="text-muted">No account? </span>
-      <a href="#" onclick="Auth.showSignup()" style="color:var(--accent2)">Create one</a>
+      <a href="#" onclick="Auth.showSignup()" class="link-accent">Create one</a>
     </div>
     <div id="signup-section" style="display:none" class="mt16">
       <div class="form-group">
         <label>Your Full Name</label>
         <input id="auth-name" type="text" class="form-input" placeholder="E.g. Abena Mensah" />
       </div>
-      <button id="btn-signup" class="btn btn-success btn-full" onclick="Auth.signup()">
-        Create Account
+      <button id="btn-signup" class="btn btn-success btn-full" onclick="Auth.signup()">Create Account</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     APP SHELL (shown after login)
+══════════════════════════════════════════ -->
+<div id="app-shell" style="display:none">
+
+  <!-- ── SIDEBAR (desktop) ── -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">💰</div>
+      <div class="brand-text">
+        <div class="brand-name">E-Max Enterprise</div>
+        <div class="brand-sub">Loan Manager</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">OVERVIEW</div>
+      <button class="si active" id="si-dashboard" onclick="App.navigate('dashboard')">
+        <span class="si-icon">🏠</span><span class="si-label">Dashboard</span>
       </button>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════
-     SCREEN 2: DASHBOARD
-══════════════════════════════════════════ -->
-<div id="screen-dashboard" class="screen">
-  <div class="screen-header">
-    <div style="flex:1">
-      <div style="font-size:12px;color:var(--text2)" id="dash-greeting">Good morning</div>
-      <h2 id="dash-biz-name" style="font-size:18px">E-Max Enterprise</h2>
-    </div>
-    <button class="back-btn" onclick="App.navigate('settings')" title="Settings">⚙️</button>
-  </div>
-
-  <div class="pad">
-    <!-- Stats -->
-    <div class="stat-grid">
-      <div class="stat-tile accent">
-        <div class="ico">💼</div>
-        <div class="val" id="stat-active">—</div>
-        <div class="lbl">Active Loans</div>
-      </div>
-      <div class="stat-tile gold">
-        <div class="ico">💰</div>
-        <div class="val" id="stat-outstanding">—</div>
-        <div class="lbl">Outstanding (GHS)</div>
-      </div>
-      <div class="stat-tile green">
-        <div class="ico">✅</div>
-        <div class="val" id="stat-collected">—</div>
-        <div class="lbl">Collected This Month</div>
-      </div>
-      <div class="stat-tile red">
-        <div class="ico">⚠️</div>
-        <div class="val" id="stat-overdue">—</div>
-        <div class="lbl">Overdue Loans</div>
-      </div>
-    </div>
-
-    <!-- Due Today -->
-    <div class="card" id="due-today-card">
-      <div class="card-title">📅 Due This Week</div>
-      <div id="due-today-list"><div class="text-muted text-center" style="padding:16px 0">Loading…</div></div>
-    </div>
-
-    <!-- Quick Actions -->
-    <div class="mt16">
-      <div class="card-title pad-x">Quick Actions</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 0 0 0">
-        <button class="btn btn-primary" onclick="Loans.openNewLoan()" style="border-radius:14px;height:52px">
-          ➕ New Loan
-        </button>
-        <button class="btn btn-ghost" onclick="App.navigate('reports')" style="border-radius:14px;height:52px">
-          📊 Reports
-        </button>
-      </div>
-    </div>
-
-    <!-- Recent Activity -->
-    <div class="card mt16">
-      <div class="card-title">🕐 Recent Activity</div>
-      <div id="activity-list"><div class="text-muted" style="padding:8px 0">Loading…</div></div>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════
-     SCREEN 3: LOANS LIST
-══════════════════════════════════════════ -->
-<div id="screen-loans" class="screen">
-  <div class="screen-header">
-    <h2>Loans</h2>
-    <button class="btn btn-primary btn-sm" onclick="Loans.openNewLoan()">+ New</button>
-  </div>
-
-  <div class="search-bar">
-    <div class="search-input-wrap">
-      <span class="search-icon">🔍</span>
-      <input id="loans-search" class="search-input" type="search" placeholder="Search by name…" oninput="Loans.filterList(this.value)" />
-    </div>
-  </div>
-
-  <div class="tab-row">
-    <button class="tab-btn active" onclick="Loans.setFilter('All', this)">All</button>
-    <button class="tab-btn" onclick="Loans.setFilter('Active', this)">Active</button>
-    <button class="tab-btn" onclick="Loans.setFilter('Overdue', this)">Overdue ⚠️</button>
-    <button class="tab-btn" onclick="Loans.setFilter('Completed', this)">Completed</button>
-  </div>
-
-  <div id="loans-list">
-    <div class="empty-state">
-      <div class="empty-icon">💳</div>
-      <h3>No loans yet</h3>
-      <p>Tap the + New button to create your first loan</p>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════
-     SCREEN 4: NEW LOAN WIZARD
-══════════════════════════════════════════ -->
-<div id="screen-new-loan" class="screen">
-  <div class="screen-header">
-    <button class="back-btn" onclick="App.back()">←</button>
-    <h2>New Loan</h2>
-  </div>
-
-  <!-- Step indicator -->
-  <div class="wizard-steps" id="wizard-steps">
-    <div class="wizard-step active" id="ws-1"><div class="w-num">1</div> Borrower</div>
-    <div class="w-sep"></div>
-    <div class="wizard-step" id="ws-2"><div class="w-num">2</div> Guarantor</div>
-    <div class="w-sep"></div>
-    <div class="wizard-step" id="ws-3"><div class="w-num">3</div> Witness</div>
-    <div class="w-sep"></div>
-    <div class="wizard-step" id="ws-4"><div class="w-num">4</div> Loan</div>
-    <div class="w-sep"></div>
-    <div class="wizard-step" id="ws-5"><div class="w-num">5</div> Review</div>
-  </div>
-
-  <!-- Step 1: Borrower -->
-  <div id="step-1" class="pad">
-    <div class="card-title">Borrower Details</div>
-    <div class="form-group">
-      <label>Full Name *</label>
-      <input id="b-name" type="text" class="form-input" placeholder="Borrower's full name" />
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label>Phone Number *</label>
-        <input id="b-phone" type="tel" class="form-input" placeholder="024 XXX XXXX" />
-      </div>
-      <div class="form-group">
-        <label>Date of Birth</label>
-        <input id="b-dob" type="date" class="form-input" />
-      </div>
-    </div>
-    <div class="form-group">
-      <label>Home Address *</label>
-      <textarea id="b-address" class="form-textarea" placeholder="House number, area, city…"></textarea>
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label>Occupation</label>
-        <input id="b-occupation" type="text" class="form-input" placeholder="E.g. Trader" />
-      </div>
-      <div class="form-group">
-        <label>Ghana Card Number</label>
-        <input id="b-ghana-card" type="text" class="form-input" placeholder="GHA-XXXXXXXXX-X" />
-      </div>
-    </div>
-    <div class="form-group">
-      <label>Borrower Photo (optional)</label>
-      <div class="photo-upload-box" onclick="document.getElementById('b-photo-input').click()">
-        <div class="pu-icon">📷</div>
-        <p>Tap to take or upload photo</p>
-      </div>
-      <input id="b-photo-input" type="file" accept="image/*" capture="user" style="display:none" onchange="Loans.previewPhoto(this,'b-photo-preview')" />
-      <img id="b-photo-preview" class="photo-preview mt8" style="display:none" />
-    </div>
-    <div class="form-group">
-      <label>Ghana Card Photo (optional)</label>
-      <div class="photo-upload-box" onclick="document.getElementById('b-id-input').click()">
-        <div class="pu-icon">🪪</div>
-        <p>Tap to photograph Ghana Card</p>
-      </div>
-      <input id="b-id-input" type="file" accept="image/*" capture="environment" style="display:none" onchange="Loans.previewPhoto(this,'b-id-preview')" />
-      <img id="b-id-preview" class="photo-preview mt8" style="display:none" />
-    </div>
-    <button class="btn btn-primary btn-full mt16" onclick="Loans.wizardNext(1)">Next: Guarantor →</button>
-  </div>
-
-  <!-- Step 2: Guarantor -->
-  <div id="step-2" class="pad" style="display:none">
-    <div class="card-title">Guarantor Details</div>
-    <p class="text-muted mt8" style="margin-bottom:14px">The guarantor agrees to pay if the borrower defaults.</p>
-    <div class="form-group">
-      <label>Guarantor Full Name *</label>
-      <input id="g-name" type="text" class="form-input" placeholder="Guarantor's full name" />
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label>Phone Number *</label>
-        <input id="g-phone" type="tel" class="form-input" placeholder="024 XXX XXXX" />
-      </div>
-      <div class="form-group">
-        <label>Relationship</label>
-        <select id="g-relationship" class="form-select">
-          <option>Spouse</option><option>Parent</option><option>Sibling</option>
-          <option>Friend</option><option>Colleague</option><option>Other</option>
-        </select>
-      </div>
-    </div>
-    <div class="form-group">
-      <label>Address</label>
-      <textarea id="g-address" class="form-textarea" placeholder="Guarantor's address…"></textarea>
-    </div>
-    <div class="form-group">
-      <label>Ghana Card Number</label>
-      <input id="g-ghana-card" type="text" class="form-input" placeholder="GHA-XXXXXXXXX-X" />
-    </div>
-    <div style="display:flex;gap:10px;margin-top:16px">
-      <button class="btn btn-ghost" onclick="Loans.wizardBack(2)" style="flex:0 0 auto">← Back</button>
-      <button class="btn btn-primary btn-full" onclick="Loans.wizardNext(2)">Next: Witness →</button>
-    </div>
-  </div>
-
-  <!-- Step 3: Witness -->
-  <div id="step-3" class="pad" style="display:none">
-    <div class="card-title">Witness Details</div>
-    <p class="text-muted mt8" style="margin-bottom:14px">A witness who can confirm the loan agreement.</p>
-    <div class="form-group">
-      <label>Witness Full Name *</label>
-      <input id="w-name" type="text" class="form-input" placeholder="Witness's full name" />
-    </div>
-    <div class="form-group">
-      <label>Phone Number *</label>
-      <input id="w-phone" type="tel" class="form-input" placeholder="024 XXX XXXX" />
-    </div>
-    <div style="display:flex;gap:10px;margin-top:16px">
-      <button class="btn btn-ghost" onclick="Loans.wizardBack(3)" style="flex:0 0 auto">← Back</button>
-      <button class="btn btn-primary btn-full" onclick="Loans.wizardNext(3)">Next: Loan Amount →</button>
-    </div>
-  </div>
-
-  <!-- Step 4: Loan Details -->
-  <div id="step-4" class="pad" style="display:none">
-    <div class="card-title">Loan Details</div>
-    <div class="form-row">
-      <div class="form-group">
-        <label>Loan Amount (GHS) *</label>
-        <input id="l-amount" type="number" class="form-input" placeholder="E.g. 1000" min="1" oninput="Loans.updateCalcPreview()" />
-      </div>
-      <div class="form-group">
-        <label>Duration (Months) *</label>
-        <select id="l-months" class="form-select" onchange="Loans.updateCalcPreview()">
-          <option value="">Select</option>
-          <option value="1">1 Month</option><option value="2">2 Months</option>
-          <option value="3">3 Months</option><option value="4">4 Months</option>
-          <option value="5">5 Months</option><option value="6">6 Months</option>
-          <option value="7">7 Months</option><option value="8">8 Months</option>
-          <option value="9">9 Months</option><option value="10">10 Months</option>
-          <option value="11">11 Months</option><option value="12">12 Months</option>
-        </select>
-      </div>
-    </div>
-    <div class="form-group">
-      <label>Start Date</label>
-      <input id="l-start" type="date" class="form-input" />
-    </div>
-    <div class="form-group">
-      <label>Processing Fee</label>
-      <div style="display:flex;gap:10px;align-items:center">
-        <label style="display:flex;gap:6px;align-items:center;font-size:14px;font-weight:500;cursor:pointer">
-          <input id="l-fee-paid" type="checkbox" checked style="width:16px;height:16px;accent-color:var(--accent)" />
-          <span>Borrower paid processing fee upfront</span>
-        </label>
-      </div>
-    </div>
-
-    <!-- Live Calculator Preview -->
-    <div id="calc-preview-box" class="calc-preview" style="display:none">
-      <div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent2);margin-bottom:10px">📐 Loan Breakdown</div>
-      <div class="calc-row"><span class="cl">Principal</span><span class="cv" id="cp-principal">—</span></div>
-      <div class="calc-row"><span class="cl">Processing Fee (4%)</span><span class="cv red" id="cp-fee">—</span></div>
-      <div class="calc-row"><span class="cl">Interest per Month (10%)</span><span class="cv gold" id="cp-monthly-int">—</span></div>
-      <div class="calc-row"><span class="cl">Total Interest</span><span class="cv gold" id="cp-total-int">—</span></div>
-      <div class="calc-row"><span class="cl">Total Repayable</span><span class="cv" id="cp-total">—</span></div>
-      <div class="calc-row"><span class="cl">Monthly Payment</span><span class="cv big" id="cp-monthly">—</span></div>
-      <div class="calc-row"><span class="cl">Late Penalty (if missed)</span><span class="cv red" id="cp-penalty">—</span></div>
-    </div>
-
-    <div class="form-group mt12">
-      <label>Notes (optional)</label>
-      <textarea id="l-notes" class="form-textarea" placeholder="Any special notes about this loan…"></textarea>
-    </div>
-    <div style="display:flex;gap:10px;margin-top:16px">
-      <button class="btn btn-ghost" onclick="Loans.wizardBack(4)" style="flex:0 0 auto">← Back</button>
-      <button class="btn btn-primary btn-full" onclick="Loans.wizardNext(4)">Review Loan →</button>
-    </div>
-  </div>
-
-  <!-- Step 5: Review + Submit -->
-  <div id="step-5" class="pad" style="display:none">
-    <div class="card-title">Review & Confirm</div>
-    <div id="review-content"></div>
-    <div style="display:flex;gap:10px;margin-top:20px">
-      <button class="btn btn-ghost" onclick="Loans.wizardBack(5)" style="flex:0 0 auto">← Back</button>
-      <button id="btn-submit-loan" class="btn btn-success btn-full" onclick="Loans.submitLoan()">
-        ✅ Issue Loan
+      <button class="si" id="si-analytics" onclick="App.navigate('analytics')">
+        <span class="si-icon">📊</span><span class="si-label">Analytics</span>
       </button>
-    </div>
-  </div>
-</div>
 
-<!-- ══════════════════════════════════════════
-     SCREEN 5: LOAN DETAIL
-══════════════════════════════════════════ -->
-<div id="screen-loan-detail" class="screen">
-  <div class="screen-header">
-    <button class="back-btn" onclick="App.back()">←</button>
-    <h2 id="loan-detail-title">Loan Details</h2>
-    <span id="loan-detail-badge"></span>
-  </div>
-  <div class="pad" id="loan-detail-content">
-    <div class="text-muted text-center" style="padding:40px 0">Loading…</div>
-  </div>
-</div>
+      <div class="nav-section-label">LOANS</div>
+      <button class="si" id="si-loans" onclick="App.navigate('loans')">
+        <span class="si-icon">💳</span><span class="si-label">All Loans</span>
+      </button>
+      <button class="si" id="si-scanner" onclick="App.navigate('scanner')">
+        <span class="si-icon">📷</span><span class="si-label">Scan Document</span>
+      </button>
+      <button class="si" id="si-applications" onclick="App.navigate('applications')">
+        <span class="si-icon">📋</span><span class="si-label">Applications</span>
+        <span class="si-badge" id="sidebar-app-count" style="display:none">0</span>
+      </button>
 
-<!-- ══════════════════════════════════════════
-     SCREEN 6: BORROWERS LIST
-══════════════════════════════════════════ -->
-<div id="screen-borrowers" class="screen">
-  <div class="screen-header">
-    <h2>Borrowers</h2>
-  </div>
-  <div class="search-bar">
-    <div class="search-input-wrap">
-      <span class="search-icon">🔍</span>
-      <input id="borrowers-search" class="search-input" type="search" placeholder="Search borrowers…" oninput="Borrowers.filter(this.value)" />
-    </div>
-  </div>
-  <div id="borrowers-list">
-    <div class="empty-state">
-      <div class="empty-icon">👥</div>
-      <h3>No borrowers yet</h3>
-      <p>Create a loan to add your first borrower</p>
-    </div>
-  </div>
-</div>
+      <div class="nav-section-label">PEOPLE</div>
+      <button class="si" id="si-borrowers" onclick="App.navigate('borrowers')">
+        <span class="si-icon">👥</span><span class="si-label">Borrowers</span>
+      </button>
 
-<!-- ══════════════════════════════════════════
-     SCREEN 7: BORROWER DETAIL
-══════════════════════════════════════════ -->
-<div id="screen-borrower-detail" class="screen">
-  <div class="screen-header">
-    <button class="back-btn" onclick="App.back()">←</button>
-    <h2 id="borrower-detail-name">Borrower</h2>
-  </div>
-  <div class="pad" id="borrower-detail-content">
-    <div class="text-muted text-center" style="padding:40px 0">Loading…</div>
-  </div>
-</div>
+      <div class="nav-section-label">FINANCE</div>
+      <button class="si" id="si-reports" onclick="App.navigate('reports')">
+        <span class="si-icon">📈</span><span class="si-label">Reports</span>
+      </button>
 
-<!-- ══════════════════════════════════════════
-     SCREEN 8: REPORTS
-══════════════════════════════════════════ -->
-<div id="screen-reports" class="screen">
-  <div class="screen-header">
-    <h2>Reports</h2>
-  </div>
-  <div class="pad">
-    <!-- Summary tiles -->
-    <div class="stat-grid" id="reports-summary">
-      <div class="stat-tile green"><div class="ico">💰</div><div class="val" id="rep-total-interest">—</div><div class="lbl">Total Interest Earned</div></div>
-      <div class="stat-tile accent"><div class="ico">📊</div><div class="val" id="rep-total-loans">—</div><div class="lbl">Total Loans Issued</div></div>
-      <div class="stat-tile gold"><div class="ico">🏆</div><div class="val" id="rep-repayment-rate">—</div><div class="lbl">Repayment Rate</div></div>
-      <div class="stat-tile"><div class="ico">👥</div><div class="val" id="rep-total-borrowers">—</div><div class="lbl">Total Borrowers</div></div>
-    </div>
-    <div class="card-title mt16">Monthly Breakdown</div>
-    <div id="monthly-reports-list">
-      <div class="text-muted text-center" style="padding:40px 0">Loading reports…</div>
-    </div>
-  </div>
-</div>
+      <div class="nav-section-label">SYSTEM</div>
+      <button class="si" id="si-team" onclick="App.navigate('team')">
+        <span class="si-icon">🤝</span><span class="si-label">Team</span>
+      </button>
+      <button class="si" id="si-settings" onclick="App.navigate('settings')">
+        <span class="si-icon">⚙️</span><span class="si-label">Settings</span>
+      </button>
+    </nav>
 
-<!-- ══════════════════════════════════════════
-     SCREEN 9: SETTINGS
-══════════════════════════════════════════ -->
-<div id="screen-settings" class="screen">
-  <div class="screen-header">
-    <button class="back-btn" onclick="App.back()">←</button>
-    <h2>Settings</h2>
-  </div>
-  <div class="pad">
-    <!-- Business Info -->
-    <div class="card-title">Business</div>
-    <div class="card">
-      <div class="form-group">
-        <label>Business Name</label>
-        <input id="set-biz-name" type="text" class="form-input" placeholder="E-Max Enterprise" />
+    <div class="sidebar-user">
+      <div class="su-avatar" id="sb-avatar">VB</div>
+      <div class="su-info">
+        <div class="su-name" id="sb-name">Loading…</div>
+        <div class="su-role" id="sb-email">—</div>
       </div>
-      <div class="form-group">
-        <label>Your Full Name</label>
-        <input id="set-full-name" type="text" class="form-input" placeholder="Your name" />
-      </div>
-      <div class="form-group">
-        <label>Phone Number</label>
-        <input id="set-phone" type="tel" class="form-input" placeholder="024 XXX XXXX" />
-      </div>
-      <button class="btn btn-primary btn-full" onclick="Settings.save()">Save Changes</button>
+      <button class="su-signout" onclick="Auth.logout()" title="Sign Out">⬆️</button>
     </div>
+  </aside>
 
-    <!-- Notifications -->
-    <div class="card-title mt16">Notifications</div>
-    <div class="card">
-      <div class="settings-row">
-        <div class="settings-icon">🔔</div>
-        <div class="settings-info">
-          <div class="s-title">Payment Reminders</div>
-          <div class="s-sub">Get notified when payments are due</div>
+  <!-- ── MAIN CONTENT ── -->
+  <main class="main-content" id="main-content">
+
+    <!-- ══ SCREEN: DASHBOARD ══ -->
+    <div id="screen-dashboard" class="screen active">
+      <div class="page-header">
+        <div>
+          <div class="page-greeting" id="dash-greeting">Good morning 👋</div>
+          <h1 class="page-title" id="dash-biz-name">E-Max Enterprise</h1>
         </div>
-        <button id="notif-toggle" class="toggle" onclick="Settings.toggleNotifications(this)"></button>
+        <button class="btn btn-primary" onclick="Loans.openNewLoan()">➕ New Loan</button>
+      </div>
+
+      <div class="page-body">
+        <!-- Stat Cards -->
+        <div class="stats-row">
+          <div class="stat-card stat-blue">
+            <div class="sc-icon">💼</div>
+            <div class="sc-val" id="stat-active">—</div>
+            <div class="sc-lbl">Active Loans</div>
+          </div>
+          <div class="stat-card stat-gold">
+            <div class="sc-icon">💰</div>
+            <div class="sc-val" id="stat-outstanding">—</div>
+            <div class="sc-lbl">Outstanding (GH₵)</div>
+          </div>
+          <div class="stat-card stat-green">
+            <div class="sc-icon">✅</div>
+            <div class="sc-val" id="stat-collected">—</div>
+            <div class="sc-lbl">Collected This Month</div>
+          </div>
+          <div class="stat-card stat-red">
+            <div class="sc-icon">⚠️</div>
+            <div class="sc-val" id="stat-overdue">—</div>
+            <div class="sc-lbl">Overdue Loans</div>
+          </div>
+        </div>
+
+        <!-- Charts + Activity Row -->
+        <div class="dash-grid">
+          <div class="dash-col-main">
+            <!-- Monthly Collections Chart -->
+            <div class="panel">
+              <div class="panel-header">
+                <div class="panel-title">Monthly Collections (GH₵)</div>
+              </div>
+              <div class="chart-wrap">
+                <canvas id="chart-collections"></canvas>
+              </div>
+            </div>
+
+            <!-- Loan Status Chart -->
+            <div class="panel mt16">
+              <div class="panel-header">
+                <div class="panel-title">Loan Status Overview</div>
+              </div>
+              <div class="status-chart-row">
+                <div class="donut-wrap">
+                  <canvas id="chart-status" width="160" height="160"></canvas>
+                </div>
+                <div class="status-legend" id="status-legend"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="dash-col-side">
+            <!-- Due This Week -->
+            <div class="panel">
+              <div class="panel-header">
+                <div class="panel-title">📅 Due This Week</div>
+              </div>
+              <div id="due-today-list"><div class="loading-row">Loading…</div></div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="panel mt16">
+              <div class="panel-header"><div class="panel-title">Quick Actions</div></div>
+              <div class="quick-actions">
+                <button class="qa-btn" onclick="Loans.openNewLoan()">
+                  <span class="qa-icon">➕</span>
+                  <span>New Loan</span>
+                </button>
+                <button class="qa-btn" onclick="App.navigate('scanner')">
+                  <span class="qa-icon">📷</span>
+                  <span>Scan Doc</span>
+                </button>
+                <button class="qa-btn" onclick="App.navigate('applications')">
+                  <span class="qa-icon">📋</span>
+                  <span>Applications</span>
+                </button>
+                <button class="qa-btn" onclick="App.navigate('reports')">
+                  <span class="qa-icon">📈</span>
+                  <span>Reports</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="panel mt16">
+              <div class="panel-header"><div class="panel-title">🕐 Recent Activity</div></div>
+              <div id="activity-list"><div class="loading-row">Loading…</div></div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Diagnostics -->
-    <div class="card-title mt16">Diagnostics</div>
-    <div class="card">
-      <div id="diag-results">
-        <div class="text-muted">Tap Run to check all systems</div>
+    <!-- ══ SCREEN: LOANS LIST ══ -->
+    <div id="screen-loans" class="screen">
+      <div class="page-header">
+        <h1 class="page-title">Loans</h1>
+        <button class="btn btn-primary" onclick="Loans.openNewLoan()">➕ New Loan</button>
       </div>
-      <button class="btn btn-ghost btn-full mt12" onclick="Settings.runDiagnostics()">🔬 Run Diagnostics</button>
+      <div class="page-body">
+        <div class="panel">
+          <div class="panel-toolbar">
+            <div class="search-wrap">
+              <span class="search-icon">🔍</span>
+              <input id="loans-search" class="search-input" type="search" placeholder="Search by borrower name…" oninput="Loans.filterList(this.value)" />
+            </div>
+            <div class="tab-row">
+              <button class="tab-btn active" onclick="Loans.setFilter('All', this)">All</button>
+              <button class="tab-btn" onclick="Loans.setFilter('Active', this)">Active</button>
+              <button class="tab-btn" onclick="Loans.setFilter('Overdue', this)">⚠️ Overdue</button>
+              <button class="tab-btn" onclick="Loans.setFilter('Completed', this)">Completed</button>
+            </div>
+          </div>
+          <div id="loans-list">
+            <div class="empty-state">
+              <div class="empty-icon">💳</div>
+              <h3>No loans yet</h3>
+              <p>Click "+ New Loan" to create your first loan</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- Sign Out -->
-    <div class="mt24">
-      <button class="btn btn-danger btn-full" onclick="Auth.logout()">Sign Out</button>
-    </div>
-    <div class="mt12 text-center text-muted" style="font-size:11px">
-      E-Max Loan Manager v1.0 · Built by Maxwell
-    </div>
-  </div>
-</div>
+    <!-- ══ SCREEN: NEW LOAN WIZARD ══ -->
+    <div id="screen-new-loan" class="screen">
+      <div class="page-header">
+        <button class="btn btn-ghost btn-sm" onclick="App.back()">← Back</button>
+        <h1 class="page-title">New Loan</h1>
+      </div>
+      <div class="page-body">
+        <div class="wizard-container">
+          <!-- Step indicator -->
+          <div class="wizard-steps" id="wizard-steps">
+            <div class="wizard-step active" id="ws-1"><div class="w-num">1</div><span>Borrower</span></div>
+            <div class="w-sep"></div>
+            <div class="wizard-step" id="ws-2"><div class="w-num">2</div><span>Guarantor</span></div>
+            <div class="w-sep"></div>
+            <div class="wizard-step" id="ws-3"><div class="w-num">3</div><span>Witness</span></div>
+            <div class="w-sep"></div>
+            <div class="wizard-step" id="ws-4"><div class="w-num">4</div><span>Loan</span></div>
+            <div class="w-sep"></div>
+            <div class="wizard-step" id="ws-5"><div class="w-num">5</div><span>Review</span></div>
+          </div>
 
-<!-- ══════════════════════════════════════════
-     BOTTOM NAVIGATION
-══════════════════════════════════════════ -->
-<nav id="bottom-nav">
-  <button class="nav-item active" id="nav-dashboard" onclick="App.navigate('dashboard')">
-    <span class="nav-icon">🏠</span>Home
-  </button>
-  <button class="nav-item" id="nav-loans" onclick="App.navigate('loans')">
-    <span class="nav-icon">💳</span>Loans
-  </button>
-  <button class="nav-item" id="nav-borrowers" onclick="App.navigate('borrowers')">
-    <span class="nav-icon">👥</span>People
-  </button>
-  <button class="nav-item" id="nav-reports" onclick="App.navigate('reports')">
-    <span class="nav-icon">📊</span>Reports
-  </button>
-</nav>
+          <!-- Step 1: Borrower -->
+          <div id="step-1" class="wizard-step-body">
+            <div class="step-title">👤 Borrower Details</div>
+            <div class="form-group">
+              <label>Full Name *</label>
+              <input id="b-name" type="text" class="form-input form-lg" placeholder="E.g. Akua Mensah" />
+            </div>
+            <div class="form-row-2">
+              <div class="form-group">
+                <label>Phone Number *</label>
+                <input id="b-phone" type="tel" class="form-input form-lg" placeholder="024 XXX XXXX" />
+              </div>
+              <div class="form-group">
+                <label>Date of Birth</label>
+                <input id="b-dob" type="date" class="form-input form-lg" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Home Address *</label>
+              <textarea id="b-address" class="form-textarea" placeholder="House number, area, city…"></textarea>
+            </div>
+            <div class="form-row-2">
+              <div class="form-group">
+                <label>Occupation</label>
+                <select id="b-occupation-select" class="form-select form-lg" onchange="Loans.handleOccupationSelect(this)">
+                  <option value="">— Select —</option>
+                  <option>Trader</option><option>Farmer</option><option>Teacher</option>
+                  <option>Nurse/Doctor</option><option>Civil Servant</option>
+                  <option>Driver</option><option>Seamstress/Tailor</option>
+                  <option>Hairdresser</option><option>Student</option>
+                  <option>Self-Employed</option><option>Other</option>
+                </select>
+                <input id="b-occupation" type="text" class="form-input mt8" placeholder="Type occupation" style="display:none" />
+              </div>
+              <div class="form-group">
+                <label>Ghana Card Number</label>
+                <input id="b-ghana-card" type="text" class="form-input form-lg" placeholder="GHA-XXXXXXXXX-X" />
+              </div>
+            </div>
+            <div class="form-row-2">
+              <div class="form-group">
+                <label>Borrower Photo (optional)</label>
+                <div class="photo-upload-box" onclick="document.getElementById('b-photo-input').click()">
+                  <div class="pu-icon">📷</div><p>Take or upload photo</p>
+                </div>
+                <input id="b-photo-input" type="file" accept="image/*" capture="user" style="display:none" onchange="Loans.previewPhoto(this,'b-photo-preview')" />
+                <img id="b-photo-preview" class="photo-preview mt8" style="display:none" />
+              </div>
+              <div class="form-group">
+                <label>Ghana Card Photo (optional)</label>
+                <div class="photo-upload-box" onclick="document.getElementById('b-id-input').click()">
+                  <div class="pu-icon">🪪</div><p>Photograph Ghana Card</p>
+                </div>
+                <input id="b-id-input" type="file" accept="image/*" capture="environment" style="display:none" onchange="Loans.previewPhoto(this,'b-id-preview')" />
+                <img id="b-id-preview" class="photo-preview mt8" style="display:none" />
+              </div>
+            </div>
+            <div class="wizard-nav">
+              <button class="btn btn-primary btn-lg" onclick="Loans.wizardNext(1)">Next: Guarantor →</button>
+            </div>
+          </div>
+
+          <!-- Step 2: Guarantor -->
+          <div id="step-2" class="wizard-step-body" style="display:none">
+            <div class="step-title">🤝 Guarantor Details</div>
+            <p class="step-hint">The guarantor agrees to repay if the borrower defaults.</p>
+            <div class="form-group">
+              <label>Guarantor Full Name *</label>
+              <input id="g-name" type="text" class="form-input form-lg" placeholder="Guarantor's full name" />
+            </div>
+            <div class="form-row-2">
+              <div class="form-group">
+                <label>Phone Number *</label>
+                <input id="g-phone" type="tel" class="form-input form-lg" placeholder="024 XXX XXXX" />
+              </div>
+              <div class="form-group">
+                <label>Relationship to Borrower</label>
+                <select id="g-relationship" class="form-select form-lg">
+                  <option>Spouse</option><option>Parent</option><option>Sibling</option>
+                  <option>Friend</option><option>Colleague</option><option>Other</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Address</label>
+              <textarea id="g-address" class="form-textarea" placeholder="Guarantor's address…"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Ghana Card Number</label>
+              <input id="g-ghana-card" type="text" class="form-input form-lg" placeholder="GHA-XXXXXXXXX-X" />
+            </div>
+            <div class="wizard-nav two-btn">
+              <button class="btn btn-ghost" onclick="Loans.wizardBack(2)">← Back</button>
+              <button class="btn btn-primary btn-lg" onclick="Loans.wizardNext(2)">Next: Witness →</button>
+            </div>
+          </div>
+
+          <!-- Step 3: Witness -->
+          <div id="step-3" class="wizard-step-body" style="display:none">
+            <div class="step-title">👁️ Witness Details</div>
+            <p class="step-hint">A witness who can confirm the loan agreement.</p>
+            <div class="form-group">
+              <label>Witness Full Name *</label>
+              <input id="w-name" type="text" class="form-input form-lg" placeholder="Witness's full name" />
+            </div>
+            <div class="form-group">
+              <label>Phone Number *</label>
+              <input id="w-phone" type="tel" class="form-input form-lg" placeholder="024 XXX XXXX" />
+            </div>
+            <div class="wizard-nav two-btn">
+              <button class="btn btn-ghost" onclick="Loans.wizardBack(3)">← Back</button>
+              <button class="btn btn-primary btn-lg" onclick="Loans.wizardNext(3)">Next: Loan Amount →</button>
+            </div>
+          </div>
+
+          <!-- Step 4: Loan Details -->
+          <div id="step-4" class="wizard-step-body" style="display:none">
+            <div class="step-title">💵 Loan Details</div>
+
+            <!-- Amount quick-pick buttons -->
+            <div class="form-group">
+              <label>Loan Amount (GH₵) *</label>
+              <div class="amount-chips">
+                <button class="amount-chip" onclick="Loans.setAmount(500)">500</button>
+                <button class="amount-chip" onclick="Loans.setAmount(1000)">1,000</button>
+                <button class="amount-chip" onclick="Loans.setAmount(2000)">2,000</button>
+                <button class="amount-chip" onclick="Loans.setAmount(3000)">3,000</button>
+                <button class="amount-chip" onclick="Loans.setAmount(5000)">5,000</button>
+                <button class="amount-chip" onclick="Loans.setAmount(10000)">10,000</button>
+              </div>
+              <div class="amount-input-wrap">
+                <span class="currency-prefix">GH₵</span>
+                <input id="l-amount" type="number" class="form-input form-lg amount-input" placeholder="Or type amount" min="1" oninput="Loans.updateCalcPreview()" />
+              </div>
+            </div>
+
+            <!-- Duration quick-pick -->
+            <div class="form-group">
+              <label>Duration *</label>
+              <div class="month-chips">
+                <button class="month-chip" onclick="Loans.setMonths(1)">1 mo</button>
+                <button class="month-chip" onclick="Loans.setMonths(2)">2 mo</button>
+                <button class="month-chip" onclick="Loans.setMonths(3)">3 mo</button>
+                <button class="month-chip" onclick="Loans.setMonths(4)">4 mo</button>
+                <button class="month-chip" onclick="Loans.setMonths(6)">6 mo</button>
+                <button class="month-chip" onclick="Loans.setMonths(9)">9 mo</button>
+                <button class="month-chip" onclick="Loans.setMonths(12)">12 mo</button>
+              </div>
+              <select id="l-months" class="form-select form-lg mt8" onchange="Loans.updateCalcPreview()">
+                <option value="">Or select exact duration</option>
+                <option value="1">1 Month</option><option value="2">2 Months</option>
+                <option value="3">3 Months</option><option value="4">4 Months</option>
+                <option value="5">5 Months</option><option value="6">6 Months</option>
+                <option value="7">7 Months</option><option value="8">8 Months</option>
+                <option value="9">9 Months</option><option value="10">10 Months</option>
+                <option value="11">11 Months</option><option value="12">12 Months</option>
+              </select>
+            </div>
+
+            <div class="form-row-2">
+              <div class="form-group">
+                <label>Start Date</label>
+                <input id="l-start" type="date" class="form-input form-lg" />
+              </div>
+              <div class="form-group">
+                <label>Interest Rate</label>
+                <select id="l-interest-rate" class="form-select form-lg" onchange="Loans.updateCalcPreview()">
+                  <option value="0.10" selected>10% / month (Standard)</option>
+                  <option value="0.08">8% / month</option>
+                  <option value="0.12">12% / month</option>
+                  <option value="0.15">15% / month</option>
+                  <option value="custom">Custom…</option>
+                </select>
+                <input id="l-interest-custom" type="number" class="form-input mt8" placeholder="Enter % rate" style="display:none" min="1" max="100" oninput="Loans.updateCalcPreview()" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Processing Fee</label>
+              <div class="checkbox-row">
+                <input id="l-fee-paid" type="checkbox" checked style="width:20px;height:20px;accent-color:var(--accent);cursor:pointer" />
+                <span>Borrower paid 4% processing fee upfront</span>
+              </div>
+            </div>
+
+            <!-- Live Loan Calculator -->
+            <div id="calc-preview-box" class="calc-preview" style="display:none">
+              <div class="calc-title">📐 Loan Breakdown</div>
+              <div class="calc-grid">
+                <div class="cg-item">
+                  <div class="cg-label">Principal</div>
+                  <div class="cg-val" id="cp-principal">—</div>
+                </div>
+                <div class="cg-item">
+                  <div class="cg-label">Processing Fee (4%)</div>
+                  <div class="cg-val text-red" id="cp-fee">—</div>
+                </div>
+                <div class="cg-item">
+                  <div class="cg-label">Interest / Month</div>
+                  <div class="cg-val text-gold" id="cp-monthly-int">—</div>
+                </div>
+                <div class="cg-item">
+                  <div class="cg-label">Total Interest</div>
+                  <div class="cg-val text-gold" id="cp-total-int">—</div>
+                </div>
+                <div class="cg-item">
+                  <div class="cg-label">Total Repayable</div>
+                  <div class="cg-val" id="cp-total">—</div>
+                </div>
+                <div class="cg-item cg-highlight">
+                  <div class="cg-label">Monthly Payment</div>
+                  <div class="cg-val cg-big" id="cp-monthly">—</div>
+                </div>
+                <div class="cg-item">
+                  <div class="cg-label">Late Penalty</div>
+                  <div class="cg-val text-red" id="cp-penalty">—</div>
+                </div>
+                <div class="cg-item">
+                  <div class="cg-label">End Date</div>
+                  <div class="cg-val" id="cp-end-date">—</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group mt12">
+              <label>Notes (optional)</label>
+              <textarea id="l-notes" class="form-textarea" placeholder="Any special notes about this loan… (e.g. purpose, collateral, special terms)"></textarea>
+            </div>
+            <div class="wizard-nav two-btn">
+              <button class="btn btn-ghost" onclick="Loans.wizardBack(4)">← Back</button>
+              <button class="btn btn-primary btn-lg" onclick="Loans.wizardNext(4)">Review Loan →</button>
+            </div>
+          </div>
+
+          <!-- Step 5: Review -->
+          <div id="step-5" class="wizard-step-body" style="display:none">
+            <div class="step-title">✅ Review & Confirm</div>
+            <div id="review-content"></div>
+            <div class="wizard-nav two-btn mt20">
+              <button class="btn btn-ghost" onclick="Loans.wizardBack(5)">← Back</button>
+              <button id="btn-submit-loan" class="btn btn-success btn-lg" onclick="Loans.submitLoan()">✅ Issue Loan</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SCREEN: LOAN DETAIL ══ -->
+    <div id="screen-loan-detail" class="screen">
+      <div class="page-header">
+        <button class="btn btn-ghost btn-sm" onclick="App.back()">← Back</button>
+        <h1 class="page-title" id="loan-detail-title">Loan Details</h1>
+        <span id="loan-detail-badge"></span>
+      </div>
+      <div class="page-body" id="loan-detail-content">
+        <div class="loading-placeholder">Loading…</div>
+      </div>
+    </div>
+
+    <!-- ══ SCREEN: BORROWERS LIST ══ -->
+    <div id="screen-borrowers" class="screen">
+      <div class="page-header">
+        <h1 class="page-title">Borrowers</h1>
+      </div>
+      <div class="page-body">
+        <div class="panel">
+          <div class="panel-toolbar">
+            <div class="search-wrap">
+              <span class="search-icon">🔍</span>
+              <input id="borrowers-search" class="search-input" type="search" placeholder="Search borrowers…" oninput="Borrowers.filter(this.value)" />
+            </div>
+          </div>
+          <div id="borrowers-list">
+            <div class="empty-state">
+              <div class="empty-icon">👥</div>
+              <h3>No borrowers yet</h3>
+              <p>Create a loan to add your first borrower</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SCREEN: BORROWER DETAIL ══ -->
+    <div id="screen-borrower-detail" class="screen">
+      <div class="page-header">
+        <button class="btn btn-ghost btn-sm" onclick="App.back()">← Back</button>
+        <h1 class="page-title" id="borrower-detail-name">Borrower</h1>
+      </div>
+      <div class="page-body" id="borrower-detail-content">
+        <div class="loading-placeholder">Loading…</div>
+      </div>
+    </div>
+
+    <!-- ══ SCREEN: DOCUMENT SCANNER ══ -->
+    <div id="screen-scanner" class="screen">
+      <div class="page-header">
+        <h1 class="page-title">📷 Scan Document</h1>
+      </div>
+      <div class="page-body">
+        <div class="scanner-intro">
+          <p>Take a photo of a paper loan document. The app will read it and pre-fill the loan form for your mum to review.</p>
+        </div>
+
+        <div id="scanner-upload-zone">
+          <div class="panel scan-panel">
+            <div class="scan-icon">📄</div>
+            <div class="scan-title">Upload Loan Document</div>
+            <div class="scan-sub">Take a photo or choose from gallery</div>
+            <div class="scan-btns">
+              <button class="btn btn-primary btn-lg" onclick="document.getElementById('scan-camera').click()">
+                📷 Take Photo
+              </button>
+              <button class="btn btn-ghost btn-lg" onclick="document.getElementById('scan-gallery').click()">
+                🖼️ From Gallery
+              </button>
+            </div>
+            <input id="scan-camera" type="file" accept="image/*" capture="environment" style="display:none" onchange="Scanner.handleFile(this)" />
+            <input id="scan-gallery" type="file" accept="image/*" style="display:none" onchange="Scanner.handleFile(this)" />
+          </div>
+        </div>
+
+        <div id="scanner-review" style="display:none">
+          <div class="scan-review-grid">
+            <div class="scan-photo-panel">
+              <div class="panel">
+                <div class="panel-title">📷 Document Photo</div>
+                <img id="scan-preview-img" style="width:100%;border-radius:12px;margin-top:12px" />
+                <div id="ocr-status" class="ocr-status mt12"></div>
+                <button class="btn btn-ghost btn-full mt12" onclick="Scanner.reset()">📷 Scan Different Document</button>
+              </div>
+            </div>
+            <div class="scan-form-panel">
+              <div class="panel">
+                <div class="panel-title">✏️ Review & Edit Extracted Data</div>
+                <p class="text-muted mt8" style="margin-bottom:16px">Check all fields carefully before creating the loan.</p>
+                <div class="form-group">
+                  <label>Borrower Full Name *</label>
+                  <input id="scan-name" type="text" class="form-input form-lg" placeholder="Borrower name" />
+                </div>
+                <div class="form-row-2">
+                  <div class="form-group">
+                    <label>Phone Number *</label>
+                    <input id="scan-phone" type="tel" class="form-input form-lg" placeholder="024 XXX XXXX" />
+                  </div>
+                  <div class="form-group">
+                    <label>Amount (GH₵) *</label>
+                    <input id="scan-amount" type="number" class="form-input form-lg" placeholder="Loan amount" />
+                  </div>
+                </div>
+                <div class="form-row-2">
+                  <div class="form-group">
+                    <label>Duration (Months)</label>
+                    <select id="scan-months" class="form-select form-lg">
+                      <option value="1">1 Month</option><option value="2">2 Months</option>
+                      <option value="3" selected>3 Months</option><option value="4">4 Months</option>
+                      <option value="5">5 Months</option><option value="6">6 Months</option>
+                      <option value="7">7 Months</option><option value="8">8 Months</option>
+                      <option value="9">9 Months</option><option value="10">10 Months</option>
+                      <option value="11">11 Months</option><option value="12">12 Months</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Loan Date</label>
+                    <input id="scan-date" type="date" class="form-input form-lg" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Address</label>
+                  <textarea id="scan-address" class="form-textarea" placeholder="Borrower's address"></textarea>
+                </div>
+                <div class="form-group">
+                  <label>Notes</label>
+                  <textarea id="scan-notes" class="form-textarea" placeholder="Any notes from the document…"></textarea>
+                </div>
+                <button class="btn btn-success btn-full btn-lg" onclick="Scanner.createLoanFromScan()">
+                  ✅ Create Loan from This Document
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SCREEN: APPLICATIONS ══ -->
+    <div id="screen-applications" class="screen">
+      <div class="page-header">
+        <h1 class="page-title">📋 Applications</h1>
+        <div class="header-actions">
+          <button class="btn btn-ghost btn-sm" onclick="Scanner.copyEnrollLink()">🔗 Copy Enroll Link</button>
+        </div>
+      </div>
+      <div class="page-body">
+        <div class="panel mb16">
+          <div class="enroll-banner">
+            <div class="eb-icon">🔗</div>
+            <div class="eb-text">
+              <div class="eb-title">Borrower Self-Enrollment</div>
+              <div class="eb-sub">Share this link with new borrowers — they fill the form, you approve.</div>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="Scanner.copyEnrollLink()">Copy Link</button>
+          </div>
+        </div>
+        <div id="applications-list">
+          <div class="empty-state">
+            <div class="empty-icon">📋</div>
+            <h3>No pending applications</h3>
+            <p>Share the enrollment link with new borrowers</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SCREEN: ANALYTICS ══ -->
+    <div id="screen-analytics" class="screen">
+      <div class="page-header">
+        <h1 class="page-title">📊 Analytics</h1>
+        <select id="analytics-period" class="form-select" style="width:auto" onchange="Analytics.load()">
+          <option value="3">Last 3 Months</option>
+          <option value="6" selected>Last 6 Months</option>
+          <option value="12">Last 12 Months</option>
+        </select>
+      </div>
+      <div class="page-body">
+        <!-- Summary KPIs -->
+        <div class="stats-row" id="analytics-kpis">
+          <div class="stat-card stat-green">
+            <div class="sc-icon">💰</div>
+            <div class="sc-val" id="an-interest">—</div>
+            <div class="sc-lbl">Total Interest Earned</div>
+          </div>
+          <div class="stat-card stat-blue">
+            <div class="sc-icon">📊</div>
+            <div class="sc-val" id="an-total-loans">—</div>
+            <div class="sc-lbl">Total Loans Issued</div>
+          </div>
+          <div class="stat-card stat-gold">
+            <div class="sc-icon">🏆</div>
+            <div class="sc-val" id="an-repayment">—</div>
+            <div class="sc-lbl">Repayment Rate</div>
+          </div>
+          <div class="stat-card stat-purple">
+            <div class="sc-icon">👥</div>
+            <div class="sc-val" id="an-borrowers">—</div>
+            <div class="sc-lbl">Total Borrowers</div>
+          </div>
+        </div>
+
+        <!-- Charts grid -->
+        <div class="analytics-grid">
+          <div class="panel">
+            <div class="panel-title">Monthly Interest Earned (GH₵)</div>
+            <div class="chart-wrap"><canvas id="chart-interest"></canvas></div>
+          </div>
+          <div class="panel">
+            <div class="panel-title">Loans Issued Per Month</div>
+            <div class="chart-wrap"><canvas id="chart-volume"></canvas></div>
+          </div>
+          <div class="panel">
+            <div class="panel-title">Loan Status Breakdown</div>
+            <div class="donut-center-wrap">
+              <canvas id="chart-donut-an" width="200" height="200"></canvas>
+            </div>
+            <div class="status-legend" id="an-status-legend"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-title">Outstanding vs Collected (GH₵)</div>
+            <div class="chart-wrap"><canvas id="chart-comparison"></canvas></div>
+          </div>
+        </div>
+
+        <!-- Top Borrowers Table -->
+        <div class="panel mt16">
+          <div class="panel-title">Top Borrowers by Amount</div>
+          <div id="top-borrowers-table" class="mt12"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SCREEN: REPORTS ══ -->
+    <div id="screen-reports" class="screen">
+      <div class="page-header">
+        <h1 class="page-title">📈 Reports</h1>
+      </div>
+      <div class="page-body">
+        <div class="stats-row">
+          <div class="stat-card stat-green"><div class="sc-icon">💰</div><div class="sc-val" id="rep-total-interest">—</div><div class="sc-lbl">Total Interest Earned</div></div>
+          <div class="stat-card stat-blue"><div class="sc-icon">📊</div><div class="sc-val" id="rep-total-loans">—</div><div class="sc-lbl">Total Loans Issued</div></div>
+          <div class="stat-card stat-gold"><div class="sc-icon">🏆</div><div class="sc-val" id="rep-repayment-rate">—</div><div class="sc-lbl">Repayment Rate</div></div>
+          <div class="stat-card"><div class="sc-icon">👥</div><div class="sc-val" id="rep-total-borrowers">—</div><div class="sc-lbl">Total Borrowers</div></div>
+        </div>
+        <div class="panel mt16">
+          <div class="panel-title">Monthly Breakdown</div>
+          <div id="monthly-reports-list" class="mt12">
+            <div class="loading-placeholder">Loading reports…</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SCREEN: TEAM ══ -->
+    <div id="screen-team" class="screen">
+      <div class="page-header">
+        <h1 class="page-title">🤝 Team Access</h1>
+      </div>
+      <div class="page-body">
+        <div class="panel mb16">
+          <div class="panel-title">How Team Access Works</div>
+          <div class="info-list mt12">
+            <div class="info-item">✅ Each person creates their own free account at the app URL</div>
+            <div class="info-item">✅ Their data is separate — only they see loans they add</div>
+            <div class="info-item">✅ Mum (Ghana) and your sister (Canada) each have their own login</div>
+            <div class="info-item">✅ You can check any account by logging in with those credentials</div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-title">Create an Account for a Team Member</div>
+          <p class="text-muted mt8">Share these steps with anyone who needs access:</p>
+          <div class="step-list mt12">
+            <div class="step-item"><span class="step-num">1</span><span>Open <strong id="app-url-display">emax-loan-manager.vercel.app</strong></span></div>
+            <div class="step-item"><span class="step-num">2</span><span>Click "No account? Create one"</span></div>
+            <div class="step-item"><span class="step-num">3</span><span>Enter their email + password + name</span></div>
+            <div class="step-item"><span class="step-num">4</span><span>They're in! Bookmark or add to home screen.</span></div>
+          </div>
+          <button class="btn btn-primary btn-full mt16" onclick="Team.copyInviteMessage()">📋 Copy Invite Message</button>
+        </div>
+        <div class="panel mt16">
+          <div class="panel-title">Your Account</div>
+          <div id="team-my-account"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SCREEN: SETTINGS ══ -->
+    <div id="screen-settings" class="screen">
+      <div class="page-header">
+        <h1 class="page-title">⚙️ Settings</h1>
+      </div>
+      <div class="page-body">
+        <div class="settings-grid">
+          <div>
+            <div class="panel">
+              <div class="panel-title">Business</div>
+              <div class="form-group mt12">
+                <label>Business Name</label>
+                <input id="set-biz-name" type="text" class="form-input" placeholder="E-Max Enterprise" />
+              </div>
+              <div class="form-group">
+                <label>Your Full Name</label>
+                <input id="set-full-name" type="text" class="form-input" placeholder="Your name" />
+              </div>
+              <div class="form-group">
+                <label>Phone Number</label>
+                <input id="set-phone" type="tel" class="form-input" placeholder="024 XXX XXXX" />
+              </div>
+              <button class="btn btn-primary btn-full" onclick="Settings.save()">Save Changes</button>
+            </div>
+
+            <div class="panel mt16">
+              <div class="panel-title">Notifications</div>
+              <div class="settings-row mt12">
+                <div class="settings-icon">🔔</div>
+                <div class="settings-info">
+                  <div class="s-title">Payment Reminders</div>
+                  <div class="s-sub">Notify when payments are due</div>
+                </div>
+                <button id="notif-toggle" class="toggle" onclick="Settings.toggleNotifications(this)"></button>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="panel">
+              <div class="panel-title">Diagnostics</div>
+              <div id="diag-results" class="mt12">
+                <div class="text-muted">Click Run to check all systems</div>
+              </div>
+              <button class="btn btn-ghost btn-full mt12" onclick="Settings.runDiagnostics()">🔬 Run Diagnostics</button>
+            </div>
+
+            <div class="panel mt16">
+              <div class="panel-title">Account</div>
+              <button class="btn btn-danger btn-full mt12" onclick="Auth.logout()">Sign Out</button>
+            </div>
+
+            <div class="panel mt16">
+              <div class="panel-title">About</div>
+              <div class="text-muted mt8" style="font-size:13px">E-Max Loan Manager v2.0<br>Built for E-Max Enterprise, Ghana</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main><!-- /main-content -->
+
+  <!-- ── MOBILE BOTTOM NAV ── -->
+  <nav id="bottom-nav" class="visible">
+    <button class="nav-item active" id="nav-dashboard" onclick="App.navigate('dashboard')">
+      <span class="nav-icon">🏠</span>Home
+    </button>
+    <button class="nav-item" id="nav-loans" onclick="App.navigate('loans')">
+      <span class="nav-icon">💳</span>Loans
+    </button>
+    <button class="nav-item" id="nav-scanner" onclick="App.navigate('scanner')">
+      <span class="nav-icon">📷</span>Scan
+    </button>
+    <button class="nav-item" id="nav-borrowers" onclick="App.navigate('borrowers')">
+      <span class="nav-icon">👥</span>People
+    </button>
+    <button class="nav-item" id="nav-reports" onclick="App.navigate('analytics')">
+      <span class="nav-icon">📊</span>Analytics
+    </button>
+  </nav>
+
+</div><!-- /app-shell -->
 
 <!-- TOAST NOTIFICATIONS -->
 <div id="toast-container"></div>
 
-<!-- ══════════════════════════════════════════
-     SCRIPTS — order matters
-══════════════════════════════════════════ -->
+<!-- ══ SCRIPTS ══ -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <script src="js/config.js"></script>
 <script src="js/calculator.js"></script>
 <script src="js/app.js"></script>
@@ -507,6 +904,9 @@
 <script src="js/payments.js"></script>
 <script src="js/dashboard.js"></script>
 <script src="js/reports.js"></script>
+<script src="js/analytics.js"></script>
+<script src="js/scanner.js"></script>
+<script src="js/team.js"></script>
 <script src="js/settings.js"></script>
 </body>
 </html>
