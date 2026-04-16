@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#0d1117" />
-  <title>E-Max Enterprise — Loan Application</title>
+  <title>E-EMAX Enterprise — Loan Application</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="js/config.js"></script>
   <style>
@@ -214,7 +214,7 @@
 <div class="header">
   <div class="header-icon">💰</div>
   <div>
-    <div class="header-title">E-Max Enterprise</div>
+    <div class="header-title">E-EMAX Enterprise</div>
     <div class="header-sub">Loan Application Form</div>
   </div>
 </div>
@@ -246,7 +246,7 @@
   <div id="step-1">
     <div class="hint-box">
       📝 Please fill this form carefully. All information must be accurate and true.
-      E-Max Enterprise will review your application before approval.
+      E-EMAX Enterprise will review your application before approval.
     </div>
     <div class="panel">
       <div class="panel-title">👤 Your Personal Details</div>
@@ -403,7 +403,7 @@
 
       <!-- Live calculator preview -->
       <div id="calc-preview" class="calc-box">
-        <div class="calc-title">📐 What you will pay — E-Max Enterprise</div>
+        <div class="calc-title">📐 What you will pay — E-EMAX Enterprise</div>
         <div class="calc-grid">
           <div class="cg-item">
             <span class="cg-label">Amount you receive</span>
@@ -439,7 +439,7 @@
 
       <div class="form-group" style="margin-top:16px">
         <label>Additional Notes (optional)</label>
-        <textarea id="e-notes" placeholder="Anything else you'd like E-Max Enterprise to know…"></textarea>
+        <textarea id="e-notes" placeholder="Anything else you'd like E-EMAX Enterprise to know…"></textarea>
       </div>
 
       <div class="nav-btns">
@@ -457,7 +457,7 @@
     <div class="success-title">Application Submitted!</div>
     <div class="success-sub">
       Thank you! Your loan application has been received.<br><br>
-      <strong>E-Max Enterprise will contact you soon</strong> to confirm approval and arrange a time to sign the loan agreement in person.<br><br>
+      <strong>E-EMAX Enterprise will contact you soon</strong> to confirm approval and arrange a time to sign the loan agreement in person.<br><br>
       Please keep your phone on — they will call you on <strong id="confirm-phone"></strong>.
     </div>
   </div>
@@ -581,7 +581,7 @@
 
     if (!amount || amount <= 0) { showError('Please enter or select a loan amount.'); return; }
     if (!months)                { showError('Please select how many months.'); return; }
-    if (!agentId)               { showError('Invalid enrollment link — please ask E-Max Enterprise for a new link.'); return; }
+    if (!agentId)               { showError('Invalid enrollment link — please ask E-EMAX Enterprise for a new link.'); return; }
 
     const btn = document.getElementById('btn-submit');
     btn.innerHTML = '<span class="spinner"></span>Submitting…';
@@ -613,7 +613,7 @@
     const { error } = await sbEnroll.from('enrollment_submissions').insert(payload);
 
     if (error) {
-      showError('Something went wrong. Please try again or contact E-Max Enterprise directly.');
+      showError('Something went wrong. Please try again or contact E-EMAX Enterprise directly.');
       btn.innerHTML = '✅ Submit Application';
       btn.disabled = false;
       return;

@@ -18,5 +18,5 @@ const LOAN_CONFIG = {
   MAX_DURATION_MONTHS   : 12,
   CURRENCY              : 'GHS',
   CURRENCY_SYMBOL       : 'GH₵',
-  BUSINESS_NAME         : 'E-Max Enterprise',
+  BUSINESS_NAME         : 'E-EMAX Enterprise',
 };

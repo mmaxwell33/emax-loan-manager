@@ -1,7 +1,7 @@
 {
-  "name": "E-Max Loan Manager",
-  "short_name": "E-Max Loans",
-  "description": "Loan management for E-Max Enterprise",
+  "name": "E-EMAX Loan Manager",
+  "short_name": "E-EMAX Loans",
+  "description": "Loan management for E-EMAX Enterprise",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0d1117",
