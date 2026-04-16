@@ -334,12 +334,13 @@ html, body {
 ══════════════════════════════════════════ */
 #bottom-nav {
   position: fixed; bottom: 0; left: 0; right: 0;
-  height: var(--nav-h);
+  height: 68px;
   background: var(--card);
   border-top: 1px solid var(--border);
   display: none;
   align-items: center;
   z-index: 100;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 #bottom-nav.visible { display: flex; }
 
@@ -865,45 +866,217 @@ html, body {
   .sidebar { display: none; }
   #bottom-nav.visible { display: flex; }
 
-  #app-shell { display: block; height: 100vh; overflow: hidden; }
+  /* App shell — full height, safe areas */
+  #app-shell {
+    display: block;
+    height: 100dvh;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* Main content — sits between header and bottom nav */
   .main-content {
-    height: calc(100vh - var(--nav-h));
+    height: calc(100dvh - 68px);
+    height: calc(100vh - 68px);
     overflow-y: auto;
-    padding-bottom: 0;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: env(safe-area-inset-bottom, 16px);
   }
 
-  .screen { min-height: 100%; }
-
+  /* Page header — clean mobile top bar */
   .page-header {
-    padding: 12px 16px;
-    min-height: 56px;
+    padding: 14px 16px 12px;
+    min-height: 60px;
+    padding-top: max(14px, env(safe-area-inset-top));
+    border-bottom: 1px solid var(--border);
+    background: var(--card);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    flex-wrap: wrap;
+    gap: 10px;
   }
-  .page-title { font-size: 18px; }
-  .page-body { padding: 12px 16px; }
+  .page-greeting {
+    font-size: 13px;
+    margin-bottom: 2px;
+  }
+  .page-title {
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 1.2;
+  }
+  .page-header .btn {
+    padding: 10px 16px;
+    font-size: 14px;
+    height: 40px;
+    white-space: nowrap;
+  }
 
-  .stats-row { grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
-  .stat-card { padding: 14px; }
-  .sc-val  { font-size: 20px; }
-  .sc-icon { font-size: 20px; margin-bottom: 6px; }
+  /* Page body — comfortable padding */
+  .page-body {
+    padding: 16px;
+    padding-bottom: 24px;
+  }
 
-  .dash-grid { grid-template-columns: 1fr; gap: 12px; }
-  .dash-col-side { display: flex; flex-direction: column; gap: 12px; }
-  .analytics-grid { grid-template-columns: 1fr; }
-  .settings-grid { grid-template-columns: 1fr; }
+  /* Stat cards — 2 per row, compact */
+  .stats-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .stat-card {
+    padding: 14px 12px;
+    border-radius: 14px;
+  }
+  .sc-icon { font-size: 18px; margin-bottom: 6px; }
+  .sc-val  { font-size: 22px; font-weight: 800; }
+  .sc-lbl  { font-size: 11px; margin-top: 2px; }
+
+  /* Dashboard grid — single column */
+  .dash-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .dash-col-side {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* Charts — shorter on mobile */
+  .chart-wrap {
+    height: 180px;
+  }
+  .status-chart-row {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  .donut-wrap canvas {
+    width: 140px !important;
+    height: 140px !important;
+  }
+
+  /* Quick action buttons — 2x2 grid, big tap targets */
+  .quick-actions {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .qa-btn {
+    padding: 18px 12px;
+    border-radius: 14px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .qa-icon { font-size: 22px; margin-bottom: 6px; }
+
+  /* Panels */
+  .panel {
+    padding: 14px;
+    border-radius: 14px;
+    margin-bottom: 12px;
+  }
+  .panel-header { margin-bottom: 10px; }
+  .panel-title  { font-size: 14px; }
+  .panel-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  /* Loan list items */
+  .loan-item {
+    padding: 12px 0;
+    gap: 10px;
+  }
+  .loan-avatar {
+    width: 40px; height: 40px;
+    font-size: 16px; flex-shrink: 0;
+  }
+  .loan-item-name { font-size: 15px; }
+  .loan-item-sub  { font-size: 12px; }
+  .loan-amount    { font-size: 16px; }
+
+  /* Forms */
+  .form-row-2 { grid-template-columns: 1fr; }
+  .form-input, .form-select, .form-textarea {
+    font-size: 16px; /* prevents iOS zoom on focus */
+    padding: 14px;
+    border-radius: 10px;
+  }
+  .form-group { margin-bottom: 14px; }
+  label       { font-size: 13px; margin-bottom: 6px; }
+
+  /* Amount & month chips */
+  .amount-chips, .month-chips {
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .amount-chip, .month-chip {
+    font-size: 14px;
+    padding: 9px 14px;
+    border-radius: 20px;
+    min-height: 40px;
+  }
+
+  /* Buttons */
+  .btn-lg {
+    min-height: 52px;
+    font-size: 16px;
+    border-radius: 12px;
+  }
+  .btn-full { min-height: 52px; }
+
+  /* Wizard */
+  .wizard-container { padding: 0; }
+  .wizard-steps     { gap: 0; overflow-x: auto; padding-bottom: 4px; }
+  .wizard-step span { font-size: 10px; }
+  .w-num            { width: 28px; height: 28px; font-size: 12px; }
+  .step-title       { font-size: 17px; margin-bottom: 16px; }
+  .step-hint        { font-size: 13px; }
+  .wizard-nav       { margin-top: 16px; }
+  .wizard-nav.two-btn { gap: 10px; }
+
+  /* Loan detail */
+  .detail-row { padding: 10px 0; }
+  .dr-label   { font-size: 12px; }
+  .dr-value   { font-size: 14px; }
+
+  /* Calc preview */
+  .calc-preview { padding: 14px; }
+  .calc-grid    { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .cg-big       { font-size: 22px; }
+
+  /* Scanner */
+  .scan-btns        { flex-direction: column; gap: 10px; }
   .scan-review-grid { grid-template-columns: 1fr; }
 
-  .wizard-step span { display: inline; }
+  /* Settings */
+  .settings-grid { grid-template-columns: 1fr; }
 
-  .form-row-2 { grid-template-columns: 1fr; }
-  .amount-chips, .month-chips { gap: 6px; }
-  .amount-chip, .month-chip { font-size: 13px; padding: 7px 12px; }
+  /* Analytics */
+  .analytics-grid { grid-template-columns: 1fr; }
 
-  .panel { padding: 14px; }
-  .panel-toolbar { flex-direction: column; align-items: stretch; }
-  .search-input { min-width: auto; }
+  /* Search */
+  .search-input { min-width: auto; font-size: 16px; }
 
-  .scan-btns { flex-direction: column; }
-  .btn-lg { height: 48px; font-size: 15px; }
+  /* Tabs */
+  .tab-row { flex-wrap: wrap; gap: 6px; }
+  .tab-btn { font-size: 13px; padding: 6px 12px; }
+}
+
+/* ── iOS safe area for bottom nav ── */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  @media (max-width: 767px) {
+    #bottom-nav.visible {
+      padding-bottom: env(safe-area-inset-bottom);
+      height: calc(68px + env(safe-area-inset-bottom));
+    }
+    .main-content {
+      height: calc(100dvh - 68px - env(safe-area-inset-bottom));
+    }
+  }
 }
 
 /* ══════════════════════════════════════════
