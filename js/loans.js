@@ -41,26 +41,32 @@ const Loans = {
   _renderList() {
     const el = document.getElementById('loans-list');
     if (!this._filtered.length) {
-      el.innerHTML = `<div class="empty-state"><div class="empty-icon">💳</div>
+      el.innerHTML = `<div class="empty-state"><div class="empty-icon"><i data-lucide="credit-card"></i></div>
         <h3>No loans found</h3><p>Try a different filter or create a new loan</p></div>`;
+      if (window.lucide) window.lucide.createIcons();
       return;
     }
     el.innerHTML = this._filtered.map(l => this._loanItem(l)).join('');
+    if (window.lucide) window.lucide.createIcons();
   },
 
   _loanItem(l) {
-    const name      = l.borrowers?.full_name || 'Unknown';
-    const initial   = name[0].toUpperCase();
-    const owed      = l.total_repayable - l.amount_paid;
-    const badge     = this._badge(l.status);
+    const name       = l.borrowers?.full_name || 'Unknown';
+    const phone      = l.borrowers?.phone || '';
+    const initial    = name[0].toUpperCase();
+    const owed       = l.total_repayable - l.amount_paid;
+    const badge      = this._badge(l.status);
     const monthsPaid = Math.round(l.amount_paid / l.monthly_payment);
+    const waBtn      = phone
+      ? `<button class="wa-chip" title="WhatsApp reminder" onclick="event.stopPropagation(); Loans.whatsappReminder('${l.id}')"><i data-lucide="message-circle"></i></button>`
+      : '';
     return `
       <div class="loan-item" onclick="App.navigate('loan-detail','${l.id}')">
         <div class="loan-avatar">${initial}</div>
         <div class="loan-item-info">
           <div class="loan-item-name">${name}</div>
           <div class="loan-item-sub">${l.duration_months} months · Started ${App.fmtDate(l.start_date)}</div>
-          <div class="mt8">${badge}</div>
+          <div class="mt8 d-flex" style="gap:6px;align-items:center">${badge}${waBtn}</div>
         </div>
         <div class="loan-item-right">
           <div class="loan-amount owed">${Calculator.fmtShort(owed)}</div>
@@ -68,6 +74,40 @@ const Loans = {
           <div class="text-muted" style="font-size:11px">${monthsPaid}/${l.duration_months} paid</div>
         </div>
       </div>`;
+  },
+
+  // Open a prefilled WhatsApp chat with the borrower.
+  // Ghana phones are entered as 024xxxxxxx / 054xxxxxxx — wa.me/ needs
+  // country code. We strip the leading 0 and prefix 233.
+  whatsappReminder(loanId) {
+    const loan = this._all.find(l => l.id === loanId) || this._currentLoan;
+    if (!loan) return;
+    const phone = (loan.borrowers?.phone || '').replace(/\D/g, '');
+    if (!phone) { App.toast('No phone number on file', 'error'); return; }
+    const wa = phone.startsWith('233') ? phone
+             : phone.startsWith('0')  ? '233' + phone.slice(1)
+             : phone;
+    const name  = loan.borrowers?.full_name?.split(' ')[0] || 'there';
+    const owed  = loan.total_repayable - loan.amount_paid;
+    const today = App.today();
+    const state = (loan.status === 'Overdue' || loan.end_date < today) ? 'overdue'
+                : (loan.status === 'Completed') ? 'done'
+                : 'upcoming';
+    let msg;
+    if (state === 'overdue') {
+      msg = `Hi ${name}, this is a friendly reminder from E-EMAX Enterprise. ` +
+            `Your loan is overdue and ${Calculator.fmt(owed)} is still outstanding. ` +
+            `Please settle as soon as possible. Thank you.`;
+    } else if (state === 'done') {
+      msg = `Hi ${name}, thank you for completing your loan with E-EMAX Enterprise. ` +
+            `We appreciate you.`;
+    } else {
+      msg = `Hi ${name}, quick reminder from E-EMAX Enterprise — your monthly ` +
+            `payment of ${Calculator.fmt(loan.monthly_payment)} is coming up. ` +
+            `Please get in touch if you need anything. Thank you.`;
+    }
+    const url = `https://wa.me/${wa}?text=${encodeURIComponent(msg)}`;
+    window.open(url, '_blank', 'noopener');
   },
 
   _badge(status) {
@@ -126,10 +166,7 @@ const Loans = {
       if (!document.getElementById('g-name').value.trim())  { App.toast('Please enter guarantor name', 'error'); return; }
       if (!document.getElementById('g-phone').value.trim()) { App.toast('Please enter guarantor phone', 'error'); return; }
     }
-    if (step === 3) {
-      if (!document.getElementById('w-name').value.trim())  { App.toast('Please enter witness name', 'error'); return; }
-      if (!document.getElementById('w-phone').value.trim()) { App.toast('Please enter witness phone', 'error'); return; }
-    }
+    // Step 3 (witness) is optional — users can leave it blank and move on.
     if (step === 4) {
       const amt = document.getElementById('l-amount').value;
       const dur = document.getElementById('l-months').value;
@@ -170,14 +207,14 @@ const Loans = {
 
     document.getElementById('review-content').innerHTML = `
       <div class="card">
-        <div class="card-title">👤 Borrower</div>
+        <div class="card-title">Borrower</div>
         <div class="detail-row"><span class="dr-label">Name</span><span class="dr-value">${bName}</span></div>
         <div class="detail-row"><span class="dr-label">Phone</span><span class="dr-value">${document.getElementById('b-phone').value}</span></div>
         <div class="detail-row"><span class="dr-label">Guarantor</span><span class="dr-value">${gName}</span></div>
-        <div class="detail-row"><span class="dr-label">Witness</span><span class="dr-value">${wName}</span></div>
+        <div class="detail-row"><span class="dr-label">Witness</span><span class="dr-value">${wName || '—'}</span></div>
       </div>
       <div class="card mt12">
-        <div class="card-title">💰 Loan Summary</div>
+        <div class="card-title">Loan Summary</div>
         <div class="detail-row"><span class="dr-label">Principal</span><span class="dr-value fw7">${Calculator.fmt(c.principal)}</span></div>
         <div class="detail-row"><span class="dr-label">Processing Fee (4%)</span><span class="dr-value text-red">${Calculator.fmt(c.processingFee)}</span></div>
         <div class="detail-row"><span class="dr-label">Duration</span><span class="dr-value">${dur} months</span></div>
@@ -230,13 +267,18 @@ const Loans = {
         ghana_card_number: document.getElementById('g-ghana-card').value.trim(),
       }).select('id').single();
 
-      // 4. Create witness
-      const { data: witness } = await sb.from('witnesses').insert({
-        agent_id    : App.agentId,
-        borrower_id : borrower.id,
-        full_name   : document.getElementById('w-name').value.trim(),
-        phone       : document.getElementById('w-phone').value.trim(),
-      }).select('id').single();
+      // 4. Create witness — only if the user actually filled one in.
+      const wName = document.getElementById('w-name').value.trim();
+      let witness = null;
+      if (wName) {
+        const { data: w } = await sb.from('witnesses').insert({
+          agent_id    : App.agentId,
+          borrower_id : borrower.id,
+          full_name   : wName,
+          phone       : document.getElementById('w-phone').value.trim(),
+        }).select('id').single();
+        witness = w;
+      }
 
       // 5. Create loan
       const { data: loan, error: lErr } = await sb.from('loans').insert({
@@ -269,13 +311,13 @@ const Loans = {
         loan_id       : loan.id,
       });
 
-      App.toast(`✅ Loan issued to ${document.getElementById('b-name').value.trim()}!`, 'success');
+      App.toast(`Loan issued to ${document.getElementById('b-name').value.trim()}`, 'success');
       App.navigate('loans');
       this.loadList();
 
-    } catch(err) {
+    } catch (err) {
       App.toast(`Error: ${err.message}`, 'error', 5000);
-      btn.innerHTML = '✅ Issue Loan';
+      btn.innerHTML = 'Issue Loan';
       btn.disabled  = false;
     }
   },
@@ -331,11 +373,11 @@ const Loans = {
       <div class="card">
         <div class="d-flex gap8" style="justify-content:space-between;margin-bottom:12px">
           <div>
-            <div style="font-size:22px;font-weight:800">${Calculator.fmt(owed)}</div>
+            <div class="num-xl">${Calculator.fmt(owed)}</div>
             <div class="text-muted">still owed</div>
           </div>
           <div style="text-align:right">
-            <div style="font-size:22px;font-weight:800;color:var(--green)">${Calculator.fmt(loan.amount_paid)}</div>
+            <div class="num-xl" style="color:var(--green)">${Calculator.fmt(loan.amount_paid)}</div>
             <div class="text-muted">collected</div>
           </div>
         </div>
@@ -343,18 +385,22 @@ const Loans = {
           <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${paidPct}%"></div></div>
           <div class="progress-label"><span>${paidPct}% paid</span><span>${monthsPaid}/${loan.duration_months} months</span></div>
         </div>
-        ${nextDue !== null ? `<div class="mt12 text-center text-muted" style="font-size:13px">
+        ${nextDue !== null ? `<div class="mt12 text-center text-muted due-note">
           ${nextDue < 0
-            ? `<span class="text-red fw7">⚠️ Payment overdue by ${Math.abs(nextDue)} days</span>`
+            ? `<span class="text-red fw7">Overdue by ${Math.abs(nextDue)} days</span>`
             : nextDue === 0
-            ? `<span class="text-gold fw7">📅 Payment due TODAY</span>`
-            : `📅 Next payment in <strong>${nextDue} days</strong>`}</div>` : ''}
+            ? `<span class="text-gold fw7">Payment due today</span>`
+            : `Next payment in <strong>${nextDue} days</strong>`}</div>` : ''}
+        ${loan.borrowers?.phone && loan.status !== 'Completed' ? `
+        <button class="btn btn-wa btn-full mt16" onclick="Loans.whatsappReminder('${loan.id}')">
+          <i data-lucide="message-circle"></i> Send WhatsApp reminder
+        </button>` : ''}
       </div>
 
       <!-- Record Payment -->
       ${loan.status !== 'Completed' ? `
       <div class="card mt12" id="record-payment-card">
-        <div class="card-title">💳 Record Payment</div>
+        <div class="card-title">Record Payment</div>
         <div class="form-row">
           <div class="form-group">
             <label>Amount Received (GHS)</label>
@@ -374,14 +420,15 @@ const Loans = {
           </label>
         </div>
         <button class="btn btn-success btn-full" onclick="Payments.record('${loan.id}')">
-          ✅ Record Payment
+          <i data-lucide="check"></i> Record Payment
         </button>
       </div>` : `<div class="card mt12 text-center" style="color:var(--green)">
-        <div style="font-size:32px">🎉</div><div class="fw7">Loan fully repaid!</div></div>`}
+        <div class="done-icon"><i data-lucide="check-circle-2"></i></div>
+        <div class="fw7">Loan fully repaid</div></div>`}
 
       <!-- Loan Details -->
       <div class="card mt12">
-        <div class="card-title">📋 Loan Details</div>
+        <div class="card-title">Loan Details</div>
         <div class="detail-row"><span class="dr-label">Principal</span><span class="dr-value">${Calculator.fmt(loan.principal)}</span></div>
         <div class="detail-row"><span class="dr-label">Processing Fee</span><span class="dr-value text-red">${Calculator.fmt(loan.processing_fee)}</span></div>
         <div class="detail-row"><span class="dr-label">Monthly Payment</span><span class="dr-value fw8" style="color:var(--accent2)">${Calculator.fmt(loan.monthly_payment)}</span></div>
@@ -390,13 +437,13 @@ const Loans = {
         <div class="detail-row"><span class="dr-label">Duration</span><span class="dr-value">${loan.duration_months} months</span></div>
         <div class="detail-row"><span class="dr-label">Start Date</span><span class="dr-value">${App.fmtDate(loan.start_date)}</span></div>
         <div class="detail-row"><span class="dr-label">End Date</span><span class="dr-value">${App.fmtDate(loan.end_date)}</span></div>
-        <div class="detail-row"><span class="dr-label">Processing Fee Paid</span><span class="dr-value">${loan.processing_fee_paid ? '✅ Yes' : '❌ No'}</span></div>
+        <div class="detail-row"><span class="dr-label">Processing Fee Paid</span><span class="dr-value">${loan.processing_fee_paid ? 'Yes' : 'No'}</span></div>
         ${loan.notes ? `<div class="detail-row"><span class="dr-label">Notes</span><span class="dr-value">${loan.notes}</span></div>` : ''}
       </div>
 
       <!-- Borrower -->
       <div class="card mt12">
-        <div class="card-title">👤 Borrower</div>
+        <div class="card-title">Borrower</div>
         ${loan.borrowers?.photo_url ? `<img src="${loan.borrowers.photo_url}" class="photo-preview" style="margin-bottom:12px">` : ''}
         <div class="detail-row"><span class="dr-label">Name</span><span class="dr-value">${loan.borrowers?.full_name}</span></div>
         <div class="detail-row"><span class="dr-label">Phone</span><span class="dr-value">${loan.borrowers?.phone || '—'}</span></div>
@@ -406,7 +453,7 @@ const Loans = {
 
       <!-- Guarantor -->
       ${loan.guarantors ? `<div class="card mt12">
-        <div class="card-title">🤝 Guarantor</div>
+        <div class="card-title">Guarantor</div>
         <div class="detail-row"><span class="dr-label">Name</span><span class="dr-value">${loan.guarantors.full_name}</span></div>
         <div class="detail-row"><span class="dr-label">Phone</span><span class="dr-value">${loan.guarantors.phone || '—'}</span></div>
         <div class="detail-row"><span class="dr-label">Relationship</span><span class="dr-value">${loan.guarantors.relationship || '—'}</span></div>
@@ -414,7 +461,7 @@ const Loans = {
 
       <!-- Witness -->
       ${loan.witnesses ? `<div class="card mt12">
-        <div class="card-title">👁️ Witness</div>
+        <div class="card-title">Witness</div>
         <div class="detail-row"><span class="dr-label">Name</span><span class="dr-value">${loan.witnesses.full_name}</span></div>
         <div class="detail-row"><span class="dr-label">Phone</span><span class="dr-value">${loan.witnesses.phone || '—'}</span></div>
       </div>` : ''}

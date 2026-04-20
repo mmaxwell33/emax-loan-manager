@@ -454,7 +454,7 @@ const Scanner = {
         phone,
         address     : (document.getElementById('scan-address')?.value || '').trim(),
         occupation  : (document.getElementById('scan-occupation')?.value || '').trim(),
-        ghana_card  : (document.getElementById('scan-ghana-card')?.value || '').trim(),
+        ghana_card_number : (document.getElementById('scan-ghana-card')?.value || '').trim(),
         notes       : (document.getElementById('scan-notes')?.value || '').trim(),
       }).select('id').single();
       if (bErr) throw bErr;
@@ -494,7 +494,6 @@ const Scanner = {
       if (gName) {
         await sb.from('guarantors').insert({
           agent_id    : App.agentId,
-          loan_id     : loan.id,
           borrower_id : borrower.id,
           full_name   : gName,
           phone       : gPhone || '',
@@ -506,7 +505,6 @@ const Scanner = {
       if (wName) {
         await sb.from('witnesses').insert({
           agent_id    : App.agentId,
-          loan_id     : loan.id,
           borrower_id : borrower.id,
           full_name   : wName,
           phone       : '',

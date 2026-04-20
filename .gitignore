@@ -1,0 +1,23 @@
+# macOS
+.DS_Store
+
+# Local working copy of the Phase 2 refinement — files are promoted to root
+refined/
+
+# Editor / OS
+.idea/
+.vscode/
+*.swp
+*.swo
+.Trashes
+
+# Node / local tooling (in case it gets added later)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment files
+.env
+.env.local
+.env.*.local

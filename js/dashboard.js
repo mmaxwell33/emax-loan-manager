@@ -111,8 +111,8 @@ const Dashboard = {
         datasets: [{
           label: 'Collected (GH₵)',
           data: values,
-          backgroundColor: 'rgba(91,91,214,0.6)',
-          borderColor: '#5b5bd6',
+          backgroundColor: 'rgba(212,169,74,0.6)',
+          borderColor: '#D4A94A',
           borderWidth: 2,
           borderRadius: 8,
           borderSkipped: false,
@@ -147,7 +147,7 @@ const Dashboard = {
 
     const labels = Object.keys(counts).filter(k => counts[k] > 0);
     const data   = labels.map(k => counts[k]);
-    const colors = { Active: '#5b5bd6', Overdue: '#ef4444', Completed: '#22c55e', Defaulted: '#6b7280' };
+    const colors = { Active: '#D4A94A', Overdue: '#ef4444', Completed: '#22c55e', Defaulted: '#6b7280' };
 
     this._charts.status = new Chart(canvas, {
       type: 'doughnut',

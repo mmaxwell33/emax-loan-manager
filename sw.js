@@ -1,12 +1,16 @@
 // ══════════════════════════════════════════════
-// E-MAX LOAN MANAGER — Service Worker
-// Offline caching + background sync
+// E-Max Loan Manager — Service Worker
+// Offline caching for the shell, network-first for Supabase.
+// Cache version bumped to v2 so existing installs pick up the
+// additional modules (analytics, scanner, team) that were missing.
 // ══════════════════════════════════════════════
 
-const CACHE_NAME = 'emax-loans-v1';
+const CACHE_NAME = 'emax-loans-v2';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
+  '/enrollment.html',
+  '/manifest.json',
   '/css/app.css',
   '/js/config.js',
   '/js/app.js',
@@ -18,7 +22,9 @@ const STATIC_ASSETS = [
   '/js/dashboard.js',
   '/js/reports.js',
   '/js/settings.js',
-  '/manifest.json',
+  '/js/analytics.js',
+  '/js/scanner.js',
+  '/js/team.js',
 ];
 
 // Install: cache all static assets
@@ -29,7 +35,7 @@ self.addEventListener('install', event => {
   self.skipWaiting();
 });
 
-// Activate: clean old caches
+// Activate: clean old caches so clients drop v1 and earlier
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys =>
@@ -39,11 +45,11 @@ self.addEventListener('activate', event => {
   self.clients.claim();
 });
 
-// Fetch: cache-first for static, network-first for API
+// Fetch: cache-first for static shell, network-first for Supabase
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
 
-  // Supabase API calls — always network
+  // Supabase API — always hit the network; return a graceful offline payload
   if (url.hostname.includes('supabase.co')) {
     event.respondWith(
       fetch(event.request).catch(() =>
@@ -55,7 +61,7 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // Static assets — cache first
+  // Static shell — cache first, fall back to network, then index
   event.respondWith(
     caches.match(event.request).then(cached => {
       if (cached) return cached;
@@ -70,21 +76,6 @@ self.addEventListener('fetch', event => {
   );
 });
 
-// Push notifications
-self.addEventListener('push', event => {
-  const data = event.data?.json() || { title: 'E-Max Loans', body: 'Payment reminder' };
-  event.waitUntil(
-    self.registration.showNotification(data.title, {
-      body: data.body,
-      icon: '/icons/icon-192.png',
-      badge: '/icons/icon-192.png',
-      tag: 'emax-reminder',
-      data: data.url,
-    })
-  );
-});
-
-self.addEventListener('notificationclick', event => {
-  event.notification.close();
-  event.waitUntil(clients.openWindow(event.notification.data || '/'));
-});
+// Note: the earlier push listener was removed. E-Max does not run a push
+// server, so no client will ever subscribe. Reminders are sent over
+// WhatsApp via a wa.me/ deeplink the user taps from a loan card.

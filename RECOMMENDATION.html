@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>E-Max — My Recommendation</title>
+<style>
+  :root {
+    --bg:       #0b0e14;
+    --bg2:      #10141d;
+    --card:     #141924;
+    --card-hi:  #1b2230;
+    --border:   rgba(255,255,255,0.08);
+    --border-hi:rgba(212,169,74,0.35);
+    --text1:    #e8eef7;
+    --text2:    #8b9bb0;
+    --text3:    #5f6b7d;
+    --gold:     #d4a94a;       /* the proposed new accent */
+    --gold-hi:  #f2c870;
+    --gold-dim: rgba(212,169,74,0.12);
+    --teal:     #2dd4bf;
+    --green:    #22c55e;
+    --red:      #ef4444;
+    --indigo:   #5b5bd6;       /* current accent, for compare */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg);
+    color: var(--text1);
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif;
+    font-feature-settings: 'ss01', 'cv11';
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .page { max-width: 1120px; margin: 0 auto; padding: 48px 24px 96px; }
+
+  /* ── Hero ── */
+  .kicker {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 11px; font-weight: 700; letter-spacing: 1.8px;
+    text-transform: uppercase; color: var(--gold);
+    background: var(--gold-dim);
+    border: 1px solid var(--border-hi);
+    border-radius: 999px;
+    padding: 6px 14px;
+    margin-bottom: 20px;
+  }
+  .kicker .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); }
+
+  h1.title {
+    font-size: clamp(34px, 5vw, 52px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    margin-bottom: 16px;
+  }
+  h1.title span.accent { color: var(--gold); }
+
+  p.lede {
+    font-size: clamp(16px, 1.7vw, 19px);
+    color: var(--text2);
+    max-width: 680px;
+    margin-bottom: 36px;
+  }
+
+  /* ── Verdict stripe ── */
+  .verdict {
+    background: linear-gradient(135deg, var(--gold-dim) 0%, transparent 80%);
+    border: 1px solid var(--border-hi);
+    border-radius: 20px;
+    padding: 24px 28px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 56px;
+  }
+  .verdict .badge {
+    width: 56px; height: 56px;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-hi) 100%);
+    border-radius: 16px;
+    display: grid; place-items: center;
+    color: #0b0e14;
+    font-weight: 800;
+    font-size: 22px;
+    flex-shrink: 0;
+    box-shadow: 0 10px 30px -12px rgba(212,169,74,0.5);
+  }
+  .verdict-text .label {
+    font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--gold); font-weight: 700; margin-bottom: 6px;
+  }
+  .verdict-text .line {
+    font-size: clamp(18px, 2.2vw, 24px); font-weight: 700; color: var(--text1);
+    letter-spacing: -0.01em;
+  }
+
+  /* ── Decisions grid ── */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-bottom: 56px;
+  }
+  @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px;
+    position: relative;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .card:hover { border-color: var(--border-hi); transform: translateY(-2px); }
+
+  .card .num {
+    position: absolute; top: 22px; right: 24px;
+    font-size: 56px; font-weight: 900;
+    color: rgba(212,169,74,0.14);
+    letter-spacing: -0.05em;
+    line-height: 1;
+  }
+  .card .q-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--text3); margin-bottom: 10px;
+  }
+  .card .q {
+    font-size: 18px; font-weight: 700; line-height: 1.3;
+    margin-bottom: 18px; padding-right: 60px;
+    color: var(--text1);
+  }
+  .pick-row {
+    display: flex; align-items: baseline; gap: 10px;
+    margin-bottom: 14px;
+  }
+  .pick-row .pick-lbl {
+    font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--gold);
+  }
+  .pick {
+    font-size: 22px; font-weight: 800;
+    color: var(--gold-hi);
+    letter-spacing: -0.01em;
+  }
+  .reason {
+    font-size: 14px; color: var(--text2); line-height: 1.6;
+    margin-bottom: 14px;
+  }
+  .tradeoff {
+    display: flex; gap: 10px; align-items: flex-start;
+    padding: 10px 12px;
+    background: rgba(255,255,255,0.02);
+    border-left: 2px solid var(--text3);
+    border-radius: 4px;
+    font-size: 12px; color: var(--text3);
+  }
+  .tradeoff::before {
+    content: '↔'; color: var(--text3); font-weight: 700;
+  }
+
+  /* ── Palette compare ── */
+  .compare {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px;
+    margin-bottom: 40px;
+  }
+  .compare h3 {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 18px;
+  }
+  .compare-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 640px) { .compare-row { grid-template-columns: 1fr; } }
+  .swatch {
+    border-radius: 14px;
+    padding: 22px 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .swatch.cur { background: linear-gradient(135deg, rgba(91,91,214,0.2), rgba(91,91,214,0.05)); border: 1px solid rgba(91,91,214,0.3); }
+  .swatch.new { background: linear-gradient(135deg, rgba(212,169,74,0.22), rgba(212,169,74,0.05)); border: 1px solid var(--border-hi); }
+  .swatch .tag {
+    font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+    font-weight: 700;
+  }
+  .swatch.cur .tag { color: var(--indigo); }
+  .swatch.new .tag { color: var(--gold); }
+  .swatch .hex { font-family: 'SF Mono', Menlo, monospace; font-size: 12px; color: var(--text3); margin-top: 4px; }
+  .swatch .label { font-size: 18px; font-weight: 700; margin-top: 8px; }
+  .swatch .feel { font-size: 13px; color: var(--text2); margin-top: 6px; }
+  .swatch .chip {
+    margin-top: 14px; display: inline-block;
+    padding: 8px 14px; border-radius: 10px;
+    font-size: 13px; font-weight: 700;
+  }
+  .swatch.cur .chip { background: var(--indigo); color: #fff; }
+  .swatch.new .chip { background: var(--gold); color: #0b0e14; }
+
+  /* ── Number sample ── */
+  .sample {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px;
+    margin-bottom: 48px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 28px;
+  }
+  @media (max-width: 640px) { .sample { grid-template-columns: 1fr; } }
+  .sample h3 {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 16px;
+  }
+  .stat-card {
+    background: var(--card-hi);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+  }
+  .stat-card .lbl { font-size: 12px; color: var(--text2); }
+  .stat-card .amt { font-size: 32px; font-weight: 800; margin-top: 6px; letter-spacing: -0.02em; color: var(--gold-hi); }
+  .stat-card .sub { font-size: 12px; color: var(--green); margin-top: 4px; }
+  .sample .notes { font-size: 13px; color: var(--text2); line-height: 1.7; }
+  .sample .notes li { margin-bottom: 6px; list-style: none; padding-left: 18px; position: relative; }
+  .sample .notes li::before {
+    content: '→'; position: absolute; left: 0; color: var(--gold); font-weight: 700;
+  }
+
+  /* ── Cut list ── */
+  .cuts {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px;
+    margin-bottom: 48px;
+  }
+  .cuts h3 {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--red); margin-bottom: 4px;
+  }
+  .cuts .sub { color: var(--text2); font-size: 14px; margin-bottom: 18px; }
+  .cut-list { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 640px) { .cut-list { grid-template-columns: 1fr; } }
+  .cut-item {
+    display: flex; gap: 12px; align-items: center;
+    padding: 12px 14px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-size: 14px;
+  }
+  .cut-item.keep { border-color: rgba(34,197,94,0.25); }
+  .cut-item .sym {
+    width: 28px; height: 28px; border-radius: 50%;
+    display: grid; place-items: center; font-weight: 800; font-size: 14px; flex-shrink: 0;
+  }
+  .cut-item.kill .sym { background: rgba(239,68,68,0.14); color: var(--red); }
+  .cut-item.keep .sym { background: rgba(34,197,94,0.14); color: var(--green); }
+  .cut-item .what { font-weight: 600; color: var(--text1); }
+  .cut-item .why { font-size: 12px; color: var(--text3); }
+
+  /* ── Close ── */
+  .close {
+    text-align: center;
+    padding: 36px 24px;
+    background: linear-gradient(180deg, transparent, var(--gold-dim));
+    border-radius: 20px;
+    border: 1px solid var(--border-hi);
+  }
+  .close .q {
+    font-size: clamp(20px, 2.5vw, 28px); font-weight: 700;
+    letter-spacing: -0.01em; margin-bottom: 10px;
+  }
+  .close .how {
+    color: var(--text2); font-size: 15px; line-height: 1.6;
+    max-width: 560px; margin: 0 auto;
+  }
+  .close code {
+    background: rgba(212,169,74,0.16); color: var(--gold-hi);
+    padding: 2px 8px; border-radius: 6px; font-weight: 600;
+    font-family: 'SF Mono', Menlo, monospace; font-size: 13px;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="kicker"><span class="dot"></span> My recommendation · 60-second read</div>
+
+  <h1 class="title">
+    Ship the <span class="accent">warm &amp; fast</span> version.<br>
+    Cut the noise. One confident look.
+  </h1>
+
+  <p class="lede">
+    Five decisions stand between a competent app and one that feels like money your mum &mdash; and later, a community &mdash; can actually trust. Here's the pick I'd ship, and what each one trades off.
+  </p>
+
+  <div class="verdict">
+    <div class="badge">★</div>
+    <div class="verdict-text">
+      <div class="label">One-line verdict</div>
+      <div class="line">E-Max &bull; warm gold accent &bull; Lucide icons &bull; WhatsApp reminders &bull; cut the fakes.</div>
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <!-- 1 -->
+    <div class="card">
+      <div class="num">01</div>
+      <div class="q-label">Decision 1 — Brand</div>
+      <div class="q">What do we call it in the UI?</div>
+      <div class="pick-row">
+        <span class="pick-lbl">Pick</span>
+        <div class="pick">"E-Max"</div>
+      </div>
+      <div class="reason">
+        Short, warm, conversational. Use "E-EMAX Enterprise" only in the sidebar footer and legal copy. Every premium fintech splits it this way — Wise isn't "Wise Payments Ltd" in the UI.
+      </div>
+      <div class="tradeoff">You lose a tiny bit of formal weight in exchange for a name your mum and her borrowers can say out loud.</div>
+    </div>
+
+    <!-- 2 -->
+    <div class="card">
+      <div class="num">02</div>
+      <div class="q-label">Decision 2 — Accent colour</div>
+      <div class="q">Indigo, gold, or teal?</div>
+      <div class="pick-row">
+        <span class="pick-lbl">Pick</span>
+        <div class="pick">Warm gold</div>
+      </div>
+      <div class="reason">
+        Gold reads as cedis, trust, and diaspora-coded warmth. Indigo is generic tech. Teal is cold for a money app. Gold on dark feels like a premium bank app, not a side project.
+      </div>
+      <div class="tradeoff">It's a strong opinion. If it's wrong, it's wrong in a bold way — easier to course-correct than a muddy middle.</div>
+    </div>
+
+    <!-- 3 -->
+    <div class="card">
+      <div class="num">03</div>
+      <div class="q-label">Decision 3 — Reminders</div>
+      <div class="q">Push notifications or something else?</div>
+      <div class="pick-row">
+        <span class="pick-lbl">Pick</span>
+        <div class="pick">Kill push → WhatsApp</div>
+      </div>
+      <div class="reason">
+        Ghana runs on WhatsApp. A "Remind via WhatsApp" button that opens <code style="color:var(--gold-hi);font-size:12px">wa.me/&lt;phone&gt;</code> pre-filled with the polite reminder works on every phone, zero backend, zero permissions. Real push costs weeks for a feature mum may never tap.
+      </div>
+      <div class="tradeoff">No silent background pinging. You rely on your mum's daily habit of opening the app once a morning.</div>
+    </div>
+
+    <!-- 4 -->
+    <div class="card">
+      <div class="num">04</div>
+      <div class="q-label">Decision 4 — Icons</div>
+      <div class="q">Emoji, Lucide, or Phosphor?</div>
+      <div class="pick-row">
+        <span class="pick-lbl">Pick</span>
+        <div class="pick">Lucide</div>
+      </div>
+      <div class="reason">
+        Cleanest professional line icons, ships with shadcn, used by Stripe-quality products. Keeps us premium. Emoji work but render differently on every OS and look less serious in investor demos. Phosphor is a fine alternative if we want rounder edges later.
+      </div>
+      <div class="tradeoff">One CDN script, ~6 KB gzipped. Trivial cost for a big visual upgrade.</div>
+    </div>
+
+    <!-- 5 -->
+    <div class="card" style="grid-column: span 2;">
+      <div class="num">05</div>
+      <div class="q-label">Decision 5 — What we cut</div>
+      <div class="q">Which of the flagged items do we actually remove?</div>
+      <div class="pick-row">
+        <span class="pick-lbl">Pick</span>
+        <div class="pick">Cut 5. Keep 2 (soft).</div>
+      </div>
+      <div class="reason">
+        Cut the orphan guide page, the fake push toggle, the stale roadmap PDFs, the "custom interest %" footgun, and the diagnostics panel from the main UI (hide it behind a 5-tap easter-egg on the version label, same trick Apple uses). Keep the witness wizard step but make it skippable. Keep the occupation dropdown but add free-text.
+      </div>
+      <div class="tradeoff">Every cut is reversible. Original files stay in place; the refined app just stops referencing them.</div>
+    </div>
+  </div>
+
+  <!-- Palette compare -->
+  <div class="compare">
+    <h3>Accent comparison &mdash; before / after</h3>
+    <div class="compare-row">
+      <div class="swatch cur">
+        <div class="tag">Current · Indigo</div>
+        <div class="hex">#5B5BD6</div>
+        <div class="label">Competent, generic</div>
+        <div class="feel">Reads as "tech app". Could be any SaaS. Doesn't say Africa, money, or trust.</div>
+        <div class="chip">➕ New Loan</div>
+      </div>
+      <div class="swatch new">
+        <div class="tag">Proposed · Warm gold</div>
+        <div class="hex">#D4A94A</div>
+        <div class="label">Premium, diaspora-coded</div>
+        <div class="feel">Reads as cedis, gold, warmth. Like the inside of an Ecobank app — but softer.</div>
+        <div class="chip">➕ New Loan</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Numbers sample -->
+  <div class="sample">
+    <div>
+      <h3>Numbers that breathe (Revolut rule)</h3>
+      <div class="stat-card">
+        <div class="lbl">Outstanding</div>
+        <div class="amt">GH₵ 24,850</div>
+        <div class="sub">▲ GH₵ 3,200 collected this week</div>
+      </div>
+      <div class="stat-card" style="margin-top: 12px;">
+        <div class="lbl">Active loans</div>
+        <div class="amt" style="color: var(--text1);">17</div>
+        <div class="sub" style="color: var(--text2);">3 due this week</div>
+      </div>
+    </div>
+    <div>
+      <h3>Why this feels different</h3>
+      <ul class="notes">
+        <li>Amount gets the gold. Everything else gets out of the way.</li>
+        <li>Tight type scale: 12&nbsp;/&nbsp;16&nbsp;/&nbsp;20&nbsp;/&nbsp;32. No in-betweens.</li>
+        <li>Labels are small &amp; quiet. Numbers are loud &amp; confident.</li>
+        <li>Positive change is green, one line, short words.</li>
+        <li>No stat borders fighting for attention.</li>
+        <li>Skeleton loaders while Supabase replies &mdash; no "Loading…" text.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Cut list -->
+  <div class="cuts">
+    <h3>What I'm cutting</h3>
+    <div class="sub">(all reversible, originals untouched)</div>
+    <div class="cut-list">
+      <div class="cut-item kill"><div class="sym">✕</div>
+        <div><div class="what">guide.html (orphan)</div>
+        <div class="why">Not linked anywhere → fold into USER-GUIDE.md</div></div></div>
+      <div class="cut-item kill"><div class="sym">✕</div>
+        <div><div class="what">Fake push toggle</div>
+        <div class="why">Pretends to work → replace with WhatsApp button</div></div></div>
+      <div class="cut-item kill"><div class="sym">✕</div>
+        <div><div class="what">Roadmap PDFs at root</div>
+        <div class="why">Stale → replaced by HANDOFF + ONE-PAGER</div></div></div>
+      <div class="cut-item kill"><div class="sym">✕</div>
+        <div><div class="what">Custom interest % option</div>
+        <div class="why">Footgun → mum charges 10% flat. Power-user only.</div></div></div>
+      <div class="cut-item kill"><div class="sym">✕</div>
+        <div><div class="what">Diagnostics panel (visible)</div>
+        <div class="why">Useless for users → 5-tap easter egg on version</div></div></div>
+      <div class="cut-item keep"><div class="sym">✓</div>
+        <div><div class="what">Witness wizard step</div>
+        <div class="why">Keep but make it skippable</div></div></div>
+      <div class="cut-item keep"><div class="sym">✓</div>
+        <div><div class="what">Occupation dropdown</div>
+        <div class="why">Keep + add free-text + autosuggest</div></div></div>
+    </div>
+  </div>
+
+  <!-- Close -->
+  <div class="close">
+    <div class="q">Do any of these five picks need to change?</div>
+    <div class="how">
+      Reply <code>Yes, go</code> and I start Phase 2 with this exact recipe. <br>
+      Or swap any pick — just tell me which card number and what to change.
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -76,14 +76,14 @@ const Analytics = {
       values.push(total);
     }
 
+    // Show actual monthly collections (what was paid). True interest earned
+    // is computed in _renderKPIs using loans.total_interest/total_repayable —
+    // no approximation. Renaming the chart to reflect what it actually shows.
     this._makeChart('chart-interest', 'bar', labels, [{
-      label: 'Interest Earned (GH₵)',
-      data: values.map(v => {
-        // approximate interest as 10/11 of collected (10% of principal+interest)
-        return Math.round(v * 0.0909 * 10) / 10;
-      }),
-      backgroundColor: 'rgba(91,91,214,0.7)',
-      borderColor: '#5b5bd6',
+      label: 'Monthly Collections (GH₵)',
+      data: values,
+      backgroundColor: 'rgba(212,169,74,0.7)',
+      borderColor: '#d4a94a',
       borderWidth: 2,
       borderRadius: 6,
     }]);
@@ -127,7 +127,7 @@ const Analytics = {
 
     const labels = Object.keys(counts).filter(k => counts[k] > 0);
     const data   = labels.map(k => counts[k]);
-    const colors = { Active: '#5b5bd6', Overdue: '#ef4444', Completed: '#22c55e', Defaulted: '#6b7280' };
+    const colors = { Active: '#D4A94A', Overdue: '#ef4444', Completed: '#22c55e', Defaulted: '#6b7280' };
 
     this._makeChart('chart-donut-an', 'doughnut', labels, [{
       data,

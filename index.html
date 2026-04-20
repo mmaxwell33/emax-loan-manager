@@ -11,6 +11,7 @@
   <link rel="manifest" href="manifest.json" />
   <link rel="stylesheet" href="css/app.css" />
   <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
 </head>
 <body>
 
@@ -19,9 +20,9 @@
 ══════════════════════════════════════════ -->
 <div id="screen-auth" class="auth-screen active">
   <div class="auth-bg-glow"></div>
-  <div class="auth-logo">💰</div>
-  <div class="auth-title">E-Max Loans</div>
-  <div class="auth-sub">Loan Manager — E-EMAX Enterprise</div>
+  <div class="auth-logo"><i data-lucide="coins"></i></div>
+  <div class="auth-title">E-Max</div>
+  <div class="auth-sub">Loan Manager for E-EMAX Enterprise</div>
   <div class="auth-box">
     <div id="auth-error" class="auth-error"></div>
     <div class="form-group">
@@ -54,51 +55,51 @@
 
   <!-- ── SIDEBAR (desktop) ── -->
   <aside class="sidebar" id="sidebar">
-    <div class="sidebar-brand">
-      <div class="brand-icon">💰</div>
+    <div class="sidebar-brand" id="brand-tap">
+      <div class="brand-icon"><i data-lucide="coins"></i></div>
       <div class="brand-text">
-        <div class="brand-name">E-EMAX Enterprise</div>
-        <div class="brand-sub">Loan Manager</div>
+        <div class="brand-name">E-Max</div>
+        <div class="brand-sub">E-EMAX Enterprise</div>
       </div>
     </div>
 
     <nav class="sidebar-nav">
       <div class="nav-section-label">OVERVIEW</div>
       <button class="si active" id="si-dashboard" onclick="App.navigate('dashboard')">
-        <span class="si-icon">🏠</span><span class="si-label">Dashboard</span>
+        <span class="si-icon"><i data-lucide="home"></i></span><span class="si-label">Dashboard</span>
       </button>
       <button class="si" id="si-analytics" onclick="App.navigate('analytics')">
-        <span class="si-icon">📊</span><span class="si-label">Analytics</span>
+        <span class="si-icon"><i data-lucide="bar-chart-3"></i></span><span class="si-label">Analytics</span>
       </button>
 
       <div class="nav-section-label">LOANS</div>
       <button class="si" id="si-loans" onclick="App.navigate('loans')">
-        <span class="si-icon">💳</span><span class="si-label">All Loans</span>
+        <span class="si-icon"><i data-lucide="credit-card"></i></span><span class="si-label">All Loans</span>
       </button>
       <button class="si" id="si-scanner" onclick="App.navigate('scanner')">
-        <span class="si-icon">📷</span><span class="si-label">Scan Document</span>
+        <span class="si-icon"><i data-lucide="scan-line"></i></span><span class="si-label">Scan Document</span>
       </button>
       <button class="si" id="si-applications" onclick="App.navigate('applications')">
-        <span class="si-icon">📋</span><span class="si-label">Applications</span>
+        <span class="si-icon"><i data-lucide="clipboard-list"></i></span><span class="si-label">Applications</span>
         <span class="si-badge" id="sidebar-app-count" style="display:none">0</span>
       </button>
 
       <div class="nav-section-label">PEOPLE</div>
       <button class="si" id="si-borrowers" onclick="App.navigate('borrowers')">
-        <span class="si-icon">👥</span><span class="si-label">Borrowers</span>
+        <span class="si-icon"><i data-lucide="users"></i></span><span class="si-label">Borrowers</span>
       </button>
 
       <div class="nav-section-label">FINANCE</div>
       <button class="si" id="si-reports" onclick="App.navigate('reports')">
-        <span class="si-icon">📈</span><span class="si-label">Reports</span>
+        <span class="si-icon"><i data-lucide="trending-up"></i></span><span class="si-label">Reports</span>
       </button>
 
       <div class="nav-section-label">SYSTEM</div>
       <button class="si" id="si-team" onclick="App.navigate('team')">
-        <span class="si-icon">🤝</span><span class="si-label">Team</span>
+        <span class="si-icon"><i data-lucide="user-plus"></i></span><span class="si-label">Team</span>
       </button>
       <button class="si" id="si-settings" onclick="App.navigate('settings')">
-        <span class="si-icon">⚙️</span><span class="si-label">Settings</span>
+        <span class="si-icon"><i data-lucide="settings"></i></span><span class="si-label">Settings</span>
       </button>
     </nav>
 
@@ -108,7 +109,7 @@
         <div class="su-name" id="sb-name">Loading…</div>
         <div class="su-role" id="sb-email">—</div>
       </div>
-      <button class="su-signout" onclick="Auth.logout()" title="Sign Out">⬆️</button>
+      <button class="su-signout" onclick="Auth.logout()" title="Sign Out"><i data-lucide="log-out"></i></button>
     </div>
   </aside>
 
@@ -119,32 +120,32 @@
     <div id="screen-dashboard" class="screen active">
       <div class="page-header">
         <div>
-          <div class="page-greeting" id="dash-greeting">Good morning 👋</div>
+          <div class="page-greeting" id="dash-greeting">Good morning</div>
           <h1 class="page-title" id="dash-biz-name">E-EMAX Enterprise</h1>
         </div>
-        <button class="btn btn-primary" onclick="Loans.openNewLoan()">➕ New Loan</button>
+        <button class="btn btn-primary" onclick="Loans.openNewLoan()"><i data-lucide="plus"></i> New Loan</button>
       </div>
 
       <div class="page-body">
         <!-- Stat Cards -->
         <div class="stats-row">
           <div class="stat-card stat-blue">
-            <div class="sc-icon">💼</div>
+            <div class="sc-icon"><i data-lucide="briefcase"></i></div>
             <div class="sc-val" id="stat-active">—</div>
             <div class="sc-lbl">Active Loans</div>
           </div>
           <div class="stat-card stat-gold">
-            <div class="sc-icon">💰</div>
+            <div class="sc-icon"><i data-lucide="coins"></i></div>
             <div class="sc-val" id="stat-outstanding">—</div>
             <div class="sc-lbl">Outstanding (GH₵)</div>
           </div>
           <div class="stat-card stat-green">
-            <div class="sc-icon">✅</div>
+            <div class="sc-icon"><i data-lucide="check-circle-2"></i></div>
             <div class="sc-val" id="stat-collected">—</div>
             <div class="sc-lbl">Collected This Month</div>
           </div>
           <div class="stat-card stat-red">
-            <div class="sc-icon">⚠️</div>
+            <div class="sc-icon"><i data-lucide="alert-triangle"></i></div>
             <div class="sc-val" id="stat-overdue">—</div>
             <div class="sc-lbl">Overdue Loans</div>
           </div>
@@ -181,7 +182,7 @@
             <!-- Due This Week -->
             <div class="panel">
               <div class="panel-header">
-                <div class="panel-title">📅 Due This Week</div>
+                <div class="panel-title"><i data-lucide="calendar-days"></i> Due This Week</div>
               </div>
               <div id="due-today-list"><div class="loading-row">Loading…</div></div>
             </div>
@@ -191,19 +192,19 @@
               <div class="panel-header"><div class="panel-title">Quick Actions</div></div>
               <div class="quick-actions">
                 <button class="qa-btn" onclick="Loans.openNewLoan()">
-                  <span class="qa-icon">➕</span>
+                  <span class="qa-icon"><i data-lucide="plus"></i></span>
                   <span>New Loan</span>
                 </button>
                 <button class="qa-btn" onclick="App.navigate('scanner')">
-                  <span class="qa-icon">📷</span>
+                  <span class="qa-icon"><i data-lucide="scan-line"></i></span>
                   <span>Scan Doc</span>
                 </button>
                 <button class="qa-btn" onclick="App.navigate('applications')">
-                  <span class="qa-icon">📋</span>
+                  <span class="qa-icon"><i data-lucide="clipboard-list"></i></span>
                   <span>Applications</span>
                 </button>
                 <button class="qa-btn" onclick="App.navigate('reports')">
-                  <span class="qa-icon">📈</span>
+                  <span class="qa-icon"><i data-lucide="trending-up"></i></span>
                   <span>Reports</span>
                 </button>
               </div>
@@ -211,7 +212,7 @@
 
             <!-- Recent Activity -->
             <div class="panel mt16">
-              <div class="panel-header"><div class="panel-title">🕐 Recent Activity</div></div>
+              <div class="panel-header"><div class="panel-title"><i data-lucide="clock"></i> Recent Activity</div></div>
               <div id="activity-list"><div class="loading-row">Loading…</div></div>
             </div>
           </div>
@@ -223,27 +224,27 @@
     <div id="screen-loans" class="screen">
       <div class="page-header">
         <h1 class="page-title">Loans</h1>
-        <button class="btn btn-primary" onclick="Loans.openNewLoan()">➕ New Loan</button>
+        <button class="btn btn-primary" onclick="Loans.openNewLoan()"><i data-lucide="plus"></i> New Loan</button>
       </div>
       <div class="page-body">
         <div class="panel">
           <div class="panel-toolbar">
             <div class="search-wrap">
-              <span class="search-icon">🔍</span>
+              <span class="search-icon"><i data-lucide="search"></i></span>
               <input id="loans-search" class="search-input" type="search" placeholder="Search by borrower name…" oninput="Loans.filterList(this.value)" />
             </div>
             <div class="tab-row">
               <button class="tab-btn active" onclick="Loans.setFilter('All', this)">All</button>
               <button class="tab-btn" onclick="Loans.setFilter('Active', this)">Active</button>
-              <button class="tab-btn" onclick="Loans.setFilter('Overdue', this)">⚠️ Overdue</button>
+              <button class="tab-btn" onclick="Loans.setFilter('Overdue', this)">Overdue</button>
               <button class="tab-btn" onclick="Loans.setFilter('Completed', this)">Completed</button>
             </div>
           </div>
           <div id="loans-list">
             <div class="empty-state">
-              <div class="empty-icon">💳</div>
+              <div class="empty-icon"><i data-lucide="credit-card"></i></div>
               <h3>No loans yet</h3>
-              <p>Click "+ New Loan" to create your first loan</p>
+              <p>Tap "New Loan" to create your first loan</p>
             </div>
           </div>
         </div>
@@ -273,7 +274,7 @@
 
           <!-- Step 1: Borrower -->
           <div id="step-1" class="wizard-step-body">
-            <div class="step-title">👤 Borrower Details</div>
+            <div class="step-title"><i data-lucide="user"></i> Borrower Details</div>
             <div class="form-group">
               <label>Full Name *</label>
               <input id="b-name" type="text" class="form-input form-lg" placeholder="E.g. Akua Mensah" />
@@ -295,15 +296,13 @@
             <div class="form-row-2">
               <div class="form-group">
                 <label>Occupation</label>
-                <select id="b-occupation-select" class="form-select form-lg" onchange="Loans.handleOccupationSelect(this)">
-                  <option value="">— Select —</option>
+                <input id="b-occupation" type="text" class="form-input form-lg" list="occupation-suggestions" placeholder="Type or pick (e.g. Trader)" />
+                <datalist id="occupation-suggestions">
                   <option>Trader</option><option>Farmer</option><option>Teacher</option>
-                  <option>Nurse/Doctor</option><option>Civil Servant</option>
-                  <option>Driver</option><option>Seamstress/Tailor</option>
-                  <option>Hairdresser</option><option>Student</option>
-                  <option>Self-Employed</option><option>Other</option>
-                </select>
-                <input id="b-occupation" type="text" class="form-input mt8" placeholder="Type occupation" style="display:none" />
+                  <option>Nurse</option><option>Doctor</option><option>Civil Servant</option>
+                  <option>Driver</option><option>Seamstress</option><option>Tailor</option>
+                  <option>Hairdresser</option><option>Student</option><option>Self-Employed</option>
+                </datalist>
               </div>
               <div class="form-group">
                 <label>Ghana Card Number</label>
@@ -314,7 +313,7 @@
               <div class="form-group">
                 <label>Borrower Photo (optional)</label>
                 <div class="photo-upload-box" onclick="document.getElementById('b-photo-input').click()">
-                  <div class="pu-icon">📷</div><p>Take or upload photo</p>
+                  <div class="pu-icon"><i data-lucide="camera"></i></div><p>Take or upload photo</p>
                 </div>
                 <input id="b-photo-input" type="file" accept="image/*" capture="user" style="display:none" onchange="Loans.previewPhoto(this,'b-photo-preview')" />
                 <img id="b-photo-preview" class="photo-preview mt8" style="display:none" />
@@ -322,7 +321,7 @@
               <div class="form-group">
                 <label>Ghana Card Photo (optional)</label>
                 <div class="photo-upload-box" onclick="document.getElementById('b-id-input').click()">
-                  <div class="pu-icon">🪪</div><p>Photograph Ghana Card</p>
+                  <div class="pu-icon"><i data-lucide="credit-card"></i></div><p>Photograph Ghana Card</p>
                 </div>
                 <input id="b-id-input" type="file" accept="image/*" capture="environment" style="display:none" onchange="Loans.previewPhoto(this,'b-id-preview')" />
                 <img id="b-id-preview" class="photo-preview mt8" style="display:none" />
@@ -335,7 +334,7 @@
 
           <!-- Step 2: Guarantor -->
           <div id="step-2" class="wizard-step-body" style="display:none">
-            <div class="step-title">🤝 Guarantor Details</div>
+            <div class="step-title"><i data-lucide="handshake"></i> Guarantor Details</div>
             <p class="step-hint">The guarantor agrees to repay if the borrower defaults.</p>
             <div class="form-group">
               <label>Guarantor Full Name *</label>
@@ -368,27 +367,27 @@
             </div>
           </div>
 
-          <!-- Step 3: Witness -->
+          <!-- Step 3: Witness (optional) -->
           <div id="step-3" class="wizard-step-body" style="display:none">
-            <div class="step-title">👁️ Witness Details</div>
-            <p class="step-hint">A witness who can confirm the loan agreement.</p>
+            <div class="step-title"><i data-lucide="eye"></i> Witness Details <span class="step-opt">optional</span></div>
+            <p class="step-hint">Someone who can confirm the loan agreement. Leave blank if not needed — you can add a witness later.</p>
             <div class="form-group">
-              <label>Witness Full Name *</label>
+              <label>Witness Full Name</label>
               <input id="w-name" type="text" class="form-input form-lg" placeholder="Witness's full name" />
             </div>
             <div class="form-group">
-              <label>Phone Number *</label>
+              <label>Phone Number</label>
               <input id="w-phone" type="tel" class="form-input form-lg" placeholder="024 XXX XXXX" />
             </div>
             <div class="wizard-nav two-btn">
-              <button class="btn btn-ghost" onclick="Loans.wizardBack(3)">← Back</button>
-              <button class="btn btn-primary btn-lg" onclick="Loans.wizardNext(3)">Next: Loan Amount →</button>
+              <button class="btn btn-ghost" onclick="Loans.wizardBack(3)"><i data-lucide="arrow-left"></i> Back</button>
+              <button class="btn btn-primary btn-lg" onclick="Loans.wizardNext(3)">Next: Loan Amount <i data-lucide="arrow-right"></i></button>
             </div>
           </div>
 
           <!-- Step 4: Loan Details -->
           <div id="step-4" class="wizard-step-body" style="display:none">
-            <div class="step-title">💵 Loan Details</div>
+            <div class="step-title"><i data-lucide="banknote"></i> Loan Details</div>
 
             <!-- Amount quick-pick buttons -->
             <div class="form-group">
@@ -437,14 +436,11 @@
               </div>
               <div class="form-group">
                 <label>Interest Rate</label>
-                <select id="l-interest-rate" class="form-select form-lg" onchange="Loans.updateCalcPreview()">
-                  <option value="0.10" selected>10% / month (Standard)</option>
-                  <option value="0.08">8% / month</option>
-                  <option value="0.12">12% / month</option>
-                  <option value="0.15">15% / month</option>
-                  <option value="custom">Custom…</option>
-                </select>
-                <input id="l-interest-custom" type="number" class="form-input mt8" placeholder="Enter % rate" style="display:none" min="1" max="100" oninput="Loans.updateCalcPreview()" />
+                <div class="rate-lock">
+                  <div class="rate-lock-val">10%</div>
+                  <div class="rate-lock-sub">per month — standard E-Max rate</div>
+                </div>
+                <input id="l-interest-rate" type="hidden" value="0.10" />
               </div>
             </div>
 
@@ -458,7 +454,7 @@
 
             <!-- Live Loan Calculator -->
             <div id="calc-preview-box" class="calc-preview" style="display:none">
-              <div class="calc-title">📐 Loan Breakdown</div>
+              <div class="calc-title"><i data-lucide="calculator"></i> Loan Breakdown</div>
               <div class="calc-grid">
                 <div class="cg-item">
                   <div class="cg-label">Principal</div>
@@ -500,18 +496,18 @@
               <textarea id="l-notes" class="form-textarea" placeholder="Any special notes about this loan… (e.g. purpose, collateral, special terms)"></textarea>
             </div>
             <div class="wizard-nav two-btn">
-              <button class="btn btn-ghost" onclick="Loans.wizardBack(4)">← Back</button>
-              <button class="btn btn-primary btn-lg" onclick="Loans.wizardNext(4)">Review Loan →</button>
+              <button class="btn btn-ghost" onclick="Loans.wizardBack(4)"><i data-lucide="arrow-left"></i> Back</button>
+              <button class="btn btn-primary btn-lg" onclick="Loans.wizardNext(4)">Review Loan <i data-lucide="arrow-right"></i></button>
             </div>
           </div>
 
           <!-- Step 5: Review -->
           <div id="step-5" class="wizard-step-body" style="display:none">
-            <div class="step-title">✅ Review & Confirm</div>
+            <div class="step-title"><i data-lucide="check-circle-2"></i> Review & Confirm</div>
             <div id="review-content"></div>
             <div class="wizard-nav two-btn mt20">
-              <button class="btn btn-ghost" onclick="Loans.wizardBack(5)">← Back</button>
-              <button id="btn-submit-loan" class="btn btn-success btn-lg" onclick="Loans.submitLoan()">✅ Issue Loan</button>
+              <button class="btn btn-ghost" onclick="Loans.wizardBack(5)"><i data-lucide="arrow-left"></i> Back</button>
+              <button id="btn-submit-loan" class="btn btn-success btn-lg" onclick="Loans.submitLoan()"><i data-lucide="check"></i> Issue Loan</button>
             </div>
           </div>
         </div>
@@ -539,13 +535,13 @@
         <div class="panel">
           <div class="panel-toolbar">
             <div class="search-wrap">
-              <span class="search-icon">🔍</span>
+              <span class="search-icon"><i data-lucide="search"></i></span>
               <input id="borrowers-search" class="search-input" type="search" placeholder="Search borrowers…" oninput="Borrowers.filter(this.value)" />
             </div>
           </div>
           <div id="borrowers-list">
             <div class="empty-state">
-              <div class="empty-icon">👥</div>
+              <div class="empty-icon"><i data-lucide="users"></i></div>
               <h3>No borrowers yet</h3>
               <p>Create a loan to add your first borrower</p>
             </div>
@@ -568,24 +564,24 @@
     <!-- ══ SCREEN: DOCUMENT SCANNER ══ -->
     <div id="screen-scanner" class="screen">
       <div class="page-header">
-        <h1 class="page-title">📷 Scan Document</h1>
+        <h1 class="page-title"><i data-lucide="scan-line"></i> Scan Document</h1>
       </div>
       <div class="page-body">
         <div class="scanner-intro">
-          <p>Take a photo of a paper loan document. The app will read it and pre-fill the loan form for your mum to review.</p>
+          <p>Take a photo of a paper loan document. The app reads it and pre-fills the loan form for review.</p>
         </div>
 
         <div id="scanner-upload-zone">
           <div class="panel scan-panel">
-            <div class="scan-icon">📄</div>
+            <div class="scan-icon"><i data-lucide="file-text"></i></div>
             <div class="scan-title">Upload Loan Document</div>
             <div class="scan-sub">Take a photo or choose from gallery</div>
             <div class="scan-btns">
               <button class="btn btn-primary btn-lg" onclick="document.getElementById('scan-camera').click()">
-                📷 Take Photo
+                <i data-lucide="camera"></i> Take Photo
               </button>
               <button class="btn btn-ghost btn-lg" onclick="document.getElementById('scan-gallery').click()">
-                🖼️ From Gallery
+                <i data-lucide="image"></i> From Gallery
               </button>
             </div>
             <input id="scan-camera" type="file" accept="image/*" capture="environment" style="display:none" onchange="Scanner.handleFile(this)" />
@@ -597,15 +593,15 @@
           <div class="scan-review-grid">
             <div class="scan-photo-panel">
               <div class="panel">
-                <div class="panel-title">📷 Document Photo</div>
+                <div class="panel-title"><i data-lucide="camera"></i> Document Photo</div>
                 <img id="scan-preview-img" style="width:100%;border-radius:12px;margin-top:12px" />
                 <div id="ocr-status" class="ocr-status mt12"></div>
-                <button class="btn btn-ghost btn-full mt12" onclick="Scanner.reset()">📷 Scan Different Document</button>
+                <button class="btn btn-ghost btn-full mt12" onclick="Scanner.reset()"><i data-lucide="camera"></i> Scan Different Document</button>
               </div>
             </div>
             <div class="scan-form-panel">
               <div class="panel">
-                <div class="panel-title">✏️ Review & Edit Extracted Data</div>
+                <div class="panel-title"><i data-lucide="pencil"></i> Review & Edit Extracted Data</div>
                 <p class="text-muted mt8" style="margin-bottom:16px">Fields highlighted in yellow were not found — enter them manually.</p>
                 <div id="scan-form">
 
@@ -693,7 +689,7 @@
 
                   <button id="scan-submit-btn" class="btn btn-success btn-full btn-lg mt12"
                     onclick="Scanner.createLoanFromScan()">
-                    ✅ Save This Loan Record
+                    <i data-lucide="check"></i> Save This Loan Record
                   </button>
                 </div>
               </div>
@@ -706,15 +702,15 @@
     <!-- ══ SCREEN: APPLICATIONS ══ -->
     <div id="screen-applications" class="screen">
       <div class="page-header">
-        <h1 class="page-title">📋 Applications</h1>
+        <h1 class="page-title"><i data-lucide="clipboard-list"></i> Applications</h1>
         <div class="header-actions">
-          <button class="btn btn-ghost btn-sm" onclick="Scanner.copyEnrollLink()">🔗 Copy Enroll Link</button>
+          <button class="btn btn-ghost btn-sm" onclick="Scanner.copyEnrollLink()"><i data-lucide="link"></i> Copy Enroll Link</button>
         </div>
       </div>
       <div class="page-body">
         <div class="panel mb16">
           <div class="enroll-banner">
-            <div class="eb-icon">🔗</div>
+            <div class="eb-icon"><i data-lucide="link"></i></div>
             <div class="eb-text">
               <div class="eb-title">Borrower Self-Enrollment</div>
               <div class="eb-sub">Share this link with new borrowers — they fill the form, you approve.</div>
@@ -724,7 +720,7 @@
         </div>
         <div id="applications-list">
           <div class="empty-state">
-            <div class="empty-icon">📋</div>
+            <div class="empty-icon"><i data-lucide="clipboard-list"></i></div>
             <h3>No pending applications</h3>
             <p>Share the enrollment link with new borrowers</p>
           </div>
@@ -735,7 +731,7 @@
     <!-- ══ SCREEN: ANALYTICS ══ -->
     <div id="screen-analytics" class="screen">
       <div class="page-header">
-        <h1 class="page-title">📊 Analytics</h1>
+        <h1 class="page-title"><i data-lucide="bar-chart-3"></i> Analytics</h1>
         <select id="analytics-period" class="form-select" style="width:auto" onchange="Analytics.load()">
           <option value="3">Last 3 Months</option>
           <option value="6" selected>Last 6 Months</option>
@@ -746,22 +742,22 @@
         <!-- Summary KPIs -->
         <div class="stats-row" id="analytics-kpis">
           <div class="stat-card stat-green">
-            <div class="sc-icon">💰</div>
+            <div class="sc-icon"><i data-lucide="coins"></i></div>
             <div class="sc-val" id="an-interest">—</div>
             <div class="sc-lbl">Total Interest Earned</div>
           </div>
           <div class="stat-card stat-blue">
-            <div class="sc-icon">📊</div>
+            <div class="sc-icon"><i data-lucide="bar-chart-3"></i></div>
             <div class="sc-val" id="an-total-loans">—</div>
             <div class="sc-lbl">Total Loans Issued</div>
           </div>
           <div class="stat-card stat-gold">
-            <div class="sc-icon">🏆</div>
+            <div class="sc-icon"><i data-lucide="trophy"></i></div>
             <div class="sc-val" id="an-repayment">—</div>
             <div class="sc-lbl">Repayment Rate</div>
           </div>
           <div class="stat-card stat-purple">
-            <div class="sc-icon">👥</div>
+            <div class="sc-icon"><i data-lucide="users"></i></div>
             <div class="sc-val" id="an-borrowers">—</div>
             <div class="sc-lbl">Total Borrowers</div>
           </div>
@@ -770,7 +766,7 @@
         <!-- Charts grid -->
         <div class="analytics-grid">
           <div class="panel">
-            <div class="panel-title">Monthly Interest Earned (GH₵)</div>
+            <div class="panel-title">Monthly Collections (GH₵)</div>
             <div class="chart-wrap"><canvas id="chart-interest"></canvas></div>
           </div>
           <div class="panel">
@@ -801,14 +797,14 @@
     <!-- ══ SCREEN: REPORTS ══ -->
     <div id="screen-reports" class="screen">
       <div class="page-header">
-        <h1 class="page-title">📈 Reports</h1>
+        <h1 class="page-title"><i data-lucide="trending-up"></i> Reports</h1>
       </div>
       <div class="page-body">
         <div class="stats-row">
-          <div class="stat-card stat-green"><div class="sc-icon">💰</div><div class="sc-val" id="rep-total-interest">—</div><div class="sc-lbl">Total Interest Earned</div></div>
-          <div class="stat-card stat-blue"><div class="sc-icon">📊</div><div class="sc-val" id="rep-total-loans">—</div><div class="sc-lbl">Total Loans Issued</div></div>
-          <div class="stat-card stat-gold"><div class="sc-icon">🏆</div><div class="sc-val" id="rep-repayment-rate">—</div><div class="sc-lbl">Repayment Rate</div></div>
-          <div class="stat-card"><div class="sc-icon">👥</div><div class="sc-val" id="rep-total-borrowers">—</div><div class="sc-lbl">Total Borrowers</div></div>
+          <div class="stat-card stat-green"><div class="sc-icon"><i data-lucide="coins"></i></div><div class="sc-val" id="rep-total-interest">—</div><div class="sc-lbl">Total Interest Earned</div></div>
+          <div class="stat-card stat-blue"><div class="sc-icon"><i data-lucide="bar-chart-3"></i></div><div class="sc-val" id="rep-total-loans">—</div><div class="sc-lbl">Total Loans Issued</div></div>
+          <div class="stat-card stat-gold"><div class="sc-icon"><i data-lucide="trophy"></i></div><div class="sc-val" id="rep-repayment-rate">—</div><div class="sc-lbl">Repayment Rate</div></div>
+          <div class="stat-card"><div class="sc-icon"><i data-lucide="users"></i></div><div class="sc-val" id="rep-total-borrowers">—</div><div class="sc-lbl">Total Borrowers</div></div>
         </div>
         <div class="panel mt16">
           <div class="panel-title">Monthly Breakdown</div>
@@ -822,16 +818,16 @@
     <!-- ══ SCREEN: TEAM ══ -->
     <div id="screen-team" class="screen">
       <div class="page-header">
-        <h1 class="page-title">🤝 Team Access</h1>
+        <h1 class="page-title"><i data-lucide="user-plus"></i> Team Access</h1>
       </div>
       <div class="page-body">
         <div class="panel mb16">
           <div class="panel-title">How Team Access Works</div>
           <div class="info-list mt12">
-            <div class="info-item">✅ Each person creates their own free account at the app URL</div>
-            <div class="info-item">✅ Their data is separate — only they see loans they add</div>
-            <div class="info-item">✅ Mum (Ghana) and your sister (Canada) each have their own login</div>
-            <div class="info-item">✅ You can check any account by logging in with those credentials</div>
+            <div class="info-item"><i data-lucide="check" class="ii-check"></i> Each person creates their own free account at the app URL</div>
+            <div class="info-item"><i data-lucide="check" class="ii-check"></i> Their data is separate — only they see loans they add</div>
+            <div class="info-item"><i data-lucide="check" class="ii-check"></i> Mum (Ghana) and your sister (Canada) each have their own login</div>
+            <div class="info-item"><i data-lucide="check" class="ii-check"></i> You can check any account by logging in with those credentials</div>
           </div>
         </div>
         <div class="panel">
@@ -839,11 +835,11 @@
           <p class="text-muted mt8">Share these steps with anyone who needs access:</p>
           <div class="step-list mt12">
             <div class="step-item"><span class="step-num">1</span><span>Open <strong id="app-url-display">emax-loan-manager.vercel.app</strong></span></div>
-            <div class="step-item"><span class="step-num">2</span><span>Click "No account? Create one"</span></div>
-            <div class="step-item"><span class="step-num">3</span><span>Enter their email + password + name</span></div>
-            <div class="step-item"><span class="step-num">4</span><span>They're in! Bookmark or add to home screen.</span></div>
+            <div class="step-item"><span class="step-num">2</span><span>Tap "No account? Create one"</span></div>
+            <div class="step-item"><span class="step-num">3</span><span>Enter their email, password, and name</span></div>
+            <div class="step-item"><span class="step-num">4</span><span>They're in. Bookmark or add to home screen.</span></div>
           </div>
-          <button class="btn btn-primary btn-full mt16" onclick="Team.copyInviteMessage()">📋 Copy Invite Message</button>
+          <button class="btn btn-primary btn-full mt16" onclick="Team.copyInviteMessage()"><i data-lucide="clipboard-copy"></i> Copy Invite Message</button>
         </div>
         <div class="panel mt16">
           <div class="panel-title">Your Account</div>
@@ -855,7 +851,7 @@
     <!-- ══ SCREEN: SETTINGS ══ -->
     <div id="screen-settings" class="screen">
       <div class="page-header">
-        <h1 class="page-title">⚙️ Settings</h1>
+        <h1 class="page-title"><i data-lucide="settings"></i> Settings</h1>
       </div>
       <div class="page-body">
         <div class="settings-grid">
@@ -878,34 +874,38 @@
             </div>
 
             <div class="panel mt16">
-              <div class="panel-title">Notifications</div>
-              <div class="settings-row mt12">
-                <div class="settings-icon">🔔</div>
-                <div class="settings-info">
-                  <div class="s-title">Payment Reminders</div>
-                  <div class="s-sub">Notify when payments are due</div>
+              <div class="panel-title">Reminders</div>
+              <div class="reminder-info mt12">
+                <div class="ri-icon"><i data-lucide="message-circle"></i></div>
+                <div>
+                  <div class="ri-title">Payments are chased over WhatsApp</div>
+                  <div class="ri-sub">Open any loan — tap the green WhatsApp button. A prefilled
+                  message is ready; one tap sends it. No app-level push, no spam.</div>
                 </div>
-                <button id="notif-toggle" class="toggle" onclick="Settings.toggleNotifications(this)"></button>
               </div>
             </div>
           </div>
           <div>
             <div class="panel">
-              <div class="panel-title">Diagnostics</div>
-              <div id="diag-results" class="mt12">
-                <div class="text-muted">Click Run to check all systems</div>
-              </div>
-              <button class="btn btn-ghost btn-full mt12" onclick="Settings.runDiagnostics()">🔬 Run Diagnostics</button>
-            </div>
-
-            <div class="panel mt16">
               <div class="panel-title">Account</div>
               <button class="btn btn-danger btn-full mt12" onclick="Auth.logout()">Sign Out</button>
             </div>
 
             <div class="panel mt16">
               <div class="panel-title">About</div>
-              <div class="text-muted mt8" style="font-size:13px">E-Max Loan Manager v2.0<br>Built for E-EMAX Enterprise, Ghana</div>
+              <div class="text-muted mt8" style="font-size:13px">
+                E-Max Loan Manager v2.1<br>
+                Built for E-EMAX Enterprise, Ghana<br>
+                <span class="about-legal">© E-EMAX Enterprise · Kumasi, Ghana</span>
+              </div>
+              <!-- Hidden diagnostics — long-press the brand icon in the sidebar to reveal. -->
+              <div id="diag-wrap" style="display:none" class="mt16">
+                <div class="panel-title">Diagnostics</div>
+                <div id="diag-results" class="mt12">
+                  <div class="text-muted">Tap Run to check all systems</div>
+                </div>
+                <button class="btn btn-ghost btn-full mt12" onclick="Settings.runDiagnostics()"><i data-lucide="activity"></i> Run Diagnostics</button>
+              </div>
             </div>
           </div>
         </div>
@@ -917,19 +917,19 @@
   <!-- ── MOBILE BOTTOM NAV ── -->
   <nav id="bottom-nav" class="visible">
     <button class="nav-item active" id="nav-dashboard" onclick="App.navigate('dashboard')">
-      <span class="nav-icon">🏠</span>Home
+      <span class="nav-icon"><i data-lucide="home"></i></span>Home
     </button>
     <button class="nav-item" id="nav-loans" onclick="App.navigate('loans')">
-      <span class="nav-icon">💳</span>Loans
+      <span class="nav-icon"><i data-lucide="credit-card"></i></span>Loans
     </button>
     <button class="nav-item" id="nav-scanner" onclick="App.navigate('scanner')">
-      <span class="nav-icon">📷</span>Scan
+      <span class="nav-icon"><i data-lucide="scan-line"></i></span>Scan
     </button>
     <button class="nav-item" id="nav-borrowers" onclick="App.navigate('borrowers')">
-      <span class="nav-icon">👥</span>People
+      <span class="nav-icon"><i data-lucide="users"></i></span>People
     </button>
     <button class="nav-item" id="nav-reports" onclick="App.navigate('analytics')">
-      <span class="nav-icon">📊</span>Analytics
+      <span class="nav-icon"><i data-lucide="bar-chart-3"></i></span>Analytics
     </button>
   </nav>
 
@@ -955,5 +955,28 @@
 <script src="js/scanner.js"></script>
 <script src="js/team.js"></script>
 <script src="js/settings.js"></script>
+<script>
+  // Paint Lucide icons on load + after each navigation
+  function paintIcons() { if (window.lucide) window.lucide.createIcons(); }
+  window.addEventListener('load', paintIcons);
+  document.addEventListener('click', () => setTimeout(paintIcons, 50));
+
+  // Long-press the sidebar brand to reveal the Diagnostics panel in Settings
+  (function(){
+    const brand = document.getElementById('brand-tap');
+    if (!brand) return;
+    let timer = null;
+    const start = () => { timer = setTimeout(() => {
+      const d = document.getElementById('diag-wrap');
+      if (d) { d.style.display = 'block'; App.navigate('settings'); paintIcons(); }
+    }, 1200); };
+    const cancel = () => { if (timer) clearTimeout(timer); };
+    brand.addEventListener('mousedown', start);
+    brand.addEventListener('touchstart', start, { passive: true });
+    brand.addEventListener('mouseup', cancel);
+    brand.addEventListener('mouseleave', cancel);
+    brand.addEventListener('touchend', cancel);
+  })();
+</script>
 </body>
 </html>
