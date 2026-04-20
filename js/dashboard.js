@@ -186,10 +186,10 @@ const Dashboard = {
       el.innerHTML = `<div class="text-muted">No activity yet</div>`;
       return;
     }
-    const icons = {
-      LOAN_CREATED: '💳', PAYMENT_RECORDED: '✅',
-      LOAN_COMPLETED: '🎉', DEFAULT: '📝'
-    };
+   const icons = {
+  LOAN_CREATED: '', PAYMENT_RECORDED: '',
+  LOAN_COMPLETED: '', DEFAULT: ''
+};
     el.innerHTML = logs.map(log => {
       const ico  = icons[log.activity_type] || icons.DEFAULT;
       const time = new Date(log.created_at).toLocaleDateString('en-GH',
